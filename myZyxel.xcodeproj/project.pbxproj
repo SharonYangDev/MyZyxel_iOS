@@ -1,0 +1,837 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		A3060ED81F14585C0023C4CD /* try_again.png in Resources */ = {isa = PBXBuildFile; fileRef = A3060ED71F14585C0023C4CD /* try_again.png */; };
+		A32AA4641ECAF27B0019003D /* MBProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = A32AA4631ECAF27B0019003D /* MBProgressHUD.m */; };
+		A32AA4671ECC359F0019003D /* launch_screen.png in Resources */ = {isa = PBXBuildFile; fileRef = A32AA4661ECC359F0019003D /* launch_screen.png */; };
+		A32AA46C1ECC4F730019003D /* start.m in Sources */ = {isa = PBXBuildFile; fileRef = A32AA46B1ECC4F730019003D /* start.m */; };
+		A34652791EEE7B6800126362 /* SearchDevicesListCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A34652781EEE7B6800126362 /* SearchDevicesListCell.m */; };
+		A355D84B1EF36F5C00774312 /* LicenseListCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A355D84A1EF36F5C00774312 /* LicenseListCell.m */; };
+		A355D88F1EF69AFD00774312 /* add.png in Resources */ = {isa = PBXBuildFile; fileRef = A355D88D1EF69AFD00774312 /* add.png */; };
+		A355D8901EF69AFD00774312 /* warring.png in Resources */ = {isa = PBXBuildFile; fileRef = A355D88E1EF69AFD00774312 /* warring.png */; };
+		A355D89D1EF73C9500774312 /* key_0.png in Resources */ = {isa = PBXBuildFile; fileRef = A355D8911EF73C9500774312 /* key_0.png */; };
+		A355D89E1EF73C9500774312 /* key_1.png in Resources */ = {isa = PBXBuildFile; fileRef = A355D8921EF73C9500774312 /* key_1.png */; };
+		A355D89F1EF73C9500774312 /* link.png in Resources */ = {isa = PBXBuildFile; fileRef = A355D8931EF73C9500774312 /* link.png */; };
+		A355D8A11EF73C9500774312 /* pg3_1.png in Resources */ = {isa = PBXBuildFile; fileRef = A355D8951EF73C9500774312 /* pg3_1.png */; };
+		A355D8A21EF73C9500774312 /* back.png in Resources */ = {isa = PBXBuildFile; fileRef = A355D8961EF73C9500774312 /* back.png */; };
+		A355D8A31EF73C9500774312 /* clear.png in Resources */ = {isa = PBXBuildFile; fileRef = A355D8971EF73C9500774312 /* clear.png */; };
+		A355D8A51EF73C9500774312 /* pg2_1.png in Resources */ = {isa = PBXBuildFile; fileRef = A355D8991EF73C9500774312 /* pg2_1.png */; };
+		A355D8A61EF73C9500774312 /* pg3_unused.png in Resources */ = {isa = PBXBuildFile; fileRef = A355D89A1EF73C9500774312 /* pg3_unused.png */; };
+		A355D8A71EF73C9500774312 /* pg23_unsed.png in Resources */ = {isa = PBXBuildFile; fileRef = A355D89B1EF73C9500774312 /* pg23_unsed.png */; };
+		A355D8A81EF73C9500774312 /* pg1_1.png in Resources */ = {isa = PBXBuildFile; fileRef = A355D89C1EF73C9500774312 /* pg1_1.png */; };
+		A355D8AE1EFA747000774312 /* scan_fram_5pt.png in Resources */ = {isa = PBXBuildFile; fileRef = A355D8AD1EFA747000774312 /* scan_fram_5pt.png */; };
+		A355D8B11EFA836800774312 /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = A355D8B01EFA836800774312 /* Reachability.m */; };
+		A355D8B71EFB57D000774312 /* DetailServiceCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A355D8B61EFB57D000774312 /* DetailServiceCell.m */; };
+		A355D8B91EFB70D700774312 /* icon-ios7-arrow-back-512.png in Resources */ = {isa = PBXBuildFile; fileRef = A355D8B81EFB70D700774312 /* icon-ios7-arrow-back-512.png */; };
+		A355D8BB1EFB722800774312 /* edit.png in Resources */ = {isa = PBXBuildFile; fileRef = A355D8BA1EFB722800774312 /* edit.png */; };
+		A355D8BE1EFC927200774312 /* AddLicenseCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A355D8BD1EFC927200774312 /* AddLicenseCell.m */; };
+		A355D8C11EFCCEE100774312 /* pg2_0.png in Resources */ = {isa = PBXBuildFile; fileRef = A355D8BF1EFCCEE100774312 /* pg2_0.png */; };
+		A355D8C21EFCCEE100774312 /* pg1_0.png in Resources */ = {isa = PBXBuildFile; fileRef = A355D8C01EFCCEE100774312 /* pg1_0.png */; };
+		A355D8C51EFF78EA00774312 /* CompleteServiceCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A355D8C41EFF78EA00774312 /* CompleteServiceCell.m */; };
+		A355D8CB1F02C7D200774312 /* RegisterDeviceListCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A355D8CA1F02C7D200774312 /* RegisterDeviceListCell.m */; };
+		A355D8CE1F03322A00774312 /* RegisterDeviceEditListCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A355D8CD1F03322A00774312 /* RegisterDeviceEditListCell.m */; };
+		A38B5DFC1EF21D01005B486D /* RegisteredLicenseListCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A38B5DFB1EF21D01005B486D /* RegisteredLicenseListCell.m */; };
+		A38B5DFF1EF2F3D5005B486D /* DeviceListCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A38B5DFE1EF2F3D5005B486D /* DeviceListCell.m */; };
+		A39889BC1EEB0D75005162B3 /* DevicesExpiredListCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A39889BB1EEB0D75005162B3 /* DevicesExpiredListCell.m */; };
+		A39BCA001EC5A0A0008882D8 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = A39BC9FF1EC5A0A0008882D8 /* main.m */; };
+		A39BCA031EC5A0A0008882D8 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = A39BCA021EC5A0A0008882D8 /* AppDelegate.m */; };
+		A39BCA061EC5A0A0008882D8 /* home.m in Sources */ = {isa = PBXBuildFile; fileRef = A39BCA051EC5A0A0008882D8 /* home.m */; };
+		A39BCA091EC5A0A0008882D8 /* device.m in Sources */ = {isa = PBXBuildFile; fileRef = A39BCA081EC5A0A0008882D8 /* device.m */; };
+		A39BCA0C1EC5A0A0008882D8 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A39BCA0A1EC5A0A0008882D8 /* Main.storyboard */; };
+		A39BCA0E1EC5A0A0008882D8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A39BCA0D1EC5A0A0008882D8 /* Assets.xcassets */; };
+		A39BCA111EC5A0A0008882D8 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A39BCA0F1EC5A0A0008882D8 /* LaunchScreen.storyboard */; };
+		A39BCA1C1EC5A0A0008882D8 /* MyZyxelTests.m in Sources */ = {isa = PBXBuildFile; fileRef = A39BCA1B1EC5A0A0008882D8 /* MyZyxelTests.m */; };
+		A39BCA271EC5A0A0008882D8 /* MyZyxelUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = A39BCA261EC5A0A0008882D8 /* MyZyxelUITests.m */; };
+		A3AD2C941F1B723D002F8D0A /* bk.png in Resources */ = {isa = PBXBuildFile; fileRef = A3AD2C931F1B723D002F8D0A /* bk.png */; };
+		A3C6BFCF1F15CC1300167A08 /* DeviceAddLicenseListCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A3C6BFCE1F15CC1300167A08 /* DeviceAddLicenseListCell.m */; };
+		A3D3032E1ED415CB00624304 /* profile_btn_60.png in Resources */ = {isa = PBXBuildFile; fileRef = A3D3032C1ED415CB00624304 /* profile_btn_60.png */; };
+		A3D3032F1ED415CB00624304 /* search_btn_60.png in Resources */ = {isa = PBXBuildFile; fileRef = A3D3032D1ED415CB00624304 /* search_btn_60.png */; };
+		A3D303311ED6D89900624304 /* logo.png in Resources */ = {isa = PBXBuildFile; fileRef = A3D303301ED6D89900624304 /* logo.png */; };
+		A3D303351ED6DCF300624304 /* sign_in_btn.png in Resources */ = {isa = PBXBuildFile; fileRef = A3D303341ED6DCF300624304 /* sign_in_btn.png */; };
+		A3D303371ED7E53900624304 /* renew_btn.png in Resources */ = {isa = PBXBuildFile; fileRef = A3D303361ED7E53900624304 /* renew_btn.png */; };
+		A3D3033A1ED7E9F900624304 /* no_working.png in Resources */ = {isa = PBXBuildFile; fileRef = A3D303381ED7E9F900624304 /* no_working.png */; };
+		A3D3033B1ED7E9F900624304 /* bg.png in Resources */ = {isa = PBXBuildFile; fileRef = A3D303391ED7E9F900624304 /* bg.png */; };
+		A3D3033F1EE00EB900624304 /* Jwt.m in Sources */ = {isa = PBXBuildFile; fileRef = A3D3033E1EE00EB900624304 /* Jwt.m */; };
+		A3D303421EE011DD00624304 /* Algorithm.m in Sources */ = {isa = PBXBuildFile; fileRef = A3D303411EE011DD00624304 /* Algorithm.m */; };
+		A3D303441EE0896700624304 /* public.m in Sources */ = {isa = PBXBuildFile; fileRef = A3D303431EE0896700624304 /* public.m */; };
+		A3E61BAC1F040AFF009FEC1D /* RegisterDeviceFinalListCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A3E61BAB1F040AFF009FEC1D /* RegisterDeviceFinalListCell.m */; };
+		A3E61BAF1F0742CC009FEC1D /* LicenseRegisteredServicesCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A3E61BAE1F0742CC009FEC1D /* LicenseRegisteredServicesCell.m */; };
+		A3E61BB51F08C4CE009FEC1D /* ToDeviceListCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A3E61BB41F08C4CE009FEC1D /* ToDeviceListCell.m */; };
+		A3EAE1221ECAD11C0038FA47 /* license.m in Sources */ = {isa = PBXBuildFile; fileRef = A3EAE1211ECAD11C0038FA47 /* license.m */; };
+		A3EAE1251ECAD1370038FA47 /* notification.m in Sources */ = {isa = PBXBuildFile; fileRef = A3EAE1241ECAD1370038FA47 /* notification.m */; };
+		A3EAE1281ECAD21F0038FA47 /* login.m in Sources */ = {isa = PBXBuildFile; fileRef = A3EAE1271ECAD21F0038FA47 /* login.m */; };
+		A3EAFC1D1F0F39A6004AA5A0 /* ShowRegisteredLicenseCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A3EAFC1C1F0F39A6004AA5A0 /* ShowRegisteredLicenseCell.m */; };
+		A3EBEC621F0DDEF400AF79C4 /* RegisterLicenseListCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A3EBEC611F0DDEF400AF79C4 /* RegisterLicenseListCell.m */; };
+		A3EF9CF91EEF8DB300FAFAD6 /* reduce.png in Resources */ = {isa = PBXBuildFile; fileRef = A3EF9CF81EEF8DB300FAFAD6 /* reduce.png */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		A39BCA181EC5A0A0008882D8 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A39BC9F31EC5A0A0008882D8 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = A39BC9FA1EC5A0A0008882D8;
+			remoteInfo = MyZyxel;
+		};
+		A39BCA231EC5A0A0008882D8 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A39BC9F31EC5A0A0008882D8 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = A39BC9FA1EC5A0A0008882D8;
+			remoteInfo = MyZyxel;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		A3060ED71F14585C0023C4CD /* try_again.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = try_again.png; sourceTree = "<group>"; };
+		A32AA4611ECAECCB0019003D /* common.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = common.h; sourceTree = "<group>"; };
+		A32AA4621ECAF27B0019003D /* MBProgressHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBProgressHUD.h; sourceTree = "<group>"; };
+		A32AA4631ECAF27B0019003D /* MBProgressHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MBProgressHUD.m; sourceTree = "<group>"; };
+		A32AA4661ECC359F0019003D /* launch_screen.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = launch_screen.png; sourceTree = "<group>"; };
+		A32AA46A1ECC4F730019003D /* start.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = start.h; sourceTree = "<group>"; };
+		A32AA46B1ECC4F730019003D /* start.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = start.m; sourceTree = "<group>"; };
+		A34652771EEE7B6800126362 /* SearchDevicesListCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SearchDevicesListCell.h; sourceTree = "<group>"; };
+		A34652781EEE7B6800126362 /* SearchDevicesListCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SearchDevicesListCell.m; sourceTree = "<group>"; };
+		A355D8491EF36F5C00774312 /* LicenseListCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LicenseListCell.h; sourceTree = "<group>"; };
+		A355D84A1EF36F5C00774312 /* LicenseListCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LicenseListCell.m; sourceTree = "<group>"; };
+		A355D88D1EF69AFD00774312 /* add.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = add.png; sourceTree = "<group>"; };
+		A355D88E1EF69AFD00774312 /* warring.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = warring.png; sourceTree = "<group>"; };
+		A355D8911EF73C9500774312 /* key_0.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = key_0.png; sourceTree = "<group>"; };
+		A355D8921EF73C9500774312 /* key_1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = key_1.png; sourceTree = "<group>"; };
+		A355D8931EF73C9500774312 /* link.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = link.png; sourceTree = "<group>"; };
+		A355D8951EF73C9500774312 /* pg3_1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = pg3_1.png; sourceTree = "<group>"; };
+		A355D8961EF73C9500774312 /* back.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = back.png; sourceTree = "<group>"; };
+		A355D8971EF73C9500774312 /* clear.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = clear.png; sourceTree = "<group>"; };
+		A355D8991EF73C9500774312 /* pg2_1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = pg2_1.png; sourceTree = "<group>"; };
+		A355D89A1EF73C9500774312 /* pg3_unused.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = pg3_unused.png; sourceTree = "<group>"; };
+		A355D89B1EF73C9500774312 /* pg23_unsed.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = pg23_unsed.png; sourceTree = "<group>"; };
+		A355D89C1EF73C9500774312 /* pg1_1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = pg1_1.png; sourceTree = "<group>"; };
+		A355D8AD1EFA747000774312 /* scan_fram_5pt.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = scan_fram_5pt.png; sourceTree = "<group>"; };
+		A355D8AF1EFA836800774312 /* Reachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Reachability.h; sourceTree = "<group>"; };
+		A355D8B01EFA836800774312 /* Reachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Reachability.m; sourceTree = "<group>"; };
+		A355D8B51EFB57D000774312 /* DetailServiceCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DetailServiceCell.h; sourceTree = "<group>"; };
+		A355D8B61EFB57D000774312 /* DetailServiceCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DetailServiceCell.m; sourceTree = "<group>"; };
+		A355D8B81EFB70D700774312 /* icon-ios7-arrow-back-512.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-ios7-arrow-back-512.png"; sourceTree = "<group>"; };
+		A355D8BA1EFB722800774312 /* edit.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = edit.png; sourceTree = "<group>"; };
+		A355D8BC1EFC927200774312 /* AddLicenseCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddLicenseCell.h; sourceTree = "<group>"; };
+		A355D8BD1EFC927200774312 /* AddLicenseCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AddLicenseCell.m; sourceTree = "<group>"; };
+		A355D8BF1EFCCEE100774312 /* pg2_0.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = pg2_0.png; sourceTree = "<group>"; };
+		A355D8C01EFCCEE100774312 /* pg1_0.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = pg1_0.png; sourceTree = "<group>"; };
+		A355D8C31EFF78EA00774312 /* CompleteServiceCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CompleteServiceCell.h; sourceTree = "<group>"; };
+		A355D8C41EFF78EA00774312 /* CompleteServiceCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CompleteServiceCell.m; sourceTree = "<group>"; };
+		A355D8C91F02C7D200774312 /* RegisterDeviceListCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RegisterDeviceListCell.h; sourceTree = "<group>"; };
+		A355D8CA1F02C7D200774312 /* RegisterDeviceListCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RegisterDeviceListCell.m; sourceTree = "<group>"; };
+		A355D8CC1F03322A00774312 /* RegisterDeviceEditListCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RegisterDeviceEditListCell.h; sourceTree = "<group>"; };
+		A355D8CD1F03322A00774312 /* RegisterDeviceEditListCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RegisterDeviceEditListCell.m; sourceTree = "<group>"; };
+		A38B5DFA1EF21D01005B486D /* RegisteredLicenseListCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RegisteredLicenseListCell.h; sourceTree = "<group>"; };
+		A38B5DFB1EF21D01005B486D /* RegisteredLicenseListCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RegisteredLicenseListCell.m; sourceTree = "<group>"; };
+		A38B5DFD1EF2F3D5005B486D /* DeviceListCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DeviceListCell.h; sourceTree = "<group>"; };
+		A38B5DFE1EF2F3D5005B486D /* DeviceListCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DeviceListCell.m; sourceTree = "<group>"; };
+		A39889BA1EEB0D75005162B3 /* DevicesExpiredListCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DevicesExpiredListCell.h; sourceTree = "<group>"; };
+		A39889BB1EEB0D75005162B3 /* DevicesExpiredListCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DevicesExpiredListCell.m; sourceTree = "<group>"; };
+		A39BC9FB1EC5A0A0008882D8 /* MyZyxel.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MyZyxel.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		A39BC9FF1EC5A0A0008882D8 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		A39BCA011EC5A0A0008882D8 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		A39BCA021EC5A0A0008882D8 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		A39BCA041EC5A0A0008882D8 /* home.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = home.h; sourceTree = "<group>"; };
+		A39BCA051EC5A0A0008882D8 /* home.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = home.m; sourceTree = "<group>"; };
+		A39BCA071EC5A0A0008882D8 /* device.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = device.h; sourceTree = "<group>"; };
+		A39BCA081EC5A0A0008882D8 /* device.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = device.m; sourceTree = "<group>"; };
+		A39BCA0B1EC5A0A0008882D8 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		A39BCA0D1EC5A0A0008882D8 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		A39BCA101EC5A0A0008882D8 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		A39BCA121EC5A0A0008882D8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		A39BCA171EC5A0A0008882D8 /* MyZyxelTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MyZyxelTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		A39BCA1B1EC5A0A0008882D8 /* MyZyxelTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MyZyxelTests.m; sourceTree = "<group>"; };
+		A39BCA1D1EC5A0A0008882D8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		A39BCA221EC5A0A0008882D8 /* MyZyxelUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MyZyxelUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		A39BCA261EC5A0A0008882D8 /* MyZyxelUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MyZyxelUITests.m; sourceTree = "<group>"; };
+		A39BCA281EC5A0A0008882D8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		A3AD2C931F1B723D002F8D0A /* bk.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bk.png; sourceTree = "<group>"; };
+		A3C6BFCD1F15CC1300167A08 /* DeviceAddLicenseListCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DeviceAddLicenseListCell.h; sourceTree = "<group>"; };
+		A3C6BFCE1F15CC1300167A08 /* DeviceAddLicenseListCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DeviceAddLicenseListCell.m; sourceTree = "<group>"; };
+		A3D3032C1ED415CB00624304 /* profile_btn_60.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = profile_btn_60.png; sourceTree = "<group>"; };
+		A3D3032D1ED415CB00624304 /* search_btn_60.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = search_btn_60.png; sourceTree = "<group>"; };
+		A3D303301ED6D89900624304 /* logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = logo.png; sourceTree = "<group>"; };
+		A3D303341ED6DCF300624304 /* sign_in_btn.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = sign_in_btn.png; sourceTree = "<group>"; };
+		A3D303361ED7E53900624304 /* renew_btn.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = renew_btn.png; sourceTree = "<group>"; };
+		A3D303381ED7E9F900624304 /* no_working.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = no_working.png; sourceTree = "<group>"; };
+		A3D303391ED7E9F900624304 /* bg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bg.png; sourceTree = "<group>"; };
+		A3D3033D1EE00EB900624304 /* Jwt.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Jwt.h; sourceTree = "<group>"; };
+		A3D3033E1EE00EB900624304 /* Jwt.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Jwt.m; sourceTree = "<group>"; };
+		A3D303401EE011DD00624304 /* Algorithm.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Algorithm.h; sourceTree = "<group>"; };
+		A3D303411EE011DD00624304 /* Algorithm.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Algorithm.m; sourceTree = "<group>"; };
+		A3D303431EE0896700624304 /* public.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = public.m; sourceTree = "<group>"; };
+		A3D303451EE0897E00624304 /* public.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = public.h; sourceTree = "<group>"; };
+		A3E61BAA1F040AFF009FEC1D /* RegisterDeviceFinalListCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RegisterDeviceFinalListCell.h; sourceTree = "<group>"; };
+		A3E61BAB1F040AFF009FEC1D /* RegisterDeviceFinalListCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RegisterDeviceFinalListCell.m; sourceTree = "<group>"; };
+		A3E61BAD1F0742CC009FEC1D /* LicenseRegisteredServicesCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LicenseRegisteredServicesCell.h; sourceTree = "<group>"; };
+		A3E61BAE1F0742CC009FEC1D /* LicenseRegisteredServicesCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LicenseRegisteredServicesCell.m; sourceTree = "<group>"; };
+		A3E61BB31F08C4CE009FEC1D /* ToDeviceListCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ToDeviceListCell.h; sourceTree = "<group>"; };
+		A3E61BB41F08C4CE009FEC1D /* ToDeviceListCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ToDeviceListCell.m; sourceTree = "<group>"; };
+		A3EAE1201ECAD11C0038FA47 /* license.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = license.h; sourceTree = "<group>"; };
+		A3EAE1211ECAD11C0038FA47 /* license.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = license.m; sourceTree = "<group>"; };
+		A3EAE1231ECAD1370038FA47 /* notification.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = notification.h; sourceTree = "<group>"; };
+		A3EAE1241ECAD1370038FA47 /* notification.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = notification.m; sourceTree = "<group>"; };
+		A3EAE1261ECAD21F0038FA47 /* login.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = login.h; sourceTree = "<group>"; };
+		A3EAE1271ECAD21F0038FA47 /* login.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = login.m; sourceTree = "<group>"; };
+		A3EAFC1B1F0F39A6004AA5A0 /* ShowRegisteredLicenseCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ShowRegisteredLicenseCell.h; sourceTree = "<group>"; };
+		A3EAFC1C1F0F39A6004AA5A0 /* ShowRegisteredLicenseCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ShowRegisteredLicenseCell.m; sourceTree = "<group>"; };
+		A3EBEC601F0DDEF400AF79C4 /* RegisterLicenseListCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RegisterLicenseListCell.h; sourceTree = "<group>"; };
+		A3EBEC611F0DDEF400AF79C4 /* RegisterLicenseListCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RegisterLicenseListCell.m; sourceTree = "<group>"; };
+		A3EF9CF81EEF8DB300FAFAD6 /* reduce.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = reduce.png; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		A39BC9F81EC5A0A0008882D8 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A39BCA141EC5A0A0008882D8 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A39BCA1F1EC5A0A0008882D8 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		A32AA45D1ECAE94D0019003D /* MBProgressHUD */ = {
+			isa = PBXGroup;
+			children = (
+				A32AA4621ECAF27B0019003D /* MBProgressHUD.h */,
+				A32AA4631ECAF27B0019003D /* MBProgressHUD.m */,
+			);
+			path = MBProgressHUD;
+			sourceTree = "<group>";
+		};
+		A32AA4651ECC348C0019003D /* Images */ = {
+			isa = PBXGroup;
+			children = (
+				A3AD2C931F1B723D002F8D0A /* bk.png */,
+				A3060ED71F14585C0023C4CD /* try_again.png */,
+				A355D8BF1EFCCEE100774312 /* pg2_0.png */,
+				A355D8C01EFCCEE100774312 /* pg1_0.png */,
+				A355D8BA1EFB722800774312 /* edit.png */,
+				A355D8B81EFB70D700774312 /* icon-ios7-arrow-back-512.png */,
+				A355D8AD1EFA747000774312 /* scan_fram_5pt.png */,
+				A355D8911EF73C9500774312 /* key_0.png */,
+				A355D8921EF73C9500774312 /* key_1.png */,
+				A355D8931EF73C9500774312 /* link.png */,
+				A355D8951EF73C9500774312 /* pg3_1.png */,
+				A355D8961EF73C9500774312 /* back.png */,
+				A355D8971EF73C9500774312 /* clear.png */,
+				A355D8991EF73C9500774312 /* pg2_1.png */,
+				A355D89A1EF73C9500774312 /* pg3_unused.png */,
+				A355D89B1EF73C9500774312 /* pg23_unsed.png */,
+				A355D89C1EF73C9500774312 /* pg1_1.png */,
+				A355D88D1EF69AFD00774312 /* add.png */,
+				A355D88E1EF69AFD00774312 /* warring.png */,
+				A3EF9CF81EEF8DB300FAFAD6 /* reduce.png */,
+				A3D303381ED7E9F900624304 /* no_working.png */,
+				A3D303391ED7E9F900624304 /* bg.png */,
+				A3D303361ED7E53900624304 /* renew_btn.png */,
+				A3D303341ED6DCF300624304 /* sign_in_btn.png */,
+				A3D303301ED6D89900624304 /* logo.png */,
+				A3D3032C1ED415CB00624304 /* profile_btn_60.png */,
+				A3D3032D1ED415CB00624304 /* search_btn_60.png */,
+				A32AA4661ECC359F0019003D /* launch_screen.png */,
+			);
+			path = Images;
+			sourceTree = "<group>";
+		};
+		A39BC9F21EC5A0A0008882D8 = {
+			isa = PBXGroup;
+			children = (
+				A39BC9FD1EC5A0A0008882D8 /* MyZyxel */,
+				A39BCA1A1EC5A0A0008882D8 /* MyZyxelTests */,
+				A39BCA251EC5A0A0008882D8 /* MyZyxelUITests */,
+				A39BC9FC1EC5A0A0008882D8 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		A39BC9FC1EC5A0A0008882D8 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				A39BC9FB1EC5A0A0008882D8 /* MyZyxel.app */,
+				A39BCA171EC5A0A0008882D8 /* MyZyxelTests.xctest */,
+				A39BCA221EC5A0A0008882D8 /* MyZyxelUITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		A39BC9FD1EC5A0A0008882D8 /* MyZyxel */ = {
+			isa = PBXGroup;
+			children = (
+				A355D8AF1EFA836800774312 /* Reachability.h */,
+				A355D8B01EFA836800774312 /* Reachability.m */,
+				A3D3033C1EE00DED00624304 /* JWT */,
+				A32AA4651ECC348C0019003D /* Images */,
+				A32AA45D1ECAE94D0019003D /* MBProgressHUD */,
+				A32AA4611ECAECCB0019003D /* common.h */,
+				A3D303451EE0897E00624304 /* public.h */,
+				A3D303431EE0896700624304 /* public.m */,
+				A39BCA011EC5A0A0008882D8 /* AppDelegate.h */,
+				A39BCA021EC5A0A0008882D8 /* AppDelegate.m */,
+				A39BCA041EC5A0A0008882D8 /* home.h */,
+				A39BCA051EC5A0A0008882D8 /* home.m */,
+				A39BCA071EC5A0A0008882D8 /* device.h */,
+				A39BCA081EC5A0A0008882D8 /* device.m */,
+				A3EAE1201ECAD11C0038FA47 /* license.h */,
+				A3EAE1211ECAD11C0038FA47 /* license.m */,
+				A3EAE1231ECAD1370038FA47 /* notification.h */,
+				A3EAE1241ECAD1370038FA47 /* notification.m */,
+				A3EAE1261ECAD21F0038FA47 /* login.h */,
+				A3EAE1271ECAD21F0038FA47 /* login.m */,
+				A32AA46A1ECC4F730019003D /* start.h */,
+				A32AA46B1ECC4F730019003D /* start.m */,
+				A39BCA0A1EC5A0A0008882D8 /* Main.storyboard */,
+				A39BCA0D1EC5A0A0008882D8 /* Assets.xcassets */,
+				A39BCA0F1EC5A0A0008882D8 /* LaunchScreen.storyboard */,
+				A39BCA121EC5A0A0008882D8 /* Info.plist */,
+				A39BC9FE1EC5A0A0008882D8 /* Supporting Files */,
+				A39889BA1EEB0D75005162B3 /* DevicesExpiredListCell.h */,
+				A39889BB1EEB0D75005162B3 /* DevicesExpiredListCell.m */,
+				A34652771EEE7B6800126362 /* SearchDevicesListCell.h */,
+				A34652781EEE7B6800126362 /* SearchDevicesListCell.m */,
+				A38B5DFA1EF21D01005B486D /* RegisteredLicenseListCell.h */,
+				A38B5DFB1EF21D01005B486D /* RegisteredLicenseListCell.m */,
+				A38B5DFD1EF2F3D5005B486D /* DeviceListCell.h */,
+				A38B5DFE1EF2F3D5005B486D /* DeviceListCell.m */,
+				A355D8491EF36F5C00774312 /* LicenseListCell.h */,
+				A355D84A1EF36F5C00774312 /* LicenseListCell.m */,
+				A355D8B51EFB57D000774312 /* DetailServiceCell.h */,
+				A355D8B61EFB57D000774312 /* DetailServiceCell.m */,
+				A355D8BC1EFC927200774312 /* AddLicenseCell.h */,
+				A355D8BD1EFC927200774312 /* AddLicenseCell.m */,
+				A355D8C31EFF78EA00774312 /* CompleteServiceCell.h */,
+				A355D8C41EFF78EA00774312 /* CompleteServiceCell.m */,
+				A355D8C91F02C7D200774312 /* RegisterDeviceListCell.h */,
+				A355D8CA1F02C7D200774312 /* RegisterDeviceListCell.m */,
+				A355D8CC1F03322A00774312 /* RegisterDeviceEditListCell.h */,
+				A355D8CD1F03322A00774312 /* RegisterDeviceEditListCell.m */,
+				A3E61BAA1F040AFF009FEC1D /* RegisterDeviceFinalListCell.h */,
+				A3E61BAB1F040AFF009FEC1D /* RegisterDeviceFinalListCell.m */,
+				A3E61BAD1F0742CC009FEC1D /* LicenseRegisteredServicesCell.h */,
+				A3E61BAE1F0742CC009FEC1D /* LicenseRegisteredServicesCell.m */,
+				A3E61BB31F08C4CE009FEC1D /* ToDeviceListCell.h */,
+				A3E61BB41F08C4CE009FEC1D /* ToDeviceListCell.m */,
+				A3EBEC601F0DDEF400AF79C4 /* RegisterLicenseListCell.h */,
+				A3EBEC611F0DDEF400AF79C4 /* RegisterLicenseListCell.m */,
+				A3EAFC1B1F0F39A6004AA5A0 /* ShowRegisteredLicenseCell.h */,
+				A3EAFC1C1F0F39A6004AA5A0 /* ShowRegisteredLicenseCell.m */,
+				A3C6BFCD1F15CC1300167A08 /* DeviceAddLicenseListCell.h */,
+				A3C6BFCE1F15CC1300167A08 /* DeviceAddLicenseListCell.m */,
+			);
+			path = MyZyxel;
+			sourceTree = "<group>";
+		};
+		A39BC9FE1EC5A0A0008882D8 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				A39BC9FF1EC5A0A0008882D8 /* main.m */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		A39BCA1A1EC5A0A0008882D8 /* MyZyxelTests */ = {
+			isa = PBXGroup;
+			children = (
+				A39BCA1B1EC5A0A0008882D8 /* MyZyxelTests.m */,
+				A39BCA1D1EC5A0A0008882D8 /* Info.plist */,
+			);
+			path = MyZyxelTests;
+			sourceTree = "<group>";
+		};
+		A39BCA251EC5A0A0008882D8 /* MyZyxelUITests */ = {
+			isa = PBXGroup;
+			children = (
+				A39BCA261EC5A0A0008882D8 /* MyZyxelUITests.m */,
+				A39BCA281EC5A0A0008882D8 /* Info.plist */,
+			);
+			path = MyZyxelUITests;
+			sourceTree = "<group>";
+		};
+		A3D3033C1EE00DED00624304 /* JWT */ = {
+			isa = PBXGroup;
+			children = (
+				A3D303401EE011DD00624304 /* Algorithm.h */,
+				A3D303411EE011DD00624304 /* Algorithm.m */,
+				A3D3033D1EE00EB900624304 /* Jwt.h */,
+				A3D3033E1EE00EB900624304 /* Jwt.m */,
+			);
+			path = JWT;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		A39BC9FA1EC5A0A0008882D8 /* MyZyxel */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A39BCA2B1EC5A0A0008882D8 /* Build configuration list for PBXNativeTarget "MyZyxel" */;
+			buildPhases = (
+				A39BC9F71EC5A0A0008882D8 /* Sources */,
+				A39BC9F81EC5A0A0008882D8 /* Frameworks */,
+				A39BC9F91EC5A0A0008882D8 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = MyZyxel;
+			productName = MyZyxel;
+			productReference = A39BC9FB1EC5A0A0008882D8 /* MyZyxel.app */;
+			productType = "com.apple.product-type.application";
+		};
+		A39BCA161EC5A0A0008882D8 /* MyZyxelTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A39BCA2E1EC5A0A0008882D8 /* Build configuration list for PBXNativeTarget "MyZyxelTests" */;
+			buildPhases = (
+				A39BCA131EC5A0A0008882D8 /* Sources */,
+				A39BCA141EC5A0A0008882D8 /* Frameworks */,
+				A39BCA151EC5A0A0008882D8 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				A39BCA191EC5A0A0008882D8 /* PBXTargetDependency */,
+			);
+			name = MyZyxelTests;
+			productName = MyZyxelTests;
+			productReference = A39BCA171EC5A0A0008882D8 /* MyZyxelTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		A39BCA211EC5A0A0008882D8 /* MyZyxelUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A39BCA311EC5A0A0008882D8 /* Build configuration list for PBXNativeTarget "MyZyxelUITests" */;
+			buildPhases = (
+				A39BCA1E1EC5A0A0008882D8 /* Sources */,
+				A39BCA1F1EC5A0A0008882D8 /* Frameworks */,
+				A39BCA201EC5A0A0008882D8 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				A39BCA241EC5A0A0008882D8 /* PBXTargetDependency */,
+			);
+			name = MyZyxelUITests;
+			productName = MyZyxelUITests;
+			productReference = A39BCA221EC5A0A0008882D8 /* MyZyxelUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		A39BC9F31EC5A0A0008882D8 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0830;
+				ORGANIZATIONNAME = Zyxel;
+				TargetAttributes = {
+					A39BC9FA1EC5A0A0008882D8 = {
+						CreatedOnToolsVersion = 8.3.2;
+						DevelopmentTeam = V8MGAQW66B;
+						ProvisioningStyle = Automatic;
+					};
+					A39BCA161EC5A0A0008882D8 = {
+						CreatedOnToolsVersion = 8.3.2;
+						ProvisioningStyle = Automatic;
+						TestTargetID = A39BC9FA1EC5A0A0008882D8;
+					};
+					A39BCA211EC5A0A0008882D8 = {
+						CreatedOnToolsVersion = 8.3.2;
+						ProvisioningStyle = Automatic;
+						TestTargetID = A39BC9FA1EC5A0A0008882D8;
+					};
+				};
+			};
+			buildConfigurationList = A39BC9F61EC5A0A0008882D8 /* Build configuration list for PBXProject "myZyxel" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = A39BC9F21EC5A0A0008882D8;
+			productRefGroup = A39BC9FC1EC5A0A0008882D8 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				A39BC9FA1EC5A0A0008882D8 /* MyZyxel */,
+				A39BCA161EC5A0A0008882D8 /* MyZyxelTests */,
+				A39BCA211EC5A0A0008882D8 /* MyZyxelUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		A39BC9F91EC5A0A0008882D8 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A3D303371ED7E53900624304 /* renew_btn.png in Resources */,
+				A355D8B91EFB70D700774312 /* icon-ios7-arrow-back-512.png in Resources */,
+				A3D3032E1ED415CB00624304 /* profile_btn_60.png in Resources */,
+				A39BCA111EC5A0A0008882D8 /* LaunchScreen.storyboard in Resources */,
+				A355D8A81EF73C9500774312 /* pg1_1.png in Resources */,
+				A3D3032F1ED415CB00624304 /* search_btn_60.png in Resources */,
+				A355D8A71EF73C9500774312 /* pg23_unsed.png in Resources */,
+				A355D89D1EF73C9500774312 /* key_0.png in Resources */,
+				A355D89E1EF73C9500774312 /* key_1.png in Resources */,
+				A3D303311ED6D89900624304 /* logo.png in Resources */,
+				A3060ED81F14585C0023C4CD /* try_again.png in Resources */,
+				A39BCA0E1EC5A0A0008882D8 /* Assets.xcassets in Resources */,
+				A32AA4671ECC359F0019003D /* launch_screen.png in Resources */,
+				A355D8C21EFCCEE100774312 /* pg1_0.png in Resources */,
+				A355D8A31EF73C9500774312 /* clear.png in Resources */,
+				A355D88F1EF69AFD00774312 /* add.png in Resources */,
+				A355D89F1EF73C9500774312 /* link.png in Resources */,
+				A355D8A51EF73C9500774312 /* pg2_1.png in Resources */,
+				A39BCA0C1EC5A0A0008882D8 /* Main.storyboard in Resources */,
+				A3D3033A1ED7E9F900624304 /* no_working.png in Resources */,
+				A3AD2C941F1B723D002F8D0A /* bk.png in Resources */,
+				A355D8A11EF73C9500774312 /* pg3_1.png in Resources */,
+				A3EF9CF91EEF8DB300FAFAD6 /* reduce.png in Resources */,
+				A355D8C11EFCCEE100774312 /* pg2_0.png in Resources */,
+				A355D8BB1EFB722800774312 /* edit.png in Resources */,
+				A355D8A21EF73C9500774312 /* back.png in Resources */,
+				A3D3033B1ED7E9F900624304 /* bg.png in Resources */,
+				A3D303351ED6DCF300624304 /* sign_in_btn.png in Resources */,
+				A355D8AE1EFA747000774312 /* scan_fram_5pt.png in Resources */,
+				A355D8A61EF73C9500774312 /* pg3_unused.png in Resources */,
+				A355D8901EF69AFD00774312 /* warring.png in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A39BCA151EC5A0A0008882D8 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A39BCA201EC5A0A0008882D8 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		A39BC9F71EC5A0A0008882D8 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A355D84B1EF36F5C00774312 /* LicenseListCell.m in Sources */,
+				A3EAE1221ECAD11C0038FA47 /* license.m in Sources */,
+				A3EAE1281ECAD21F0038FA47 /* login.m in Sources */,
+				A355D8B71EFB57D000774312 /* DetailServiceCell.m in Sources */,
+				A39BCA091EC5A0A0008882D8 /* device.m in Sources */,
+				A355D8CE1F03322A00774312 /* RegisterDeviceEditListCell.m in Sources */,
+				A39889BC1EEB0D75005162B3 /* DevicesExpiredListCell.m in Sources */,
+				A3D303421EE011DD00624304 /* Algorithm.m in Sources */,
+				A38B5DFC1EF21D01005B486D /* RegisteredLicenseListCell.m in Sources */,
+				A355D8CB1F02C7D200774312 /* RegisterDeviceListCell.m in Sources */,
+				A3D3033F1EE00EB900624304 /* Jwt.m in Sources */,
+				A38B5DFF1EF2F3D5005B486D /* DeviceListCell.m in Sources */,
+				A3EAE1251ECAD1370038FA47 /* notification.m in Sources */,
+				A34652791EEE7B6800126362 /* SearchDevicesListCell.m in Sources */,
+				A39BCA031EC5A0A0008882D8 /* AppDelegate.m in Sources */,
+				A3EBEC621F0DDEF400AF79C4 /* RegisterLicenseListCell.m in Sources */,
+				A3E61BAF1F0742CC009FEC1D /* LicenseRegisteredServicesCell.m in Sources */,
+				A3E61BB51F08C4CE009FEC1D /* ToDeviceListCell.m in Sources */,
+				A39BCA061EC5A0A0008882D8 /* home.m in Sources */,
+				A355D8C51EFF78EA00774312 /* CompleteServiceCell.m in Sources */,
+				A3EAFC1D1F0F39A6004AA5A0 /* ShowRegisteredLicenseCell.m in Sources */,
+				A32AA46C1ECC4F730019003D /* start.m in Sources */,
+				A355D8BE1EFC927200774312 /* AddLicenseCell.m in Sources */,
+				A3E61BAC1F040AFF009FEC1D /* RegisterDeviceFinalListCell.m in Sources */,
+				A39BCA001EC5A0A0008882D8 /* main.m in Sources */,
+				A3D303441EE0896700624304 /* public.m in Sources */,
+				A355D8B11EFA836800774312 /* Reachability.m in Sources */,
+				A32AA4641ECAF27B0019003D /* MBProgressHUD.m in Sources */,
+				A3C6BFCF1F15CC1300167A08 /* DeviceAddLicenseListCell.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A39BCA131EC5A0A0008882D8 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A39BCA1C1EC5A0A0008882D8 /* MyZyxelTests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A39BCA1E1EC5A0A0008882D8 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A39BCA271EC5A0A0008882D8 /* MyZyxelUITests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		A39BCA191EC5A0A0008882D8 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = A39BC9FA1EC5A0A0008882D8 /* MyZyxel */;
+			targetProxy = A39BCA181EC5A0A0008882D8 /* PBXContainerItemProxy */;
+		};
+		A39BCA241EC5A0A0008882D8 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = A39BC9FA1EC5A0A0008882D8 /* MyZyxel */;
+			targetProxy = A39BCA231EC5A0A0008882D8 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		A39BCA0A1EC5A0A0008882D8 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				A39BCA0B1EC5A0A0008882D8 /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		A39BCA0F1EC5A0A0008882D8 /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				A39BCA101EC5A0A0008882D8 /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		A39BCA291EC5A0A0008882D8 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		A39BCA2A1EC5A0A0008882D8 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		A39BCA2C1EC5A0A0008882D8 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = V8MGAQW66B;
+				INFOPLIST_FILE = MyZyxel/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.zyxel.myZyxel;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Debug;
+		};
+		A39BCA2D1EC5A0A0008882D8 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = V8MGAQW66B;
+				INFOPLIST_FILE = MyZyxel/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				ONLY_ACTIVE_ARCH = NO;
+				PRODUCT_BUNDLE_IDENTIFIER = com.zyxel.myZyxel;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Release;
+		};
+		A39BCA2F1EC5A0A0008882D8 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				INFOPLIST_FILE = MyZyxelTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = RegApp.MyZyxelTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/myZyxel.temp_caseinsensitive_rename.app/myZyxel.temp_caseinsensitive_rename";
+			};
+			name = Debug;
+		};
+		A39BCA301EC5A0A0008882D8 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				INFOPLIST_FILE = MyZyxelTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = RegApp.MyZyxelTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/myZyxel.temp_caseinsensitive_rename.app/myZyxel.temp_caseinsensitive_rename";
+			};
+			name = Release;
+		};
+		A39BCA321EC5A0A0008882D8 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				INFOPLIST_FILE = MyZyxelUITests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = RegApp.MyZyxelUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_TARGET_NAME = MyZyxel;
+			};
+			name = Debug;
+		};
+		A39BCA331EC5A0A0008882D8 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				INFOPLIST_FILE = MyZyxelUITests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = RegApp.MyZyxelUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_TARGET_NAME = MyZyxel;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		A39BC9F61EC5A0A0008882D8 /* Build configuration list for PBXProject "myZyxel" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A39BCA291EC5A0A0008882D8 /* Debug */,
+				A39BCA2A1EC5A0A0008882D8 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		A39BCA2B1EC5A0A0008882D8 /* Build configuration list for PBXNativeTarget "MyZyxel" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A39BCA2C1EC5A0A0008882D8 /* Debug */,
+				A39BCA2D1EC5A0A0008882D8 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		A39BCA2E1EC5A0A0008882D8 /* Build configuration list for PBXNativeTarget "MyZyxelTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A39BCA2F1EC5A0A0008882D8 /* Debug */,
+				A39BCA301EC5A0A0008882D8 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		A39BCA311EC5A0A0008882D8 /* Build configuration list for PBXNativeTarget "MyZyxelUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A39BCA321EC5A0A0008882D8 /* Debug */,
+				A39BCA331EC5A0A0008882D8 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = A39BC9F31EC5A0A0008882D8 /* Project object */;
+}
