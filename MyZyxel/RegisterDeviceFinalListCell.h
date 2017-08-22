@@ -11,4 +11,5 @@
 @interface RegisterDeviceFinalListCell : UITableViewCell
 @property (weak, nonatomic) IBOutlet UILabel *name;
 @property (weak, nonatomic) IBOutlet UILabel *mac;
+@property (weak, nonatomic) IBOutlet UILabel *message;
 @end

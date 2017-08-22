@@ -26,6 +26,10 @@
 + (NSData *)hexToBytes:(NSString *)str;
 + (NSString*)getHexStringFromNSData:(NSData*)data;
 + (int8_t)getDeviceType;
++ (NSString *)checkErrorCode:(NSString *)code;
++ (NSString *)getServiceTime:(NSInteger)amount;
++ (NSString *)getExpiringTime: (NSInteger)day;
++ (BOOL)checkNetWorkConn;
 
 + (void)set_access_token:(NSString *)input;
 + (NSString *)get_access_token;

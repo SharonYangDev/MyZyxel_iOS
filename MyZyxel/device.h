@@ -17,6 +17,8 @@
 #import "RegisterDeviceEditListCell.h"
 #import "RegisterDeviceFinalListCell.h"
 #import "DeviceAddLicenseListCell.h"
+#import "SearchDeviceListCell.h"
+#import "ActivateOkListCell.h"
 
 @interface device : UIViewController
 @property (weak, nonatomic) IBOutlet UIView *deviceView;
@@ -34,6 +36,11 @@
 @property (weak, nonatomic) IBOutlet UIView *addLicenseScanView;
 @property (weak, nonatomic) IBOutlet UIView *noDeviceView;
 @property (weak, nonatomic) IBOutlet UIView *errorView;
+@property (weak, nonatomic) IBOutlet UIView *cancelMask;
+@property (weak, nonatomic) IBOutlet UIView *cancalView;
+@property (weak, nonatomic) IBOutlet UIView *searchDeviceView;
+@property (weak, nonatomic) IBOutlet UIView *searchNoResView;
+@property (weak, nonatomic) IBOutlet UIView *activateOkView;
 @property (weak, nonatomic) IBOutlet UITableView *devicesList;
 @property (weak, nonatomic) IBOutlet UITableView *detailServiceList;
 @property (weak, nonatomic) IBOutlet UITableView *addLicenseServiceList;
@@ -43,6 +50,8 @@
 @property (weak, nonatomic) IBOutlet UITableView *registerDeviceFinalList;
 @property (weak, nonatomic) IBOutlet UITableView *addLicenseManualList;
 @property (weak, nonatomic) IBOutlet UITableView *addLicenseScanList;
+@property (weak, nonatomic) IBOutlet UITableView *searchList;
+@property (weak, nonatomic) IBOutlet UITableView *activateOkList;
 @property (weak, nonatomic) IBOutlet UIButton *registerDevicePage3RegisterBtn;
 @property (weak, nonatomic) IBOutlet UIButton *registerDevicepage1ScanCancelBtn;
 @property (weak, nonatomic) IBOutlet UIButton *registerDevicepage1ManualCancelBtn;
@@ -73,6 +82,11 @@
 @property (weak, nonatomic) IBOutlet UIButton *addlicenseManualActivateBtn;
 @property (weak, nonatomic) IBOutlet UIButton *addlicenseScanActivateBtn;
 @property (weak, nonatomic) IBOutlet UIButton *tryAgainBtn;
+@property (weak, nonatomic) IBOutlet UIButton *cancelViewContinueBtn;
+@property (weak, nonatomic) IBOutlet UIButton *cancelViewExitBtn;
+@property (weak, nonatomic) IBOutlet UIButton *searchDeviceCancelBtn;
+@property (weak, nonatomic) IBOutlet UIButton *deviceSearchBtn;
+@property (weak, nonatomic) IBOutlet UIButton *activateOkBtn;
 @property (weak, nonatomic) IBOutlet UILabel *detailDeviceName;
 @property (weak, nonatomic) IBOutlet UILabel *detailDeviceMacAddr;
 @property (weak, nonatomic) IBOutlet UILabel *detailDeviceModel;
@@ -101,14 +115,15 @@
 @property (weak, nonatomic) IBOutlet UILabel *addLicenseManualDeviceName;
 @property (weak, nonatomic) IBOutlet UILabel *addLicenseManualMac;
 @property (weak, nonatomic) IBOutlet UILabel *errorLbl;
+@property (weak, nonatomic) IBOutlet UILabel *resellerMailTxt;
+@property (weak, nonatomic) IBOutlet UILabel *resellerVatTxt;
 @property (weak, nonatomic) IBOutlet UITextField *resellerNameTxt;
-@property (weak, nonatomic) IBOutlet UITextField *resellerMailTxt;
-@property (weak, nonatomic) IBOutlet UITextField *resellerVatTxt;
 @property (weak, nonatomic) IBOutlet UITextField *editViewSearchTxt;
 @property (weak, nonatomic) IBOutlet UITextField *editViewDevieNameTxt;
 @property (weak, nonatomic) IBOutlet UITextField *manualMacAddress;
 @property (weak, nonatomic) IBOutlet UITextField *manualSerialNumber;
 @property (weak, nonatomic) IBOutlet UITextField *addLicenseManualViewTxt;
+@property (weak, nonatomic) IBOutlet UITextField *searchDeviceTxt;
 @property (strong, nonatomic) IBOutlet UITapGestureRecognizer *HiddeKeyboardGesture;
 - (IBAction)registerDevicepage1CancelBtn:(id)sender;
 - (IBAction)registerDevicepage2CancelBtn:(id)sender;
@@ -139,5 +154,10 @@
 - (IBAction)addLicenseScanActivateBtn:(id)sender;
 - (IBAction)addLicenseManualActivateBtn:(id)sender;
 - (IBAction)tryAgainBtn:(id)sender;
+- (IBAction)cancelViewContinueView:(id)sender;
+- (IBAction)cancelViewExitView:(id)sender;
+- (IBAction)searchDeviceCancelBtn:(id)sender;
+- (IBAction)deviceSearchBtn:(id)sender;
+- (IBAction)activateOkBtn:(id)sender;
 @end
 

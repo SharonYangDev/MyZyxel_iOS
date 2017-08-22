@@ -11,7 +11,6 @@
 @interface login ()
 {
     MBProgressHUD *m_HUD;
-    NetworkStatus netStatus;
 }
 @end
 
@@ -24,10 +23,8 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    debug(@"sdafdsafdsafasfasfasdfas");
     [self.loginPage.scrollView setBounces: NO];
-    Reachability *reach = [Reachability reachabilityWithHostName: @"www.apple.com"];
-    netStatus = [reach currentReachabilityStatus];
-    
     if (m_HUD == nil)
     {
         m_HUD = [[MBProgressHUD alloc]initWithView: self.view];
@@ -37,21 +34,25 @@
         [m_HUD setMinShowTime: 15];
         [self.view addSubview: m_HUD];
     }
-    // call get_authorization fun
-    if (netStatus == NotReachable) {
-        debug(@"no internet!");
-    }
-    else
-    {
-        //[m_HUD showWhileExecuting:@selector(get_authorization) onTarget:self withObject:nil animated:YES];
-        [self get_authorization];
-    }
+    [self.errorView setHidden: YES];
+    [self selfLayout];
 }
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear: animated];
-    [self.errorView setHidden: YES];
-    [self selfLayout];
+    
+    // get_authorization
+    if ([public checkNetWorkConn]) {
+        [self get_authorization];
+    }
+    else
+    {
+        dispatch_async(dispatch_get_main_queue(), ^() {
+            debug(@"no internet");
+            [m_HUD setHidden: YES];
+            [self.errorView setHidden: NO];
+        });
+    }
 }
 - (void)didReceiveMemoryWarning
 {
@@ -62,18 +63,16 @@
 - (void) get_authorization
 {
     [m_HUD setHidden: NO];
-    [m_HUD.label setText: @"Login ..."];
     NSString *oauth_url = [NSString stringWithFormat: @"%@/oauth/authorize?client_id=%@&redirect_uri=%@&response_type=code&state=line", SITE_URL, CLIENT_ID, REDIRECT_URI];
     if (DEBUG) debug(@"oauth url = %@", oauth_url);
     NSURL *url = [NSURL URLWithString: oauth_url];
     //NSURLRequest *request_auth = [NSURLRequest requestWithURL: url];
-    NSURLRequest *request_auth = [NSURLRequest requestWithURL: url cachePolicy: NSURLRequestUseProtocolCachePolicy timeoutInterval: 60];
+    NSURLRequest *request_auth = [NSURLRequest requestWithURL: url cachePolicy: NSURLRequestUseProtocolCachePolicy timeoutInterval: 30];
     [self.loginPage loadRequest: request_auth];
 }
 - (void)get_access_token:(NSString *)auth_grant_code
 {
     [m_HUD setHidden: NO];
-    [m_HUD.label setText: @"Login ..."];
     NSString *access_token_url = [NSString stringWithFormat: @"%@/oauth/token", SITE_URL];
     if (DEBUG) debug(@"access token url = %@", access_token_url);
     NSURL *url = [NSURL URLWithString: access_token_url];
@@ -152,6 +151,7 @@
                         if ([[json objectForKey: @"result"]length] > 0)
                         {
                             dispatch_async(dispatch_get_main_queue(), ^{
+                                if (DEBUG) debug(@"change to main page.");
                                 [m_HUD setHidden: YES];
                                 [self changeView:@"main"];
                             });
@@ -176,9 +176,9 @@
     if (DEBUG) debug(@"status = %ld", (long)[(NSHTTPURLResponse*)resp.response statusCode]);
     //if ((long)[(NSHTTPURLResponse*)resp.response statusCode])
     //{
-        dispatch_async(dispatch_get_main_queue(), ^() {
-            [m_HUD setHidden: YES];
-        });
+    dispatch_async(dispatch_get_main_queue(), ^() {
+        [m_HUD setHidden: YES];
+    });
     //}
 }
 -(void)webView:(UIWebView *)webView didFailLoadWithError:(NSError *)error
@@ -186,13 +186,9 @@
     NSDictionary *serverInfo = [error userInfo];
     if (DEBUG) debug(@"serverInfo = %@", serverInfo);
     NSString *urlKey = [NSString stringWithFormat: @"NSErrorFailingURLKey = %@", [serverInfo objectForKey: @"NSErrorFailingURLKey"]];
-
     NSArray *auth_grant_code = [urlKey componentsSeparatedByString: @"?"];
-
     if (DEBUG) debug(@"auth_grant_code = %@", [auth_grant_code objectAtIndex: 1]);
-    
     NSDictionary *query_str = [public parseQueryString: [auth_grant_code objectAtIndex: 1]];
-    
     [public set_code: [NSString stringWithFormat: @"%@", [query_str objectForKey: @"code"]]];
     if (![[public get_code] isEqualToString: @"(null)"])
     {
@@ -200,7 +196,7 @@
     }
     else
     {
-        if (DEBUG) debug(@"timeout");
+        // timeout
         [m_HUD setHidden: YES];
         [self.errorView setHidden: NO];
     }
@@ -213,7 +209,6 @@
 }
 - (void)selfLayout
 {
-    debug(@"layout");
     switch (public.getDeviceType)
     {
         case 1:
@@ -236,9 +231,12 @@
 #pragma mark - BUTTON EVENTS
 - (IBAction)tryAgainBtn:(id)sender
 {
-    [m_HUD setHidden: NO];
-    [self.loginPage stopLoading];
-    [self.errorView setHidden: YES];
-    [self get_authorization];
+    if ([public checkNetWorkConn])
+    {
+        [m_HUD setHidden: NO];
+        [self.loginPage stopLoading];
+        [self.errorView setHidden: YES];
+        [self get_authorization];
+    }
 }
 @end

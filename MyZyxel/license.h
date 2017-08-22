@@ -15,6 +15,8 @@
 #import "ToDeviceListCell.h"
 #import "RegisterLicenseListCell.h"
 #import "ShowRegisteredLicenseCell.h"
+#import "RegisterListCell.h"
+#import "SearchServiceListCell.h"
 
 @interface license : UIViewController
 @property (weak, nonatomic) IBOutlet UIView *licenseView;
@@ -26,12 +28,17 @@
 @property (weak, nonatomic) IBOutlet UIView *showView;
 @property (weak, nonatomic) IBOutlet UIView *noLicenseView;
 @property (weak, nonatomic) IBOutlet UIView *errorView;
+@property (weak, nonatomic) IBOutlet UIView *registerListView;
+@property (weak, nonatomic) IBOutlet UIView *searchListView;
+@property (weak, nonatomic) IBOutlet UIView *searchNoResView;
 @property (weak, nonatomic) IBOutlet UITableView *licenseList;
 @property (weak, nonatomic) IBOutlet UITableView *scanLicenseList;
 @property (weak, nonatomic) IBOutlet UITableView *manualLicenseList;
 @property (weak, nonatomic) IBOutlet UITableView *licenseRegisteredServicesList;
 @property (weak, nonatomic) IBOutlet UITableView *toDeviceList;
 @property (weak, nonatomic) IBOutlet UITableView *showRegisteredServicesList;
+@property (weak, nonatomic) IBOutlet UITableView *registerList;
+@property (weak, nonatomic) IBOutlet UITableView *searchList;
 @property (weak, nonatomic) IBOutlet UIButton *registerNewLicensesBtn;
 @property (weak, nonatomic) IBOutlet UIButton *scanViewBtn;
 @property (weak, nonatomic) IBOutlet UIButton *scanViewCancelBtn;
@@ -43,8 +50,12 @@
 @property (weak, nonatomic) IBOutlet UIButton *showDoneBtn;
 @property (weak, nonatomic) IBOutlet UIButton *scanRegisterBtn;
 @property (weak, nonatomic) IBOutlet UIButton *manualRegisterBtn;
+@property (weak, nonatomic) IBOutlet UIButton *registerListOkBtn;
 @property (weak, nonatomic) IBOutlet UIButton *tryAgainBtn;
+@property (weak, nonatomic) IBOutlet UIButton *licenseSearchBtn;
+@property (weak, nonatomic) IBOutlet UIButton *searchServiceCancelBtn;
 @property (weak, nonatomic) IBOutlet UITextField *manualLicenseKeyTxt;
+@property (weak, nonatomic) IBOutlet UITextField *searchServiceTxt;
 @property (weak, nonatomic) IBOutlet UILabel *manualViewErrorMessage;
 @property (weak, nonatomic) IBOutlet UILabel *scanViewErrorMessage;
 @property (weak, nonatomic) IBOutlet UILabel *licenseDetailModuleCodeName;
@@ -70,4 +81,7 @@
 - (IBAction)scanRegisterBtn:(id)sender;
 - (IBAction)manualRegisterBtn:(id)sender;
 - (IBAction)tryAgainBtn:(id)sender;
+- (IBAction)registerListOkBtn:(id)sender;
+- (IBAction)licenseSearchBtn:(id)sender;
+- (IBAction)searchServiceCancelBtn:(id)sender;
 @end

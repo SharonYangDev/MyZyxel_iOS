@@ -8,7 +8,7 @@
 
 #import "license.h"
 
-@interface license ()
+@interface license ()<AVCaptureMetadataOutputObjectsDelegate>
 {
     MBProgressHUD *m_HUD;
     BOOL licenseListStatus;
@@ -17,28 +17,43 @@
     BOOL toDeviceStatus;
     BOOL showStatus;
     BOOL _scanStatus;
+    BOOL registerListStatus;
+    BOOL searchStatus;
+    BOOL searchKeyWordStatus;
     NSInteger serviceCount;
     NSInteger detailServiceCount;
     NSInteger toDeviceIndex;
     NSIndexPath *cancelIndexPath;
     NSInteger showCount;
+    NSInteger action;
+    NSInteger registerIndex;
     NSMutableArray *licenseNameList;
     NSMutableArray *licenseTotalList;
     NSMutableArray *licenseParsedModuleCodeList;
     NSMutableArray *detailAmountList;
     NSMutableArray *detailTotalList;
+    NSMutableArray *detailErrorMessageList;
     NSMutableArray *toDeviceNameList;
     NSMutableArray *toDeviceMacList;
     NSMutableArray *toDeviceIdList;
+    NSMutableArray *toDeviceIdsListFromDevice;
+    NSMutableArray *selectIdsListFromDevice;
     NSMutableArray *detailIdsListArr;
+    NSMutableArray *toDeviceIdsListArr;
     NSMutableArray *activateServiceIdsList;
     NSMutableArray *scanServiceNameList;
     NSMutableArray *scanServiceKeyList;
     NSMutableArray *scanServiceAmountList;
+    NSMutableArray *registerMessageList;
+    NSMutableArray *searchServiceList;
+    NSMutableArray *searchServiceTotalList;
+    NSMutableArray *searchParsedModuleCodeList;
     NSArray *detailIdsList;
     NSString *detailModuleCode;
     NSString *licenseParsedModuleCode;
     NSString *activateDeviceId;
+    NSString *selectServiceName;
+    NSString *inputLicenseKey;
     AVCaptureSession *_session;
 }
 @end
@@ -53,8 +68,24 @@
     // Do any additional setup after loading the view, typically from a nib.
     [self.manualLicenseKeyTxt addTarget: self action: @selector(checkLicense) forControlEvents: UIControlEventEditingDidEndOnExit];
     [self.manualLicenseKeyTxt.layer setCornerRadius: self.manualLicenseKeyTxt.frame.size.height/2];
+    [self.searchServiceTxt addTarget: self action: @selector(searchServiceInfo) forControlEvents: UIControlEventEditingDidEndOnExit];
     [self.toDeviceCount.layer setMasksToBounds: YES];
     [self.toDeviceCount.layer setCornerRadius: self.toDeviceCount.frame.size.height/2];
+    NSMutableAttributedString *attrString = [[NSMutableAttributedString alloc]initWithString: self.manualViewBtn.titleLabel.text];
+    [attrString setAttributes:@{NSFontAttributeName:[UIFont fontWithName:@"Helvetica-Oblique" size:15.0],NSForegroundColorAttributeName:[UIColor darkGrayColor],NSUnderlineStyleAttributeName:[NSNumber numberWithInteger:NSUnderlineStyleSingle]} range:NSMakeRange(0,[attrString length])];
+    [self.manualViewBtn setAttributedTitle: attrString forState: UIControlStateNormal];
+    attrString = [[NSMutableAttributedString alloc]initWithString: self.scanViewBtn.titleLabel.text];
+    [attrString setAttributes:@{NSFontAttributeName:[UIFont fontWithName:@"Helvetica-Oblique" size:15.0],NSForegroundColorAttributeName:[UIColor darkGrayColor],NSUnderlineStyleAttributeName:[NSNumber numberWithInteger:NSUnderlineStyleSingle]} range:NSMakeRange(0,[attrString length])];
+    [self.scanViewBtn setAttributedTitle: attrString forState: UIControlStateNormal];
+    self.licenseRegisteredServicesList.rowHeight = UITableViewAutomaticDimension;
+    self.licenseRegisteredServicesList.estimatedRowHeight = 74;
+    [self.registerNewLicensesBtn setHitTestEdgeInsets: UIEdgeInsetsMake(60, 60, 60, 60)];
+    [self.scanViewCancelBtn setHitTestEdgeInsets: UIEdgeInsetsMake(120, 60, 120, 60)];
+    [self.manualViewCancelBtn setHitTestEdgeInsets: UIEdgeInsetsMake(120, 60, 120, 60)];
+    [self.licenseDetailCancelBtn setHitTestEdgeInsets: UIEdgeInsetsMake(120, 60, 120, 60)];
+    [self.toDeviceCancelBtn setHitTestEdgeInsets: UIEdgeInsetsMake(120, 60, 120, 60)];
+    [self.showDoneBtn setHitTestEdgeInsets: UIEdgeInsetsMake(120, 60, 120, 60)];
+    [self.licenseSearchBtn setHitTestEdgeInsets: UIEdgeInsetsMake(60, 60, 60, 60)];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -67,6 +98,9 @@
     [self.manualViewErrorMessage setHidden: YES];
     [self.toDeviceView setHidden: YES];
     [self.errorView setHidden: YES];
+    [self.registerListView setHidden: YES];
+    [self.searchListView setHidden: YES];
+    [self selfLayout];
     if (m_HUD == nil)
     {
         m_HUD = [[MBProgressHUD alloc]initWithView: self.view];
@@ -75,12 +109,14 @@
         [m_HUD showAnimated: YES];
         [m_HUD setMinShowTime: 15];
     }
+    [self.tabBarController.tabBar setUserInteractionEnabled: NO];
 }
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear: animated];
     licenseListStatus = YES;
     [self.view addSubview: m_HUD];
+    action = ENTER_SERVICE;
     [self initEnv];
 }
 - (void)initEnv
@@ -93,7 +129,7 @@
 - (void)getLicenseInfo
 {
     [m_HUD setHidden: NO];
-    [m_HUD.label setText: @"Load license data ..."];
+//    [m_HUD.label setText: @"Load license data ..."];
     NSError *error;
     NSDictionary *payload = @{};
     NSString *token = [Jwt encodeWithPayload: payload andKey: [public get_secret_access_key]andError:&error];
@@ -110,89 +146,110 @@
     NSString *get_license_info_url = [NSString stringWithFormat: @"%@/api/v2/my/licenses?token=%@&access_key_id=%@", DATA_URL, token, [public get_access_key_id]];
     if (DEBUG) debug(@"get_license_info_url = %@", get_license_info_url);
     NSURL *url = [NSURL URLWithString: get_license_info_url];
-    NSMutableURLRequest *request_user_info = [NSMutableURLRequest requestWithURL: url cachePolicy: NSURLRequestUseProtocolCachePolicy timeoutInterval: 10];
+    NSMutableURLRequest *request_user_info = [NSMutableURLRequest requestWithURL: url cachePolicy: NSURLRequestUseProtocolCachePolicy timeoutInterval: 15];
     [request_user_info setHTTPMethod: @"GET"];
     [request_user_info setValue: [public get_access_token] forHTTPHeaderField: @"Authorization"];
     NSURLSession *session = [NSURLSession sessionWithConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration]];
     [[session dataTaskWithRequest: request_user_info
                 completionHandler:^(NSData *data, NSURLResponse *response, NSError *error)
       {
-          NSMutableDictionary *json = [NSJSONSerialization JSONObjectWithData: data options: kNilOptions error: nil];
-          if (DEBUG) debug(@"licenseInfo = %@", json);
-          NSMutableDictionary *status = [json objectForKey: @"return_status"];
-          NSString *code = [NSString stringWithFormat: @"%@", [status objectForKey: @"code"]];
-          NSString *message = [NSString stringWithFormat: @"%@", [status objectForKey: @"message"]];
-          if ([code isEqualToString: @"0"])
+          if (data != nil)
           {
-              NSString *encryptionCode = [json objectForKey: @"data"];
-              NSString *iv = [encryptionCode substringWithRange: NSMakeRange(0, 16)];
-              NSString *encrypted_data = [encryptionCode substringFromIndex: 16];
-              NSString *sha256_decode_data = [public sha256: [public get_secret_access_key]];
-              NSData *decode_key = [public hexToBytes: sha256_decode_data];
-              NSData *base64_decode_data = [[NSData alloc]initWithData: (NSData *)[public base64_decode: encrypted_data]];
-              NSData *aes_decode_data = [[NSData alloc]initWithData: [public aes_cbc_256: base64_decode_data andIv: iv andkey: decode_key andType: kCCDecrypt]];
-              NSStringEncoding enc = CFStringConvertEncodingToNSStringEncoding (kCFStringEncodingUTF8);
-              NSString *licenseInfo = [[NSString alloc]initWithData: aes_decode_data encoding: enc];
-              if (DEBUG) debug(@"license info = %@", licenseInfo);
-              licenseNameList = [[NSMutableArray alloc]init];
-              licenseTotalList = [[NSMutableArray alloc]init];
-              licenseParsedModuleCodeList = [[NSMutableArray alloc]init];
-              NSMutableDictionary *license_info_json = [NSJSONSerialization JSONObjectWithData: aes_decode_data options:kNilOptions error: nil];
-              NSInteger licenseCount = [[license_info_json objectForKey: @"total"]integerValue];
-              if (licenseCount > 0)
+              NSMutableDictionary *json = [NSJSONSerialization JSONObjectWithData: data options: kNilOptions error: nil];
+              if (DEBUG) debug(@"licenseInfo = %@", json);
+              NSMutableDictionary *status = [json objectForKey: @"return_status"];
+              NSString *code = [NSString stringWithFormat: @"%@", [status objectForKey: @"code"]];
+              NSString *message = [NSString stringWithFormat: @"%@", [status objectForKey: @"message"]];
+              if ([code isEqualToString: @"0"])
               {
-                  NSArray *deviceListArr = [license_info_json objectForKey: @"services"];
-                  for (NSDictionary *device in deviceListArr)
+                  NSString *encryptionCode = [json objectForKey: @"data"];
+                  NSString *iv = [encryptionCode substringWithRange: NSMakeRange(0, 16)];
+                  NSString *encrypted_data = [encryptionCode substringFromIndex: 16];
+                  NSString *sha256_decode_data = [public sha256: [public get_secret_access_key]];
+                  NSData *decode_key = [public hexToBytes: sha256_decode_data];
+                  NSData *base64_decode_data = [[NSData alloc]initWithData: (NSData *)[public base64_decode: encrypted_data]];
+                  NSData *aes_decode_data = [[NSData alloc]initWithData: [public aes_cbc_256: base64_decode_data andIv: iv andkey: decode_key andType: kCCDecrypt]];
+                  NSStringEncoding enc = CFStringConvertEncodingToNSStringEncoding (kCFStringEncodingUTF8);
+                  NSString *licenseInfo = [[NSString alloc]initWithData: aes_decode_data encoding: enc];
+                  if (DEBUG) debug(@"license info = %@", licenseInfo);
+                  licenseNameList = [[NSMutableArray alloc]init];
+                  licenseTotalList = [[NSMutableArray alloc]init];
+                  licenseParsedModuleCodeList = [[NSMutableArray alloc]init];
+                  NSMutableDictionary *license_info_json = [NSJSONSerialization JSONObjectWithData: aes_decode_data options:kNilOptions error: nil];
+                  NSInteger licenseCount = [[license_info_json objectForKey: @"total"]integerValue];
+                  if (licenseCount > 0)
                   {
-                      NSString *name = [NSString stringWithFormat: @"%@", [device objectForKey: @"name"]];
-                      [licenseNameList addObject: name];
-                      NSString *total = [NSString stringWithFormat: @"%@", [device objectForKey: @"total"]];
-                      [licenseTotalList addObject: total];
-                      NSString *module_code = [NSString stringWithFormat: @"%@", [device objectForKey: @"parsed_module_code"]];
-                      [licenseParsedModuleCodeList addObject: module_code];
-                  }
-                  dispatch_async(dispatch_get_main_queue(), ^() {
-                      if (licenseListStatus == YES)
+                      NSArray *deviceListArr = [license_info_json objectForKey: @"services"];
+                      for (NSDictionary *device in deviceListArr)
                       {
-                          [self.licenseList setHidden: NO];
-                          [self.noLicenseView setHidden: YES];
-                          [self.licenseList reloadData];
+                          NSString *name = [NSString stringWithFormat: @"%@", [device objectForKey: @"name"]];
+                          [licenseNameList addObject: name];
+                          NSString *total = [NSString stringWithFormat: @"%@", [device objectForKey: @"total"]];
+                          [licenseTotalList addObject: total];
+                          NSString *module_code = [NSString stringWithFormat: @"%@", [device objectForKey: @"parsed_module_code"]];
+                          [licenseParsedModuleCodeList addObject: module_code];
+                      }
+                      dispatch_async(dispatch_get_main_queue(), ^() {
+                          if (licenseListStatus == YES)
+                          {
+                              [self.licenseList setHidden: NO];
+                              [self.noLicenseView setHidden: YES];
+                              [self.licenseList reloadData];
+                              [self.licenseDetailView setHidden: YES];
+                              [self.scanView setHidden: YES];
+                              [self.manualView setHidden: YES];
+                              [self.showView setHidden: YES];
+                              [self.registerListView setHidden: YES];
+                              [self.tabBarController.tabBar setHidden: NO];
+                              [self.licenseView setHidden: NO];
+                              [self.errorView setHidden: YES];
+                              [m_HUD setHidden: YES];
+                          }
+                      });
+                  }
+                  else
+                  {
+                      // no license data
+                      dispatch_async(dispatch_get_main_queue(), ^() {
+                          // show no license view
                           [self.licenseDetailView setHidden: YES];
                           [self.scanView setHidden: YES];
                           [self.manualView setHidden: YES];
                           [self.showView setHidden: YES];
+                          [self.licenseList setHidden: YES];
+                          [self.registerListView setHidden: YES];
                           [self.tabBarController.tabBar setHidden: NO];
+                          [self.noLicenseView setHidden: NO];
                           [self.licenseView setHidden: NO];
+                          [self.errorView setHidden: YES];
                           [m_HUD setHidden: YES];
-                      }
-                  });
+                      });
+                  }
               }
               else
               {
-                  dispatch_async(dispatch_get_main_queue(), ^() {
-                      // show no license view
-                      [self.licenseDetailView setHidden: YES];
-                      [self.scanView setHidden: YES];
-                      [self.manualView setHidden: YES];
-                      [self.showView setHidden: YES];
-                      [self.licenseList setHidden: YES];
-                      [self.tabBarController.tabBar setHidden: NO];
-                      [self.noLicenseView setHidden: NO];
-                      [self.licenseView setHidden: NO];
-                      [m_HUD setHidden: YES];
-                  });
+                  // reponse error
+                  if (RESPONSE) debug(@"error code = %@, error meesage = %@", code, message);
+                  [self.tabBarController.tabBar setHidden: YES];
+                  [self.errorView setHidden: NO];
+                  [m_HUD setHidden: YES];
               }
           }
           else
           {
-              debug(@"server response meesage = %@", message);
+              // no response data
+              if (RESPONSE) debug(@"No response data");
+              [self.tabBarController.tabBar setHidden: YES];
+              [self.errorView setHidden: NO];
+              [m_HUD setHidden: YES];
           }
+          [self.tabBarController.tabBar setUserInteractionEnabled: YES];
       }] resume];
 }
 - (void)getLicenseDetail:(NSString *)module_code andServiceName:(NSString *)service_name
 {
     [m_HUD setHidden: NO];
-    [m_HUD.label setText: @"Load service data ..."];
+//    [m_HUD.label setText: @"Load service data ..."];
     NSError *error;
     NSString *payloadFormat = [NSString stringWithFormat: @"{"
                                "\"parsed_module_code\": \"%@\""
@@ -213,92 +270,98 @@
     NSString *get_license_info_url = [NSString stringWithFormat: @"%@/api/v2/my/license?token=%@&access_key_id=%@", DATA_URL, token, [public get_access_key_id]];
     if (DEBUG) debug(@"get_license_info_url = %@", get_license_info_url);
     NSURL *url = [NSURL URLWithString: get_license_info_url];
-    NSMutableURLRequest *request_user_info = [NSMutableURLRequest requestWithURL: url cachePolicy: NSURLRequestUseProtocolCachePolicy timeoutInterval: 10];
+    NSMutableURLRequest *request_user_info = [NSMutableURLRequest requestWithURL: url cachePolicy: NSURLRequestUseProtocolCachePolicy timeoutInterval: 15];
     [request_user_info setHTTPMethod: @"GET"];
     [request_user_info setValue: [public get_access_token] forHTTPHeaderField: @"Authorization"];
     NSURLSession *session = [NSURLSession sessionWithConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration]];
     [[session dataTaskWithRequest: request_user_info
                 completionHandler:^(NSData *data, NSURLResponse *response, NSError *error)
       {
-          NSMutableDictionary *json = [NSJSONSerialization JSONObjectWithData: data options: kNilOptions error: nil];
-          if (DEBUG) debug(@"serviceInfo = %@", json);
-          
-          NSMutableDictionary *status = [json objectForKey: @"return_status"];
-          NSString *code = [NSString stringWithFormat: @"%@", [status objectForKey: @"code"]];
-          NSString *message = [NSString stringWithFormat: @"%@", [status objectForKey: @"message"]];
-          if ([code isEqualToString: @"0"])
+          if (data != nil)
           {
-              NSString *encryptionCode = [json objectForKey: @"data"];
-              NSString *iv = [encryptionCode substringWithRange: NSMakeRange(0, 16)];
-              NSString *encrypted_data = [encryptionCode substringFromIndex: 16];
-              NSString *sha256_decode_data = [public sha256: [public get_secret_access_key]];
-              NSData *decode_key = [public hexToBytes: sha256_decode_data];
-              
-              NSData *base64_decode_data = [[NSData alloc]initWithData: (NSData *)[public base64_decode: encrypted_data]];
-              NSData *aes_decode_data = [[NSData alloc]initWithData: [public aes_cbc_256: base64_decode_data andIv: iv andkey: decode_key andType: kCCDecrypt]];
-              
-              NSStringEncoding enc = CFStringConvertEncodingToNSStringEncoding (kCFStringEncodingUTF8);
-              NSString *serviceInfo = [[NSString alloc]initWithData: aes_decode_data encoding: enc];
-              if (DEBUG) debug(@"service info = %@", serviceInfo);
-              
-              detailTotalList = [[NSMutableArray alloc]init];
-              detailAmountList = [[NSMutableArray alloc]init];
-              detailIdsList = [[NSMutableArray alloc]init];
-              detailIdsListArr = [[NSMutableArray alloc]init];
-              
-              NSMutableDictionary *service_info_json = [NSJSONSerialization JSONObjectWithData: aes_decode_data options:kNilOptions error: nil];
-              detailModuleCode = [NSString stringWithFormat: @"%@", [service_info_json objectForKey: @"parsed_module_code"]];
-              serviceCount = [[service_info_json objectForKey: @"total"]integerValue];
-              if (serviceCount > 0)
+              NSMutableDictionary *json = [NSJSONSerialization JSONObjectWithData: data options: kNilOptions error: nil];
+              if (DEBUG) debug(@"serviceInfo = %@", json);
+              NSMutableDictionary *status = [json objectForKey: @"return_status"];
+              NSString *code = [NSString stringWithFormat: @"%@", [status objectForKey: @"code"]];
+              NSString *message = [NSString stringWithFormat: @"%@", [status objectForKey: @"message"]];
+              if ([code isEqualToString: @"0"])
               {
-                  NSArray *licenseListArr = [service_info_json objectForKey: @"services"];
-                  for (NSDictionary *service in licenseListArr)
+                  NSString *encryptionCode = [json objectForKey: @"data"];
+                  NSString *iv = [encryptionCode substringWithRange: NSMakeRange(0, 16)];
+                  NSString *encrypted_data = [encryptionCode substringFromIndex: 16];
+                  NSString *sha256_decode_data = [public sha256: [public get_secret_access_key]];
+                  NSData *decode_key = [public hexToBytes: sha256_decode_data];
+                  NSData *base64_decode_data = [[NSData alloc]initWithData: (NSData *)[public base64_decode: encrypted_data]];
+                  NSData *aes_decode_data = [[NSData alloc]initWithData: [public aes_cbc_256: base64_decode_data andIv: iv andkey: decode_key andType: kCCDecrypt]];
+                  NSStringEncoding enc = CFStringConvertEncodingToNSStringEncoding (kCFStringEncodingUTF8);
+                  NSString *serviceInfo = [[NSString alloc]initWithData: aes_decode_data encoding: enc];
+                  if (DEBUG) debug(@"service info = %@", serviceInfo);
+                  detailTotalList = [[NSMutableArray alloc]init];
+                  detailAmountList = [[NSMutableArray alloc]init];
+                  detailIdsList = [[NSMutableArray alloc]init];
+                  detailIdsListArr = [[NSMutableArray alloc]init];
+                  detailErrorMessageList = [[NSMutableArray alloc]init];
+                  NSMutableDictionary *service_info_json = [NSJSONSerialization JSONObjectWithData: aes_decode_data options:kNilOptions error: nil];
+                  detailModuleCode = [NSString stringWithFormat: @"%@", [service_info_json objectForKey: @"parsed_module_code"]];
+                  serviceCount = [[service_info_json objectForKey: @"total"]integerValue];
+                  if (serviceCount > 0)
                   {
-                      NSInteger amountProc = [[service objectForKey: @"amount"]integerValue];
-                      int getYear = (int)amountProc/365;
-                      NSString *amount = [[NSString alloc]init];
-                      if (getYear > 1)
+                      NSArray *licenseListArr = [service_info_json objectForKey: @"services"];
+                      for (NSDictionary *service in licenseListArr)
                       {
-                          amount = [NSString stringWithFormat: @"%d years service", getYear];
+                          NSInteger amountProc = [[service objectForKey: @"amount"]integerValue];
+                          NSString *amount = [public getServiceTime: amountProc];
+                          [detailAmountList addObject: amount];
+                          NSString *total = [NSString stringWithFormat: @"%@", [service objectForKey: @"total"]];
+                          [detailTotalList addObject: total];
+                          [detailErrorMessageList addObject: @"NULL"];
+                          NSString *ids = [NSString stringWithFormat: @"%@", [service objectForKey: @"license_service_ids"]];
+                          ids = [ids stringByReplacingOccurrencesOfString: @" " withString: @""];
+                          ids = [ids stringByReplacingOccurrencesOfString: @"(" withString: @""];
+                          ids = [ids stringByReplacingOccurrencesOfString: @")" withString: @""];
+                          ids = [ids stringByReplacingOccurrencesOfString: @"\n" withString: @""];
+                          detailIdsList = [ids componentsSeparatedByString: @","];
+                          [detailIdsListArr addObject: detailIdsList];
                       }
-                      else
-                      {
-                          amount = [NSString stringWithFormat: @"%d year service", getYear];
-                      }
-                      [detailAmountList addObject: amount];
-                      NSString *total = [NSString stringWithFormat: @"%@", [service objectForKey: @"total"]];
-                      [detailTotalList addObject: total];
-
-                      NSString *ids = [NSString stringWithFormat: @"%@", [service objectForKey: @"license_service_ids"]];
-                      ids = [ids stringByReplacingOccurrencesOfString: @" " withString: @""];
-                      ids = [ids stringByReplacingOccurrencesOfString: @"(" withString: @""];
-                      ids = [ids stringByReplacingOccurrencesOfString: @")" withString: @""];
-                      ids = [ids stringByReplacingOccurrencesOfString: @"\n" withString: @""];
-                      
-                      detailIdsList = [ids componentsSeparatedByString: @","];
-                      [detailIdsListArr addObject: detailIdsList];
+                      dispatch_async(dispatch_get_main_queue(), ^() {
+                          if (licenseDetailStatus == YES)
+                          {
+                              [self.licenseDetailModuleCodeName setText: service_name];
+                              [self.licenseRegisteredServicesList reloadData];
+                              [self.searchListView setHidden: YES];
+                              [self.licenseView setHidden: YES];
+                              [self.tabBarController.tabBar setHidden: YES];
+                              [self.licenseDetailView setHidden: NO];
+                              [self.errorView setHidden: YES];
+                              [m_HUD setHidden: YES];
+                          }
+                      });
                   }
-
-                  dispatch_async(dispatch_get_main_queue(), ^() {
-                      if (licenseDetailStatus == YES)
-                      {
-                          //[self.licenseDetailModuleCodeName setText: detailModuleCode];
-                          [self.licenseDetailModuleCodeName setText: service_name];
-                          [self.licenseRegisteredServicesList reloadData];
-                          [self.licenseView setHidden: YES];
-                          [self.tabBarController.tabBar setHidden: YES];
-                          [self.licenseDetailView setHidden: NO];
-                          [m_HUD setHidden: YES];
-                      }
-                  });
+                  else
+                  {
+                      if (DEBUG) debug(@"No service data");
+                  }
               }
+              else
+              {
+                  // request error
+                  if (RESPONSE) debug(@"error code = %@, error message = %@", code, message);
+                  [self.errorView setHidden: YES];
+                  [m_HUD setHidden: YES];
+              }
+          }
+          else
+          {
+              // no response data
+              if (RESPONSE) debug(@"No response data");
+              [self.errorView setHidden: NO];
+              [m_HUD setHidden: YES];
           }
       }] resume];
 }
 - (void)toDeviceInfo:(NSInteger)index andAmount:(NSString *)service_date
 {
     [m_HUD setHidden: NO];
-    [m_HUD.label setText: @"Load device data ..."];
     NSString *payloadFormat = [[NSString alloc]init];
     NSArray *getIdsList = [detailIdsListArr objectAtIndex: index];
     debug(@"list = %@", detailIdsListArr);
@@ -329,78 +392,133 @@
     NSString *to_device_info_url = [NSString stringWithFormat: @"%@/api/v2/my/license/devices?token=%@&access_key_id=%@", DATA_URL, token, [public get_access_key_id]];
     if (DEBUG) debug(@"to_device_info_url = %@", to_device_info_url);
     NSURL *url = [NSURL URLWithString: to_device_info_url];
-    NSMutableURLRequest *request_user_info = [NSMutableURLRequest requestWithURL: url cachePolicy: NSURLRequestUseProtocolCachePolicy timeoutInterval: 10];
+    NSMutableURLRequest *request_user_info = [NSMutableURLRequest requestWithURL: url cachePolicy: NSURLRequestUseProtocolCachePolicy timeoutInterval: 15];
     [request_user_info setHTTPMethod: @"GET"];
     [request_user_info setValue: [public get_access_token] forHTTPHeaderField: @"Authorization"];
     NSURLSession *session = [NSURLSession sessionWithConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration]];
     [[session dataTaskWithRequest: request_user_info
                 completionHandler:^(NSData *data, NSURLResponse *response, NSError *error)
       {
-          NSMutableDictionary *json = [NSJSONSerialization JSONObjectWithData: data options: kNilOptions error: nil];
-          if (DEBUG) debug(@"toDeviceInfo = %@", json);
-          
-          NSMutableDictionary *status = [json objectForKey: @"return_status"];
-          NSString *code = [NSString stringWithFormat: @"%@", [status objectForKey: @"code"]];
-          NSString *message = [NSString stringWithFormat: @"%@", [status objectForKey: @"message"]];
-          if ([code isEqualToString: @"0"])
+          if (data != nil)
           {
-              NSString *encryptionCode = [json objectForKey: @"data"];
-              NSString *iv = [encryptionCode substringWithRange: NSMakeRange(0, 16)];
-              NSString *encrypted_data = [encryptionCode substringFromIndex: 16];
-              NSString *sha256_decode_data = [public sha256: [public get_secret_access_key]];
-              NSData *decode_key = [public hexToBytes: sha256_decode_data];
-              
-              NSData *base64_decode_data = [[NSData alloc]initWithData: (NSData *)[public base64_decode: encrypted_data]];
-              NSData *aes_decode_data = [[NSData alloc]initWithData: [public aes_cbc_256: base64_decode_data andIv: iv andkey: decode_key andType: kCCDecrypt]];
-              
-              NSStringEncoding enc = CFStringConvertEncodingToNSStringEncoding (kCFStringEncodingUTF8);
-              NSString *serviceInfo = [[NSString alloc]initWithData: aes_decode_data encoding: enc];
-              if (DEBUG) debug(@"to device info = %@", serviceInfo);
-              toDeviceNameList = [[NSMutableArray alloc]init];
-              toDeviceMacList = [[NSMutableArray alloc]init];
-              toDeviceIdList = [[NSMutableArray alloc]init];
-              NSMutableDictionary *to_device_info_json = [NSJSONSerialization JSONObjectWithData: aes_decode_data options:kNilOptions error: nil];
-              NSString *ids = [NSString stringWithFormat: @"%@", [to_device_info_json objectForKey: @"license_service_ids"]];
-              ids = [ids stringByReplacingOccurrencesOfString: @" " withString: @""];
-              ids = [ids stringByReplacingOccurrencesOfString: @"(" withString: @""];
-              ids = [ids stringByReplacingOccurrencesOfString: @")" withString: @""];
-              ids = [ids stringByReplacingOccurrencesOfString: @"\n" withString: @""];
-              NSInteger deviceCount = [[to_device_info_json objectForKey: @"total"]integerValue];
-              if (deviceCount > 0)
+              NSMutableDictionary *json = [NSJSONSerialization JSONObjectWithData: data options: kNilOptions error: nil];
+              if (DEBUG) debug(@"toDeviceInfo = %@", json);
+              NSMutableDictionary *status = [json objectForKey: @"return_status"];
+              NSString *code = [NSString stringWithFormat: @"%@", [status objectForKey: @"code"]];
+              NSString *message = [NSString stringWithFormat: @"%@", [status objectForKey: @"message"]];
+              if ([code isEqualToString: @"0"])
               {
-                  NSArray *toDeviceListArr = [to_device_info_json objectForKey: @"devices"];
-                  for (NSDictionary *device in toDeviceListArr)
+                  NSString *encryptionCode = [json objectForKey: @"data"];
+                  NSString *iv = [encryptionCode substringWithRange: NSMakeRange(0, 16)];
+                  NSString *encrypted_data = [encryptionCode substringFromIndex: 16];
+                  NSString *sha256_decode_data = [public sha256: [public get_secret_access_key]];
+                  NSData *decode_key = [public hexToBytes: sha256_decode_data];
+                  NSData *base64_decode_data = [[NSData alloc]initWithData: (NSData *)[public base64_decode: encrypted_data]];
+                  NSData *aes_decode_data = [[NSData alloc]initWithData: [public aes_cbc_256: base64_decode_data andIv: iv andkey: decode_key andType: kCCDecrypt]];
+                  NSStringEncoding enc = CFStringConvertEncodingToNSStringEncoding (kCFStringEncodingUTF8);
+                  NSString *serviceInfo = [[NSString alloc]initWithData: aes_decode_data encoding: enc];
+                  if (DEBUG) debug(@"to device info = %@", serviceInfo);
+                  toDeviceNameList = [[NSMutableArray alloc]init];
+                  toDeviceMacList = [[NSMutableArray alloc]init];
+                  toDeviceIdList = [[NSMutableArray alloc]init];
+                  toDeviceIdsListFromDevice = [[NSMutableArray alloc]init];
+                  NSMutableDictionary *to_device_info_json = [NSJSONSerialization JSONObjectWithData: aes_decode_data options:kNilOptions error: nil];
+                  NSString *ids = [NSString stringWithFormat: @"%@", [to_device_info_json objectForKey: @"license_service_ids"]];
+                  ids = [ids stringByReplacingOccurrencesOfString: @" " withString: @""];
+                  ids = [ids stringByReplacingOccurrencesOfString: @"(" withString: @""];
+                  ids = [ids stringByReplacingOccurrencesOfString: @")" withString: @""];
+                  ids = [ids stringByReplacingOccurrencesOfString: @"\n" withString: @""];
+                  NSArray *idsArr = [ids componentsSeparatedByString: @","];
+                  toDeviceIdsListArr = [[NSMutableArray alloc]initWithArray: idsArr];
+                  if (DEBUG) debug(@"toDeviceIdsListArr = %@", toDeviceIdsListArr);
+                  NSInteger deviceCount = [[to_device_info_json objectForKey: @"total"]integerValue];
+                  if (deviceCount > 0)
                   {
-                      NSString *name = [NSString stringWithFormat: @"%@", [device objectForKey: @"name"]];
-                      [toDeviceNameList addObject: name];
-                      NSString *mac = [NSString stringWithFormat: @"%@", [device objectForKey: @"mac_address"]];
-                      [toDeviceMacList addObject: mac];
-                      NSString *deviceId = [NSString stringWithFormat: @"%@", [device objectForKey: @"id"]];
-                      [toDeviceIdList addObject: deviceId];
-                  }
-                  dispatch_async(dispatch_get_main_queue(), ^() {
-                      if (toDeviceStatus == YES)
+                      NSArray *toDeviceListArr = [to_device_info_json objectForKey: @"devices"];
+                      for (NSDictionary *device in toDeviceListArr)
                       {
-                          [self.activateCountSlider setMaximumValue: detailServiceCount];
-                          [self.activateCount setText: @"1"];
-                          [self.toDeviceCount setText: [NSString stringWithFormat: @"%ld", detailServiceCount]];
-                          [self.toDeviceName setText: self.licenseDetailModuleCodeName.text];
-                          [self.toDeviceAmount setText: service_date];
-                          [self.toDeviceList reloadData];
-                          [self.toDeviceMessage setHidden: YES];
-                          [self.licenseDetailView setHidden: YES];
-                          [self.toDeviceView setHidden: NO];
-                          [m_HUD setHidden: YES];
+                          NSString *name = [NSString stringWithFormat: @"%@", [device objectForKey: @"name"]];
+                          [toDeviceNameList addObject: name];
+                          NSString *mac = [NSString stringWithFormat: @"%@", [device objectForKey: @"mac_address"]];
+                          [toDeviceMacList addObject: mac];
+                          NSString *deviceId = [NSString stringWithFormat: @"%@", [device objectForKey: @"id"]];
+                          [toDeviceIdList addObject: deviceId];
+                          NSString *ids = [NSString stringWithFormat: @"%@", [device objectForKey: @"license_service_ids"]];
+                          ids = [ids stringByReplacingOccurrencesOfString: @" " withString: @""];
+                          ids = [ids stringByReplacingOccurrencesOfString: @"(" withString: @""];
+                          ids = [ids stringByReplacingOccurrencesOfString: @")" withString: @""];
+                          ids = [ids stringByReplacingOccurrencesOfString: @"\n" withString: @""];
+                          [toDeviceIdsListFromDevice addObject: ids];
+                          if (DEBUG) debug(@"IDs from device = %@", ids);
                       }
+                      dispatch_async(dispatch_get_main_queue(), ^() {
+                          if (toDeviceStatus == YES)
+                          {
+                              // set slider attribute
+                              if (detailServiceCount > 1)
+                              {
+                                  [self.activateCountSlider setMinimumValue: 1];
+                                  [self.activateCountSlider setMaximumValue: detailServiceCount];
+                                  [self.activateCountSlider setEnabled: YES];
+                              }
+                              else
+                              {
+                                  [self.activateCountSlider setMinimumValue: 0];
+                                  [self.activateCountSlider setMaximumValue: detailServiceCount];
+                                  [self.activateCountSlider setEnabled: NO];
+                              }
+                              [self.activateCount setText: @"1"];
+                              [self.toDeviceCount setText: [NSString stringWithFormat: @"%ld", (long)detailServiceCount]];
+                              [self.toDeviceName setText: self.licenseDetailModuleCodeName.text];
+                              [self.toDeviceAmount setText: service_date];
+                              [self.toDeviceList reloadData];
+                              [self.toDeviceMessage setHidden: YES];
+                              [self.licenseDetailView setHidden: YES];
+                              [self.toDeviceView setHidden: NO];
+                              [self.errorView setHidden: YES];
+                              [m_HUD setHidden: YES];
+                          }
+                      });
+                  }
+                  else
+                  {
+                      // no device
+                      dispatch_async(dispatch_get_main_queue(), ^() {
+                          licenseDetailStatus = YES;
+                          toDeviceStatus = NO;
+                          [detailErrorMessageList replaceObjectAtIndex: toDeviceIndex withObject: @"Please register a device first to proceed the license activation."];
+                          [self.licenseRegisteredServicesList reloadData];
+                          dispatch_async(dispatch_get_main_queue(), ^() {
+                              [self.errorView setHidden: YES];
+                              [m_HUD setHidden: YES];
+                          });
+                      });
+                  }
+              }
+              else
+              {
+                  // response error
+                  dispatch_async(dispatch_get_main_queue(), ^() {
+                      if (RESPONSE) debug(@"error code = %@, error message = %@", code, message);
+                      [self.errorView setHidden: YES];
+                      [m_HUD setHidden: YES];
                   });
               }
+          }
+          else
+          {
+              // no response
+              dispatch_async(dispatch_get_main_queue(), ^() {
+                  if (RESPONSE) debug(@"No response data");
+                  [self.errorView setHidden: NO];
+                  [m_HUD setHidden: YES];
+              });
           }
       }] resume];
 }
 - (void)activateLicenseInfo:(NSString *)deviceId andServcieList:(NSMutableArray *)idsList
 {
     [m_HUD setHidden: NO];
-    [m_HUD.label setText: @"Activate license ..."];
     NSString *payloadFormat = [[NSString alloc]init];
     NSError *error;
     payloadFormat = [NSString stringWithFormat: @"{"
@@ -432,45 +550,71 @@
     NSString *to_device_info_url = [NSString stringWithFormat: @"%@/api/v2/my/license/license_services/activate?token=%@&access_key_id=%@", DATA_URL, token, [public get_access_key_id]];
     if (DEBUG) debug(@"to_device_info_url = %@", to_device_info_url);
     NSURL *url = [NSURL URLWithString: to_device_info_url];
-    NSMutableURLRequest *request_user_info = [NSMutableURLRequest requestWithURL: url cachePolicy: NSURLRequestUseProtocolCachePolicy timeoutInterval: 10];
+    NSMutableURLRequest *request_user_info = [NSMutableURLRequest requestWithURL: url cachePolicy: NSURLRequestUseProtocolCachePolicy timeoutInterval: 15];
     [request_user_info setHTTPMethod: @"POST"];
     [request_user_info setValue: [public get_access_token] forHTTPHeaderField: @"Authorization"];
     NSURLSession *session = [NSURLSession sessionWithConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration]];
     [[session dataTaskWithRequest: request_user_info
                 completionHandler:^(NSData *data, NSURLResponse *response, NSError *error)
       {
-          NSMutableDictionary *json = [NSJSONSerialization JSONObjectWithData: data options: kNilOptions error: nil];
-          if (DEBUG) debug(@"toDeviceInfo = %@", json);
-          
-          NSMutableDictionary *status = [json objectForKey: @"return_status"];
-          NSString *code = [NSString stringWithFormat: @"%@", [status objectForKey: @"code"]];
-          NSString *message = [NSString stringWithFormat: @"%@", [status objectForKey: @"message"]];
-          if ([code isEqualToString: @"0"])
+          if (data != nil)
           {
-              dispatch_async(dispatch_get_main_queue(), ^() {
-                  toDeviceStatus = NO;
-                  showStatus = YES;
-                  [self.showRegisteredServicesList reloadData];
+              NSMutableDictionary *json = [NSJSONSerialization JSONObjectWithData: data options: kNilOptions error: nil];
+              if (DEBUG) debug(@"toDeviceInfo = %@", json);
+              
+              NSMutableDictionary *status = [json objectForKey: @"return_status"];
+              NSString *code = [NSString stringWithFormat: @"%@", [status objectForKey: @"code"]];
+              NSString *message = [NSString stringWithFormat: @"%@", [status objectForKey: @"message"]];
+              if ([code isEqualToString: @"0"])
+              {
                   dispatch_async(dispatch_get_main_queue(), ^() {
-                      [self.toDeviceMessage setHidden: YES];
-                      [self.toDeviceView setHidden: YES];
-                      [self.showView setHidden: NO];
+                      toDeviceStatus = NO;
+                      showStatus = YES;
+                      [self.showRegisteredServicesList reloadData];
+                      dispatch_async(dispatch_get_main_queue(), ^() {
+                          [self.toDeviceMessage setHidden: YES];
+                          [self.toDeviceView setHidden: YES];
+                          [self.showView setHidden: NO];
+                          [self.errorView setHidden: YES];
+                          [m_HUD setHidden: YES];
+                      });
+                  });
+              }
+              else
+              {
+                  // request error
+                  dispatch_async(dispatch_get_main_queue(), ^() {
+                      if (RESPONSE) debug(@"error code = %@, error message = %@", code, message);
+                      NSString *errorMsg = [public checkErrorCode: code];
+                      if ([errorMsg isEqualToString: @"unknow"])
+                      {
+                          [self.toDeviceMessage setText: message];
+                      }
+                      else
+                      {
+                          [self.toDeviceMessage setText: errorMsg];
+                      }
+                      [self.toDeviceMessage setHidden: NO];
+                      [self.errorView setHidden: YES];
                       [m_HUD setHidden: YES];
                   });
-              });
+              }
           }
           else
           {
-              [self.toDeviceMessage setText: message];
-              [self.toDeviceMessage setHidden: NO];
-              [m_HUD setHidden: YES];
+              // no response data
+              dispatch_async(dispatch_get_main_queue(), ^() {
+                  if (RESPONSE) debug(@"No response data");
+                  [self.errorView setHidden: NO];
+                  [m_HUD setHidden: YES];
+              });
           }
       }] resume];
 }
 - (void)checkLicenseInfo:(NSString *)licenseKey
 {
+    if (DEBUG) debug(@"license key = %@", licenseKey);
     [m_HUD setHidden: NO];
-    [m_HUD.label setText: @"check license data ..."];
     NSError *error;
     NSString *payloadFormat = [NSString stringWithFormat: @"{"
                                "\"pretend\": true,"
@@ -501,91 +645,111 @@
     [[session dataTaskWithRequest: request_user_info
                 completionHandler:^(NSData *data, NSURLResponse *response, NSError *error)
       {
-          NSMutableDictionary *json = [NSJSONSerialization JSONObjectWithData: data options: kNilOptions error: nil];
-          if (DEBUG) debug(@"checkLicenseInfo = %@", json);
-          NSMutableDictionary *status = [json objectForKey: @"return_status"];
-          NSString *code = [NSString stringWithFormat: @"%@", [status objectForKey: @"code"]];
-          NSString *message = [NSString stringWithFormat: @"%@", [status objectForKey: @"message"]];
-          if ([code isEqualToString: @"0"])
+          if (data != nil)
           {
-              NSString *encryptionCode = [json objectForKey: @"data"];
-              NSString *iv = [encryptionCode substringWithRange: NSMakeRange(0, 16)];
-              NSString *encrypted_data = [encryptionCode substringFromIndex: 16];
-              NSString *sha256_decode_data = [public sha256: [public get_secret_access_key]];
-              NSData *decode_key = [public hexToBytes: sha256_decode_data];
-              NSData *base64_decode_data = [[NSData alloc]initWithData: (NSData *)[public base64_decode: encrypted_data]];
-              NSData *aes_decode_data = [[NSData alloc]initWithData: [public aes_cbc_256: base64_decode_data andIv: iv andkey: decode_key andType: kCCDecrypt]];
-              NSStringEncoding enc = CFStringConvertEncodingToNSStringEncoding (kCFStringEncodingUTF8);
-              NSString *checkLicenseInfo = [[NSString alloc]initWithData: aes_decode_data encoding: enc];
-              if (DEBUG) debug(@"check license info = %@", checkLicenseInfo);
-              NSMutableDictionary *service_info_json = [NSJSONSerialization JSONObjectWithData: aes_decode_data options:kNilOptions error: nil];
-              NSArray *licenseListArr = [service_info_json objectForKey: @"licenses"];
-              for (NSDictionary *service in licenseListArr)
+              NSMutableDictionary *json = [NSJSONSerialization JSONObjectWithData: data options: kNilOptions error: nil];
+              if (DEBUG) debug(@"checkLicenseInfo = %@", json);
+              NSMutableDictionary *status = [json objectForKey: @"return_status"];
+              NSString *code = [NSString stringWithFormat: @"%@", [status objectForKey: @"code"]];
+              NSString *message = [NSString stringWithFormat: @"%@", [status objectForKey: @"message"]];
+              if ([code isEqualToString: @"0"])
               {
-                  NSData *return_status = [NSJSONSerialization dataWithJSONObject: [service objectForKey: @"return_status"] options: NSJSONWritingPrettyPrinted error: nil];
-                  NSMutableDictionary *status = [NSJSONSerialization JSONObjectWithData: return_status options:kNilOptions error: nil];
-                  NSString *return_code = [NSString stringWithFormat: @"%@", [status objectForKey: @"code"]];
-                  NSString *return_message = [NSString stringWithFormat: @"%@", [status objectForKey: @"message"]];
-                  if ([return_code isEqualToString: @"0"])
+                  NSString *encryptionCode = [json objectForKey: @"data"];
+                  NSString *iv = [encryptionCode substringWithRange: NSMakeRange(0, 16)];
+                  NSString *encrypted_data = [encryptionCode substringFromIndex: 16];
+                  NSString *sha256_decode_data = [public sha256: [public get_secret_access_key]];
+                  NSData *decode_key = [public hexToBytes: sha256_decode_data];
+                  NSData *base64_decode_data = [[NSData alloc]initWithData: (NSData *)[public base64_decode: encrypted_data]];
+                  NSData *aes_decode_data = [[NSData alloc]initWithData: [public aes_cbc_256: base64_decode_data andIv: iv andkey: decode_key andType: kCCDecrypt]];
+                  NSStringEncoding enc = CFStringConvertEncodingToNSStringEncoding (kCFStringEncodingUTF8);
+                  NSString *checkLicenseInfo = [[NSString alloc]initWithData: aes_decode_data encoding: enc];
+                  if (DEBUG) debug(@"check license info = %@", checkLicenseInfo);
+                  NSMutableDictionary *service_info_json = [NSJSONSerialization JSONObjectWithData: aes_decode_data options:kNilOptions error: nil];
+                  NSArray *licenseListArr = [service_info_json objectForKey: @"licenses"];
+                  for (NSDictionary *service in licenseListArr)
                   {
-                      [scanServiceKeyList addObject: [service objectForKey: @"key"]];
-                      NSData *services = [NSJSONSerialization dataWithJSONObject: [service objectForKey: @"services"] options: NSJSONWritingPrettyPrinted error: nil];
-                      NSArray *getServiceArr = [NSJSONSerialization JSONObjectWithData: services options: NSJSONReadingMutableContainers error: nil];
-                      for (NSDictionary *serviceInfo in getServiceArr)
+                      NSData *return_status = [NSJSONSerialization dataWithJSONObject: [service objectForKey: @"return_status"] options: NSJSONWritingPrettyPrinted error: nil];
+                      NSMutableDictionary *status = [NSJSONSerialization JSONObjectWithData: return_status options:kNilOptions error: nil];
+                      NSString *return_code = [NSString stringWithFormat: @"%@", [status objectForKey: @"code"]];
+                      NSString *return_message = [NSString stringWithFormat: @"%@", [status objectForKey: @"message"]];
+                      if ([return_code isEqualToString: @"0"])
                       {
-                          NSString *serviceName = [NSString stringWithFormat: @"%@", [serviceInfo objectForKey: @"name"]];
-                          NSInteger amountProc = [[serviceInfo objectForKey: @"amount"]integerValue];
-                          int getYear = (int)amountProc/365;
-                          int getDay = amountProc%365;
-                          NSString *amount = [NSString stringWithFormat: @"%d year service +  %d days", getYear, getDay];
-                          [scanServiceNameList addObject: serviceName];
-                          [scanServiceAmountList addObject: amount];
-                      }
-                      dispatch_async(dispatch_get_main_queue(), ^() {
-                          [self.scanLicenseList reloadData];
-                          [self.manualLicenseList reloadData];
-                          [self.manualViewErrorMessage setHidden: YES];
-                          [self.scanViewErrorMessage setHidden: YES];
-                          [self.manualLicenseKeyTxt setText: @""];
-                          [m_HUD setHidden: YES];
-                          _scanStatus = YES;
-                          if ([scanServiceKeyList count] > 0)
+                          // check succeeded
+                          [scanServiceKeyList addObject: [service objectForKey: @"key"]];
+                          NSData *services = [NSJSONSerialization dataWithJSONObject: [service objectForKey: @"services"] options: NSJSONWritingPrettyPrinted error: nil];
+                          NSArray *getServiceArr = [NSJSONSerialization JSONObjectWithData: services options: NSJSONReadingMutableContainers error: nil];
+                          for (NSDictionary *serviceInfo in getServiceArr)
                           {
-                              [self.scanRegisterBtn setEnabled: YES];
-                              [self.manualRegisterBtn setEnabled: YES];
+                              NSString *serviceName = [NSString stringWithFormat: @"%@", [serviceInfo objectForKey: @"name"]];
+                              NSInteger amountProc = [[serviceInfo objectForKey: @"amount"]integerValue];
+                              NSString *amount = [public getServiceTime: amountProc];
+                              [scanServiceNameList addObject: serviceName];
+                              [scanServiceAmountList addObject: amount];
                           }
-                      });
+                          dispatch_async(dispatch_get_main_queue(), ^() {
+                              [self.scanLicenseList reloadData];
+                              [self.manualLicenseList reloadData];
+                              [self.manualViewErrorMessage setHidden: YES];
+                              [self.scanViewErrorMessage setHidden: YES];
+                              [self.manualLicenseKeyTxt setText: @""];
+                              [self.errorView setHidden: YES];
+                              [m_HUD setHidden: YES];
+                              _scanStatus = YES;
+                              if ([scanServiceKeyList count] > 0)
+                              {
+                                  [self.scanRegisterBtn setEnabled: YES];
+                                  [self.manualRegisterBtn setEnabled: YES];
+                              }
+                          });
+                      }
+                      else
+                      {
+                          // check failed
+                          dispatch_async(dispatch_get_main_queue(), ^() {
+                              NSString *errorMsg = [public checkErrorCode: return_code];
+                              if ([errorMsg isEqualToString: @"unknow"])
+                              {
+                                  [self.manualViewErrorMessage setText: return_message];
+                                  [self.scanViewErrorMessage setText: return_message];
+                              }
+                              else
+                              {
+                                  [self.manualViewErrorMessage setText: errorMsg];
+                                  [self.scanViewErrorMessage setText: errorMsg];
+                              }
+                              [self.manualViewErrorMessage setHidden: NO];
+                              [self.scanViewErrorMessage setHidden: NO];
+                              [self.errorView setHidden: YES];
+                              [m_HUD setHidden: YES];
+                              _scanStatus = YES;
+                          });
+                      }
                   }
-                  else
-                  {
-                      dispatch_async(dispatch_get_main_queue(), ^() {
-                          [self.manualViewErrorMessage setText: return_message];
-                          [self.scanViewErrorMessage setText: return_message];
-                          [self.manualViewErrorMessage setHidden: NO];
-                          [self.scanViewErrorMessage setHidden: NO];
-                          [m_HUD setHidden: YES];
-                          _scanStatus = YES;
-                      });
-                  }
+              }
+              else
+              {
+                  // response error
+                  dispatch_async(dispatch_get_main_queue(), ^() {
+                      if (RESPONSE) debug(@"error code = %@, error message = %@", code, message);
+                      [self.errorView setHidden: NO];
+                      [m_HUD setHidden: YES];
+                  });
               }
           }
           else
           {
+              //no resonse data
               dispatch_async(dispatch_get_main_queue(), ^() {
-                  [self.manualViewErrorMessage setHidden: NO];
-                  [self.scanViewErrorMessage setHidden: NO];
-                  [self.manualViewErrorMessage setText: message];
-                  [self.scanViewErrorMessage setText: message];
+                  if (RESPONSE) debug(@"no response data");
+                  [self.errorView setHidden: NO];
                   [m_HUD setHidden: YES];
-                  _scanStatus = YES;
               });
           }
       }] resume];
 }
-- (void)registerLicenseInfo:(NSString *)licenseKey
+- (void)registerLicenseInfo:(NSString *)licenseKey andIndex:(NSInteger)index
 {
-    [m_HUD setHidden: NO];
-    [m_HUD.label setText: @"register license data ..."];
+    debug(@"ooxxxooxx index = %ld", (long)index);
     NSError *error;
     NSString *payloadFormat = [NSString stringWithFormat: @"{"
                                "\"pretend\": false,"
@@ -613,70 +777,84 @@
     [[session dataTaskWithRequest: request_user_info
                 completionHandler:^(NSData *data, NSURLResponse *response, NSError *error)
       {
-          NSMutableDictionary *json = [NSJSONSerialization JSONObjectWithData: data options: kNilOptions error: nil];
-          if (DEBUG) debug(@"registerLicenseInfo = %@", json);
-          NSMutableDictionary *status = [json objectForKey: @"return_status"];
-          NSString *code = [NSString stringWithFormat: @"%@", [status objectForKey: @"code"]];
-          NSString *message = [NSString stringWithFormat: @"%@", [status objectForKey: @"message"]];
-          if ([code isEqualToString: @"0"])
+          if (data != nil)
           {
-              NSString *encryptionCode = [json objectForKey: @"data"];
-              NSString *iv = [encryptionCode substringWithRange: NSMakeRange(0, 16)];
-              NSString *encrypted_data = [encryptionCode substringFromIndex: 16];
-              NSString *sha256_decode_data = [public sha256: [public get_secret_access_key]];
-              NSData *decode_key = [public hexToBytes: sha256_decode_data];
-              NSData *base64_decode_data = [[NSData alloc]initWithData: (NSData *)[public base64_decode: encrypted_data]];
-              NSData *aes_decode_data = [[NSData alloc]initWithData: [public aes_cbc_256: base64_decode_data andIv: iv andkey: decode_key andType: kCCDecrypt]];
-              NSStringEncoding enc = CFStringConvertEncodingToNSStringEncoding (kCFStringEncodingUTF8);
-              NSString *registerLicenseInfo = [[NSString alloc]initWithData: aes_decode_data encoding: enc];
-              if (DEBUG) debug(@"register license info = %@", registerLicenseInfo);
-              NSMutableDictionary *service_info_json = [NSJSONSerialization JSONObjectWithData: aes_decode_data options:kNilOptions error: nil];
-              NSArray *licenseListArr = [service_info_json objectForKey: @"licenses"];
-              for (NSDictionary *service in licenseListArr)
+              NSMutableDictionary *json = [NSJSONSerialization JSONObjectWithData: data options: kNilOptions error: nil];
+              if (DEBUG) debug(@"registerLicenseInfo = %@", json);
+              NSMutableDictionary *status = [json objectForKey: @"return_status"];
+              NSString *code = [NSString stringWithFormat: @"%@", [status objectForKey: @"code"]];
+              NSString *message = [NSString stringWithFormat: @"%@", [status objectForKey: @"message"]];
+              if ([code isEqualToString: @"0"])
               {
-                  NSData *return_status = [NSJSONSerialization dataWithJSONObject: [service objectForKey: @"return_status"] options: NSJSONWritingPrettyPrinted error: nil];
-                  NSMutableDictionary *status = [NSJSONSerialization JSONObjectWithData: return_status options:kNilOptions error: nil];
-                  NSString *return_code = [NSString stringWithFormat: @"%@", [status objectForKey: @"code"]];
-                  NSString *return_message = [NSString stringWithFormat: @"%@", [status objectForKey: @"message"]];
-                  if ([return_code isEqualToString: @"0"])
+                  NSString *encryptionCode = [json objectForKey: @"data"];
+                  NSString *iv = [encryptionCode substringWithRange: NSMakeRange(0, 16)];
+                  NSString *encrypted_data = [encryptionCode substringFromIndex: 16];
+                  NSString *sha256_decode_data = [public sha256: [public get_secret_access_key]];
+                  NSData *decode_key = [public hexToBytes: sha256_decode_data];
+                  NSData *base64_decode_data = [[NSData alloc]initWithData: (NSData *)[public base64_decode: encrypted_data]];
+                  NSData *aes_decode_data = [[NSData alloc]initWithData: [public aes_cbc_256: base64_decode_data andIv: iv andkey: decode_key andType: kCCDecrypt]];
+                  NSStringEncoding enc = CFStringConvertEncodingToNSStringEncoding (kCFStringEncodingUTF8);
+                  NSString *registerLicenseInfo = [[NSString alloc]initWithData: aes_decode_data encoding: enc];
+                  if (DEBUG) debug(@"register license info = %@", registerLicenseInfo);
+                  NSMutableDictionary *service_info_json = [NSJSONSerialization JSONObjectWithData: aes_decode_data options:kNilOptions error: nil];
+                  NSArray *licenseListArr = [service_info_json objectForKey: @"licenses"];
+                  for (NSDictionary *service in licenseListArr)
                   {
-                      dispatch_async(dispatch_get_main_queue(), ^() {
+                      NSData *return_status = [NSJSONSerialization dataWithJSONObject: [service objectForKey: @"return_status"] options: NSJSONWritingPrettyPrinted error: nil];
+                      NSMutableDictionary *status = [NSJSONSerialization JSONObjectWithData: return_status options:kNilOptions error: nil];
+                      NSString *return_code = [NSString stringWithFormat: @"%@", [status objectForKey: @"code"]];
+                      NSString *return_message = [NSString stringWithFormat: @"%@", [status objectForKey: @"message"]];
+                      if ([return_code isEqualToString: @"0"])
+                      {
+                          // return result successed
+                          [registerMessageList addObject: @"Register succeeded."];
+                      }
+                      else
+                      {
+                          // return result failed
+                          NSString *errorMsg = [public checkErrorCode: return_code];
+                          if ([errorMsg isEqualToString: @"unknow"])
+                          {
+                              [registerMessageList addObject: return_message];
+                          }
+                          else
+                          {
+                              [registerMessageList addObject: errorMsg];
+                          }
+                      }
+                  }
+                  dispatch_async(dispatch_get_main_queue(), ^() {
+                      if ([registerMessageList count] == [scanServiceKeyList count]) {
                           scanStatus = NO;
-                          licenseListStatus = YES;
-                          [self.licenseList reloadData];
-                          dispatch_async(dispatch_get_main_queue(), ^() {
-                              [self.scanView setHidden: YES];
-                              [self.manualView setHidden: YES];
-                              [self.licenseView setHidden: NO];
-                              [m_HUD setHidden: YES];
-                              _scanStatus = YES;
-                              [self stopReading];
-                              [self getLicenseInfo];
-                          });
-                      });
-                  }
-                  else
-                  {
-                      dispatch_async(dispatch_get_main_queue(), ^() {
-                          [self.manualViewErrorMessage setText: return_message];
-                          [self.scanViewErrorMessage setText: return_message];
-                          [self.manualViewErrorMessage setHidden: NO];
-                          [self.scanViewErrorMessage setHidden: NO];
-                          [m_HUD setHidden: YES];
+                          registerListStatus = YES;
+                          [self.registerList reloadData];
+                          [self.scanView setHidden: YES];
+                          [self.manualView setHidden: YES];
+                          [self.errorView setHidden: YES];
                           _scanStatus = YES;
-                      });
-                  }
+                          [self stopReading];
+                          [self.registerListView setHidden: NO];
+                          [m_HUD setHidden: YES];
+                      }
+                  });
+              }
+              else
+              {
+                  // response error
+                  dispatch_async(dispatch_get_main_queue(), ^() {
+                      if (RESPONSE) debug(@"error code = %@, error message = %@", code, message);
+                      [self.errorView setHidden: NO];
+                      [m_HUD setHidden: YES];
+                  });
               }
           }
           else
           {
+              // no response data
               dispatch_async(dispatch_get_main_queue(), ^() {
-                  [self.manualViewErrorMessage setText: message];
-                  [self.scanViewErrorMessage setText: message];
-                  [self.manualViewErrorMessage setHidden: NO];
-                  [self.scanViewErrorMessage setHidden: NO];
+                  if (RESPONSE) debug(@"No reponse data");
+                  [self.errorView setHidden: NO];
                   [m_HUD setHidden: YES];
-                  _scanStatus = YES;
               });
           }
       }] resume];
@@ -684,29 +862,150 @@
 #pragma mark - FUNCTION EVENTS
 - (void)checkLicense
 {
-    [self checkLicenseInfo: self.manualLicenseKeyTxt.text];
+    NSString *key = [self.manualLicenseKeyTxt.text stringByTrimmingCharactersInSet: [NSCharacterSet whitespaceAndNewlineCharacterSet]];
+    if ([key length] > 0)
+    {
+        BOOL repeated = NO;
+        for (NSString *license in scanServiceKeyList) {
+            if ([self.manualLicenseKeyTxt.text isEqualToString: license]) {
+                repeated = YES;
+                [self.manualViewErrorMessage setText: @"The license is already in the list for add license."];
+                [self.manualViewErrorMessage setHidden: NO];
+                break;
+            }
+        }
+        if (repeated == NO)
+        {
+            action = SERVICE_CHECK_LICENSE;
+            if ([public checkNetWorkConn])
+            {
+                [self checkLicenseInfo: self.manualLicenseKeyTxt.text];
+            }
+            else
+            {
+                [self.errorView setHidden: NO];
+            }
+        }
+    }
+    else
+    {
+        [self.manualViewErrorMessage setText: @"License key can't be blank."];
+        [self.manualViewErrorMessage setHidden: NO];
+    }
 }
 - (void)stopReading
 {
     [_session stopRunning];
 }
+- (void)selfLayout
+{
+    switch (public.getDeviceType)
+    {
+        case 1:
+            [self.tryAgainBtn setFrame: CGRectMake(124, 360, 73, 30)];
+            [self.errorLbl setFrame: CGRectMake(60, 54, 200, 21)];
+            break;
+        case 2:
+            [self.tryAgainBtn setFrame: CGRectMake(144, 424, 87, 33)];
+            [self.errorLbl setFrame: CGRectMake(87, 66, 200, 21)];
+            break;
+        case 3:
+            [self.tryAgainBtn setFrame: CGRectMake(160, 468, 93, 35)];
+            [self.errorLbl setFrame: CGRectMake(107, 74, 200, 21)];
+            break;
+        default:
+            // other size
+            break;
+    }
+}
+- (void)searchServiceInfo
+{
+    [m_HUD setHidden: NO];
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        if ([licenseNameList count] > 0)
+        {
+            searchServiceList = [[NSMutableArray alloc]init];
+            searchServiceTotalList = [[NSMutableArray alloc]init];
+            searchParsedModuleCodeList = [[NSMutableArray alloc]init];
+            searchKeyWordStatus = NO;
+            NSString *keyWord = [self.searchServiceTxt.text stringByTrimmingCharactersInSet: [NSCharacterSet whitespaceAndNewlineCharacterSet]];
+            if ([keyWord length] > 0)
+            {
+                for (int i=0; i<[licenseNameList count]; i++) {
+                    NSRange searchName = [[licenseNameList objectAtIndex: i]rangeOfString: self.searchServiceTxt.text];
+                    if (searchName.location == NSNotFound)
+                    {
+                        // show message
+                        [self.searchList setHidden: YES];
+                        [self.searchNoResView setHidden: NO];
+                    }
+                    else
+                    {
+                        [searchServiceList addObject: [licenseNameList objectAtIndex: i]];
+                        [searchServiceTotalList addObject: [licenseTotalList objectAtIndex: i]];
+                        [searchParsedModuleCodeList addObject: [licenseParsedModuleCodeList objectAtIndex: i]];
+                        [self.searchNoResView setHidden: YES];
+                        searchKeyWordStatus = YES;
+                    }
+                }
+                if (searchKeyWordStatus == YES)
+                {
+                    [self.searchList reloadData];
+                    // show result
+                    [self.searchNoResView setHidden: YES];
+                    [self.searchList setHidden: NO];
+                }
+            }
+            else
+            {
+                searchKeyWordStatus = NO;
+                [self.searchList reloadData];
+                [self.searchList setHidden: NO];
+                [self.searchNoResView setHidden: YES];
+            }
+            [m_HUD setHidden: YES];
+        }
+        else
+        {
+            // show message
+            [self.searchList setHidden: YES];
+            [self.searchNoResView setHidden: NO];
+            [m_HUD setHidden: YES];
+        }
+    });
+}
+- (void)hiddeKeyboard
+{
+    // hidde keyboard
+    [[[UIApplication sharedApplication]keyWindow]endEditing: YES];
+}
+- (void)showStatus
+{
+    debug(@"licenseListStatus = %d, licenseDetailStatus = %d, toDeviceStatus = %d, scanStatus = %d, registerListStatus = %d, searchStatus = %d", licenseListStatus, licenseDetailStatus, toDeviceStatus, scanStatus, registerListStatus, searchStatus);
+}
 #pragma mark - BUTTON EVENTS
 - (IBAction)registerNewLicensesBtn:(id)sender
 {
-    [self.tabBarController.tabBar setHidden: YES];
-    licenseListStatus = NO;
-    scanStatus = YES;
-    scanServiceNameList = [[NSMutableArray alloc]init];
-    scanServiceKeyList = [[NSMutableArray alloc]init];
-    scanServiceAmountList = [[NSMutableArray alloc]init];
-    [self.scanRegisterBtn setEnabled: NO];
-    [self.manualRegisterBtn setEnabled: NO];
-    [self.scanLicenseList reloadData];
-    [self.manualLicenseList reloadData];
-    [self.licenseView setHidden: YES];
-    [self.scanView setHidden: NO];
-    _scanStatus = YES;
-    [self scanCode];
+    [m_HUD setHidden: NO];
+//    [m_HUD.label setText: @"Add Licenses ..."];
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [self.tabBarController.tabBar setHidden: YES];
+        licenseListStatus = NO;
+        scanStatus = YES;
+        scanServiceNameList = [[NSMutableArray alloc]init];
+        scanServiceKeyList = [[NSMutableArray alloc]init];
+        scanServiceAmountList = [[NSMutableArray alloc]init];
+        registerMessageList = [[NSMutableArray alloc]init];
+        [self.scanRegisterBtn setEnabled: NO];
+        [self.manualRegisterBtn setEnabled: NO];
+        [self.scanLicenseList reloadData];
+        [self.manualLicenseList reloadData];
+        [self.licenseView setHidden: YES];
+        [self.scanView setHidden: NO];
+        _scanStatus = YES;
+        [self scanCode];
+        [m_HUD setHidden: YES];
+    });
 }
 - (IBAction)scanViewBtn:(id)sender
 {
@@ -715,6 +1014,7 @@
 }
 - (IBAction)manualViewBtn:(id)sender
 {
+    [self hiddeKeyboard];
     [self.manualView setHidden: YES];
     [self.scanView setHidden: NO];
 }
@@ -722,25 +1022,52 @@
 {
     licenseListStatus = YES;
     scanStatus = NO;
-    [self.scanView setHidden: YES];
-    [self.licenseView setHidden: NO];
-    [self.tabBarController.tabBar setHidden: NO];
+    //[self.scanView setHidden: YES];
+    //[self.licenseView setHidden: NO];
+    //[self.tabBarController.tabBar setHidden: NO];
     [self stopReading];
+    action = ENTER_SERVICE;
+    if ([public checkNetWorkConn])
+    {
+        [self getLicenseInfo];
+    }
+    else
+    {
+        [self.errorView setHidden: NO];
+    }
 }
 - (IBAction)manualViewCancelBtn:(id)sender
 {
     licenseListStatus = YES;
     scanStatus = NO;
+    [self hiddeKeyboard];
     [self.manualView setHidden: YES];
     [self.licenseView setHidden: NO];
     [self.tabBarController.tabBar setHidden: NO];
     [self stopReading];
+    action = ENTER_SERVICE;
+    if ([public checkNetWorkConn])
+    {
+        [self getLicenseInfo];
+    }
+    else
+    {
+        [self.errorView setHidden: NO];
+    }
 }
 - (IBAction)licenseDetailCancelBtn:(id)sender
 {
     licenseListStatus = YES;
     licenseDetailStatus = NO;
-    [self getLicenseInfo];
+    action = ENTER_SERVICE;
+    if ([public checkNetWorkConn])
+    {
+        [self getLicenseInfo];
+    }
+    else
+    {
+        [self.errorView setHidden: NO];
+    }
 }
 - (void)detailActivateBtn:(UIButton *)sender
 {
@@ -748,23 +1075,49 @@
     licenseDetailStatus = NO;
     toDeviceStatus = YES;
     detailServiceCount = [[detailTotalList objectAtIndex: sender.tag]integerValue];
-    [self toDeviceInfo: sender.tag andAmount: [detailAmountList objectAtIndex: sender.tag]];
     toDeviceIndex = sender.tag;
     cancelIndexPath = nil;
+    // set slider init value
+    [self.activateCountSlider setValue: 1];
+    action = SERVICE_GET_DEVICE;
+    if ([public checkNetWorkConn])
+    {
+        [self toDeviceInfo: toDeviceIndex andAmount: [detailAmountList objectAtIndex: toDeviceIndex]];
+    }
+    else
+    {
+        [self.errorView setHidden: NO];
+    }
 }
 - (void)toDeviceCancelBtn:(id)sender
 {
     toDeviceStatus = NO;
     licenseDetailStatus = YES;
-    [self getLicenseDetail: licenseParsedModuleCode andServiceName: self.licenseDetailModuleCodeName.text];
+    action = SERVICE_GET_LICENSE;
+    if ([public checkNetWorkConn])
+    {
+        [self getLicenseDetail: licenseParsedModuleCode andServiceName: self.licenseDetailModuleCodeName.text];
+    }
+    else
+    {
+        [self.errorView setHidden: NO];
+    }
 }
-
 - (IBAction)activateCountSliderChange:(id)sender
 {
     UISlider *slider = (UISlider *)sender;
     if (slider == self.activateCountSlider)
     {
-        [self.activateCount setText: [NSString stringWithFormat: @"%d", (int)slider.value]];
+        NSString *value = [NSString stringWithFormat: @"%.1f", slider.value];
+        float getValue = [value floatValue];
+        if ((getValue-(int)slider.value)>=0.5)
+        {
+            [self.activateCount setText: [NSString stringWithFormat: @"%d", ((int)slider.value)+1]];
+        }
+        else
+        {
+            [self.activateCount setText: [NSString stringWithFormat: @"%d", (int)slider.value]];
+        }
     }
 }
 - (IBAction)activateCountSliderEnd:(id)sender
@@ -791,13 +1144,23 @@
     if (DEBUG) debug(@"device id = %@", activateDeviceId);
     activateServiceIdsList = [[NSMutableArray alloc]init];
     NSInteger selectCount = [self.activateCount.text integerValue];
-    NSArray *getServiceIdsList = [detailIdsListArr objectAtIndex: toDeviceIndex];
+    //NSArray *getServiceIdsList = [detailIdsListArr objectAtIndex: toDeviceIndex];
     for (int i=0; i<selectCount; i++) {
-        [activateServiceIdsList addObject: [getServiceIdsList objectAtIndex: i]];
+        //[activateServiceIdsList addObject: [getServiceIdsList objectAtIndex: i]];
+        NSString *serviceId = [selectIdsListFromDevice objectAtIndex: i];
+        [activateServiceIdsList addObject: serviceId];
     }
     if (DEBUG) debug(@"service id = %@", activateServiceIdsList);
     showCount = selectCount;
-    [self activateLicenseInfo: activateDeviceId andServcieList: activateServiceIdsList];
+    action = SERVICE_ACTIVATE_LICENSE;
+    if ([public checkNetWorkConn])
+    {
+        [self activateLicenseInfo: activateDeviceId andServcieList: activateServiceIdsList];
+    }
+    else
+    {
+        [self.errorView setHidden: NO];
+    }
 }
 - (void)newLicenseDelBtn:(UIButton *)sender
 {
@@ -814,44 +1177,151 @@
 }
 - (IBAction)scanRegisterBtn:(id)sender
 {
+    if (DEBUG) debug(@"scan register licenses = %@", scanServiceKeyList);
+    [m_HUD setHidden: NO];
     NSString *licenseKey = [[NSString alloc]init];
     for (int i=0; i<[scanServiceKeyList count]; i++) {
-        if (i == ([scanServiceKeyList count]-1))
+        licenseKey = [NSString stringWithFormat: @"{\"key\":\"%@\"}", [scanServiceKeyList objectAtIndex: i]];
+        action = SERVICE_REGISTER_LICENSE;
+        registerIndex = i;
+        if ([public checkNetWorkConn])
         {
-            licenseKey = [licenseKey stringByAppendingFormat: @"{\"key\":\"%@\"}", [scanServiceKeyList objectAtIndex: i]];
+            dispatch_async(dispatch_get_main_queue(), ^() {
+                [self registerLicenseInfo: licenseKey andIndex: i];
+            });
         }
         else
         {
-            licenseKey = [licenseKey stringByAppendingFormat: @"{\"key\":\"%@\"},", [scanServiceKeyList objectAtIndex: i]];
+            [self.errorView setHidden: NO];
         }
     }
-    if(DEBUG) debug(@"license key = %@", licenseKey);
-    [self registerLicenseInfo: licenseKey];
 }
 - (IBAction)manualRegisterBtn:(id)sender
 {
+    if (DEBUG) debug(@"manual register licenses.");
+    [m_HUD setHidden: NO];
     NSString *licenseKey = [[NSString alloc]init];
     for (int i=0; i<[scanServiceKeyList count]; i++) {
-        if (i == ([scanServiceKeyList count]-1))
+        licenseKey = [NSString stringWithFormat: @"{\"key\":\"%@\"}", [scanServiceKeyList objectAtIndex: i]];
+        action = SERVICE_REGISTER_LICENSE;
+        registerIndex = i;
+        if ([public checkNetWorkConn])
         {
-            licenseKey = [licenseKey stringByAppendingFormat: @"{\"key\":\"%@\"}", [scanServiceKeyList objectAtIndex: i]];
+            dispatch_async(dispatch_get_main_queue(), ^() {
+                [self registerLicenseInfo: licenseKey andIndex: i];
+            });
         }
         else
         {
-            licenseKey = [licenseKey stringByAppendingFormat: @"{\"key\":\"%@\"},", [scanServiceKeyList objectAtIndex: i]];
+            [self.errorView setHidden: NO];
         }
     }
-    if(DEBUG) debug(@"license key = %@", licenseKey);
-    [self registerLicenseInfo: licenseKey];
+}
+- (IBAction)tryAgainBtn:(id)sender
+{
+    if ([public checkNetWorkConn])
+    {
+        if (action == ENTER_SERVICE)
+        {
+            [self getLicenseInfo];
+        }
+        else if (action == SERVICE_GET_LICENSE)
+        {
+            [self getLicenseDetail: licenseParsedModuleCode andServiceName: selectServiceName];
+        }
+        else if (action == SERVICE_GET_DEVICE)
+        {
+            [self toDeviceInfo: toDeviceIndex andAmount: [detailAmountList objectAtIndex: toDeviceIndex]];
+        }
+        else if (action == SERVICE_ACTIVATE_LICENSE)
+        {
+            [self activateLicenseInfo: activateDeviceId andServcieList: activateServiceIdsList];
+        }
+        else if (action == SERVICE_REGISTER_LICENSE)
+        {
+            [m_HUD setHidden: NO];
+            NSString *licenseKey = [[NSString alloc]init];
+            for (int i=(int)registerIndex; i<[scanServiceKeyList count]; i++) {
+                licenseKey = [NSString stringWithFormat: @"{\"key\":\"%@\"}", [scanServiceKeyList objectAtIndex: i]];
+                action = SERVICE_REGISTER_LICENSE;
+                registerIndex = i;
+                if ([public checkNetWorkConn])
+                {
+                    dispatch_async(dispatch_get_main_queue(), ^() {
+                        [self registerLicenseInfo: licenseKey andIndex: i];
+                    });
+                }
+                else
+                {
+                    [self.errorView setHidden: NO];
+                }
+            }
+        }
+    }
+    else
+    {
+        debug(@"No Internet.");
+    }
 }
 
-- (IBAction)tryAgainBtn:(id)sender {
+- (IBAction)registerListOkBtn:(id)sender
+{
+    registerListStatus = NO;
+    licenseListStatus = YES;
+    [self.licenseList reloadData];
+    dispatch_async(dispatch_get_main_queue(), ^() {
+        action = ENTER_SERVICE;
+        if ([public checkNetWorkConn])
+        {
+            [self getLicenseInfo];
+        }
+        else
+        {
+            [self.errorView setHidden: NO];
+        }
+    });
+}
+
+- (IBAction)licenseSearchBtn:(id)sender
+{
+    [m_HUD setHidden: NO];
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        licenseListStatus = NO;
+        searchKeyWordStatus = NO;
+        searchStatus = YES;
+        [self.searchServiceTxt setText: @""];
+        [self.searchList reloadData];
+        [self.licenseView setHidden: YES];
+        [self.tabBarController.tabBar setHidden: YES];
+        [self.searchNoResView setHidden: YES];
+        [self.searchListView setHidden: NO];
+        [m_HUD setHidden: YES];
+    });
 }
 - (void)showDoneBtn:(id)sender
 {
     showStatus = NO;
     licenseListStatus = YES;
-    [self getLicenseInfo];
+    action = ENTER_SERVICE;
+    if ([public checkNetWorkConn])
+    {
+        [self getLicenseInfo];
+    }
+    else
+    {
+        [self.errorView setHidden: NO];
+    }
+}
+- (IBAction)searchServiceCancelBtn:(id)sender {
+    [m_HUD setHidden: NO];
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        searchStatus = NO;
+        licenseListStatus = YES;
+        [self.searchListView setHidden: YES];
+        [self.tabBarController.tabBar setHidden: NO];
+        [self.licenseView setHidden: NO];
+        [m_HUD setHidden: YES];
+    });
 }
 #pragma mark - SCAN EVENTS
 - (void)scanCode
@@ -888,9 +1358,34 @@
         {
             if (_scanStatus)
             {
-                if (DEBUG) debug(@"scan data = %@", metadataObject.stringValue);
-                [self checkLicenseInfo: metadataObject.stringValue];
                 _scanStatus = NO;
+                BOOL repeated = NO;
+                for (NSString *license in scanServiceKeyList) {
+                    if ([metadataObject.stringValue isEqualToString: license]) {
+                        repeated = YES;
+                        [self.scanViewErrorMessage setText: @"The license is already in the list for add license."];
+                        [self.scanViewErrorMessage setHidden: NO];
+                        break;
+                    }
+                }
+                if (DEBUG) debug(@"scan data = %@", metadataObject.stringValue);
+                if (repeated == NO)
+                {
+                    [self.scanViewErrorMessage setHidden: YES];
+                    action = SERVICE_CHECK_LICENSE;
+                    if ([public checkNetWorkConn])
+                    {
+                        [self checkLicenseInfo: metadataObject.stringValue];
+                    }
+                    else
+                    {
+                        [self.errorView setHidden: NO];
+                    }
+                }
+                else
+                {
+                    _scanStatus = YES;
+                }
             }
         }
     }
@@ -921,29 +1416,41 @@
     {
         count = [licenseNameList count];
     }
-    if (licenseDetailStatus == YES)
+    else if (licenseDetailStatus == YES)
     {
         count = [detailTotalList count];
     }
-    if (toDeviceStatus == YES)
+    else if (toDeviceStatus == YES)
     {
         count = [toDeviceNameList count];
     }
-    if (scanStatus == YES)
+    else if (scanStatus == YES)
     {
         count = [scanServiceKeyList count];
     }
-    if (showStatus == YES)
+    else if (showStatus == YES)
     {
         count = [detailTotalList count];
     }
-    if (DEBUG_TABLE) debug(@"count = %ld", (long)count);
-    if (DEBUG_TABLE) debug(@"licenseListStatus = %d, licenseDetailStatus = %d, toDeviceStatus = %d", licenseListStatus, licenseDetailStatus, toDeviceStatus);
+    else if (registerListStatus == YES)
+    {
+        count = [scanServiceKeyList count];
+    }
+    else if (searchStatus == YES)
+    {
+        if (searchKeyWordStatus == YES)
+        {
+            count = [searchServiceList count];
+        }
+        else
+        {
+            count = [licenseNameList count];
+        }
+    }
     return  count;
 }
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (DEBUG_TABLE) debug(@"tableView cellForRowAtIndexPath %d", indexPath.row);
     UITableViewCell *cell;
     if (licenseListStatus == YES)
     {
@@ -987,6 +1494,16 @@
                 [licenseDetailCell.activate addTarget: self action: @selector(detailActivateBtn:) forControlEvents: UIControlEventTouchUpInside];
                 [licenseDetailCell.count setText: [detailTotalList objectAtIndex: indexPath.row]];
                 [licenseDetailCell.amount setText: [detailAmountList objectAtIndex: indexPath.row]];
+                // set error message
+                [licenseDetailCell.message setText: [detailErrorMessageList objectAtIndex: indexPath.row]];
+                if ([[detailErrorMessageList objectAtIndex: indexPath.row] isEqualToString: @"NULL"])
+                {
+                    [licenseDetailCell.message setHidden: YES];
+                }
+                else
+                {
+                    [licenseDetailCell.message setHidden: NO];
+                }
                 cell = licenseDetailCell;
             }
         }
@@ -1032,10 +1549,12 @@
                 [registerLicenseListCell.scanServiceKey setText: [scanServiceKeyList objectAtIndex: indexPath.row]];
                 [registerLicenseListCell.scanServiceAmount setText: [scanServiceAmountList objectAtIndex: indexPath.row]];
                 [registerLicenseListCell.scanDel addTarget: self action: @selector(newLicenseDelBtn:) forControlEvents: UIControlEventTouchUpInside];
+                [registerLicenseListCell.scanDel setHitTestEdgeInsets: UIEdgeInsetsMake(50, 50, 50, 50)];
                 [registerLicenseListCell.manualServiceName setText: [scanServiceNameList objectAtIndex: indexPath.row]];
                 [registerLicenseListCell.manualServiceKey setText: [scanServiceKeyList objectAtIndex: indexPath.row]];
                 [registerLicenseListCell.manualServiceAmount setText: [scanServiceAmountList objectAtIndex: indexPath.row]];
                 [registerLicenseListCell.manualDel addTarget: self action: @selector(newLicenseDelBtn:) forControlEvents: UIControlEventTouchUpInside];
+                [registerLicenseListCell.manualDel setHitTestEdgeInsets: UIEdgeInsetsMake(50, 50, 50, 50)];
                 cell = registerLicenseListCell;
             }
         }
@@ -1052,7 +1571,7 @@
             ShowRegisteredLicenseCell *showRegisteredLicenseCell = [tableView dequeueReusableCellWithIdentifier: CellIdentifier];
             if (showRegisteredLicenseCell == nil)
             {
-                cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
+                cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier: CellIdentifier];
             }
             else
             {
@@ -1061,7 +1580,7 @@
                 [showRegisteredLicenseCell.count setText: [detailTotalList objectAtIndex: indexPath.row]];
                 [showRegisteredLicenseCell.amount setText: [detailAmountList objectAtIndex: indexPath.row]];
                 if (indexPath.row == toDeviceIndex) {
-                    [showRegisteredLicenseCell.activateCount setText:[NSString stringWithFormat: @"%d Activated", showCount]];
+                    [showRegisteredLicenseCell.activateCount setText:[NSString stringWithFormat: @"%ld Activated", (long)showCount]];
                 }
                 else
                 {
@@ -1072,7 +1591,82 @@
         }
         else
         {
-            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
+            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier: CellIdentifier];
+        }
+    }
+    if (registerListStatus == YES)
+    {
+        static NSString *CellIdentifier = @"registerListCell";
+        if (indexPath.row < [scanServiceKeyList count])
+        {
+            RegisterListCell *registerListCell = [tableView dequeueReusableCellWithIdentifier: CellIdentifier];
+            if (registerListCell == nil)
+            {
+                cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier: CellIdentifier];
+            }
+            else
+            {
+                [registerListCell.serviceName setText: [scanServiceNameList objectAtIndex: indexPath.row]];
+                [registerListCell.licenseKey setText: [scanServiceKeyList objectAtIndex: indexPath.row]];
+                [registerListCell.amount setText: [scanServiceAmountList objectAtIndex: indexPath.row]];
+                if (DEBUG) debug(@"registerMessageList = %@", registerMessageList);
+                [registerListCell.message setText: [registerMessageList objectAtIndex: indexPath.row]];
+                if ([registerListCell.message.text isEqualToString: @"Register succeeded."])
+                {
+                    [registerListCell.message setTextColor: [UIColor blueColor]];
+                }
+            }
+            cell = registerListCell;
+        }
+        else
+        {
+            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier: CellIdentifier];
+        }
+    }
+    if (searchStatus == YES)
+    {
+        static NSString *CellIdentifier = @"searchListCell";
+        if (searchKeyWordStatus == YES)
+        {
+            if (indexPath.row < [searchServiceList count])
+            {
+                SearchServiceListCell *searchCell = [tableView dequeueReusableCellWithIdentifier: CellIdentifier];
+                if (searchCell == nil) {
+                    cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier: CellIdentifier];
+                }
+                else
+                {
+                    [searchCell.name setText:[searchServiceList objectAtIndex: indexPath.row]];
+                    NSString *total = [NSString stringWithFormat: @"%@ Registered", [searchServiceTotalList objectAtIndex: indexPath.row]];
+                    [searchCell.amount setText: total];
+                    cell = searchCell;
+                }
+            }
+            else
+            {
+                cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier: CellIdentifier];
+            }
+        }
+        else
+        {
+            if (indexPath.row < [licenseNameList count])
+            {
+                SearchServiceListCell *searchCell = [tableView dequeueReusableCellWithIdentifier: CellIdentifier];
+                if (searchCell == nil) {
+                    cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier: CellIdentifier];
+                }
+                else
+                {
+                    [searchCell.name setText:[licenseNameList objectAtIndex: indexPath.row]];
+                    NSString *total = [NSString stringWithFormat: @"%@ Registered", [licenseTotalList objectAtIndex: indexPath.row]];
+                    [searchCell.amount setText: total];
+                    cell = searchCell;
+                }
+            }
+            else
+            {
+                cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier: CellIdentifier];
+            }
         }
     }
     return cell;
@@ -1085,9 +1679,83 @@
         licenseDetailStatus = YES;
         licenseParsedModuleCode = [licenseParsedModuleCodeList objectAtIndex: indexPath.row];
         LicenseListCell *cell = [tableView cellForRowAtIndexPath: indexPath];
-        [self getLicenseDetail: licenseParsedModuleCode andServiceName: cell.name.text];
+        selectServiceName = cell.name.text;
+        if (DEBUG) debug(@"module code = %@ service name = %@", licenseParsedModuleCode, selectServiceName);
+        action = SERVICE_GET_LICENSE;
+        if ([public checkNetWorkConn])
+        {
+            [self getLicenseDetail: licenseParsedModuleCode andServiceName: selectServiceName];
+        }
+        else
+        {
+            [self.errorView setHidden: NO];
+        }
     }
-
+    else if (searchStatus == YES)
+    {
+        if (searchKeyWordStatus == NO)
+        {
+            searchStatus = NO;
+            licenseDetailStatus = YES;
+            licenseParsedModuleCode = [licenseParsedModuleCodeList objectAtIndex: indexPath.row];
+            LicenseListCell *cell = [tableView cellForRowAtIndexPath: indexPath];
+            selectServiceName = cell.name.text;
+            if (DEBUG) debug(@"module code = %@ service name = %@", licenseParsedModuleCode, selectServiceName);
+            action = SERVICE_GET_LICENSE;
+            if ([public checkNetWorkConn])
+            {
+                [self getLicenseDetail: licenseParsedModuleCode andServiceName: selectServiceName];
+            }
+            else
+            {
+                [self.errorView setHidden: NO];
+            }
+        }
+        else
+        {
+            searchStatus = NO;
+            licenseDetailStatus = YES;
+            licenseParsedModuleCode = [searchParsedModuleCodeList objectAtIndex: indexPath.row];
+            SearchServiceListCell *cell = [tableView cellForRowAtIndexPath: indexPath];
+            selectServiceName = cell.name.text;
+            if (DEBUG) debug(@"module code = %@ service name = %@", licenseParsedModuleCode, selectServiceName);
+            action = SERVICE_GET_LICENSE;
+            if ([public checkNetWorkConn])
+            {
+                [self getLicenseDetail: licenseParsedModuleCode andServiceName: selectServiceName];
+            }
+            else
+            {
+                [self.errorView setHidden: NO];
+            }
+        }
+    }
+    else if (toDeviceStatus == YES)
+    {
+        if (DEBUG) debug(@"IDs = %@", [toDeviceIdsListFromDevice objectAtIndex: indexPath.row]);
+        NSArray *idsArr = [[toDeviceIdsListFromDevice objectAtIndex: indexPath.row] componentsSeparatedByString: @","];
+        selectIdsListFromDevice = [[NSMutableArray alloc]initWithArray: idsArr];
+        if ([idsArr count] > 1)
+        {
+            [self.toDeviceCount setText: [NSString stringWithFormat: @"%lu", (unsigned long)[idsArr count]]];
+            [self.activateCount setText: @"1"];
+            // set slider init value
+            [self.activateCountSlider setMinimumValue: 1];
+            [self.activateCountSlider setMaximumValue: [idsArr count]];
+            [self.activateCountSlider setValue: 1];
+            [self.activateCountSlider setEnabled: YES];
+        }
+        else
+        {
+            [self.toDeviceCount setText: @"1"];
+            [self.activateCount setText: @"1"];
+            // set slider init value
+            [self.activateCountSlider setMinimumValue: 0];
+            [self.activateCountSlider setMaximumValue: 1];
+            [self.activateCountSlider setValue: 1];
+            [self.activateCountSlider setEnabled: NO];
+        }
+    }
     return indexPath;
 }
 - (UITableViewCellEditingStyle)tableView:(UITableView *)tableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -1111,12 +1779,16 @@
 
         [self.toDeviceConfirmBtn setEnabled: YES];
     }
+    else
+    {
+        [tableView deselectRowAtIndexPath:indexPath animated:NO];
+    }
 }
 - (void)tableView:(UITableView *)tableView didDeselectRowAtIndexPath:(nonnull NSIndexPath *)indexPath
 {
     if (toDeviceStatus == YES)
     {
-        [self.toDeviceList selectRowAtIndexPath:indexPath animated:NO scrollPosition: UITableViewScrollPositionNone];
+        [self.toDeviceList selectRowAtIndexPath: indexPath animated:NO scrollPosition: UITableViewScrollPositionNone];
     }
 }
 @end

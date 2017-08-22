@@ -10,8 +10,8 @@
 
 @interface start ()
 {
-    Reachability *reach;
-    NetworkStatus netStatus;
+//    Reachability *reach;
+//    NetworkStatus netStatus;
 }
 @end
 
@@ -19,7 +19,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    reach = [Reachability reachabilityWithHostName: @"www.apple.com"];
+//    reach = [Reachability reachabilityWithHostName: @"www.apple.com"];
 }
 - (void)viewWillAppear:(BOOL)animated
 {
@@ -30,24 +30,24 @@
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
 }
--(BOOL)shouldPerformSegueWithIdentifier:(NSString *)identifier sender:(id)sender
-{
-    BOOL result = NO;
-    if([identifier isEqualToString: @"SignIn"])
-    {
-        netStatus = [reach currentReachabilityStatus];
-        if (netStatus == NotReachable)
-        {
-            [self.errorView setHidden: NO];
-            result = NO;
-        }
-        else
-        {
-            result = YES;
-        }
-    }
-    return result;
-}
+//-(BOOL)shouldPerformSegueWithIdentifier:(NSString *)identifier sender:(id)sender
+//{
+//    BOOL result = NO;
+//    if([identifier isEqualToString: @"SignIn"])
+//    {
+//        netStatus = [reach currentReachabilityStatus];
+//        if (netStatus == NotReachable)
+//        {
+//            [self.errorView setHidden: NO];
+//            result = NO;
+//        }
+//        else
+//        {
+//            result = YES;
+//        }
+//    }
+//    return result;
+//}
 - (void)selfLayout
 {
     switch (public.getDeviceType)

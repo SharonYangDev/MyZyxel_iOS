@@ -69,6 +69,17 @@
 		A3EAFC1D1F0F39A6004AA5A0 /* ShowRegisteredLicenseCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A3EAFC1C1F0F39A6004AA5A0 /* ShowRegisteredLicenseCell.m */; };
 		A3EBEC621F0DDEF400AF79C4 /* RegisterLicenseListCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A3EBEC611F0DDEF400AF79C4 /* RegisterLicenseListCell.m */; };
 		A3EF9CF91EEF8DB300FAFAD6 /* reduce.png in Resources */ = {isa = PBXBuildFile; fileRef = A3EF9CF81EEF8DB300FAFAD6 /* reduce.png */; };
+		E23576001F25EC45000048C5 /* search_bg.png in Resources */ = {isa = PBXBuildFile; fileRef = E23575FF1F25EC45000048C5 /* search_bg.png */; };
+		E241AC861F231DEA000AC656 /* bar.png in Resources */ = {isa = PBXBuildFile; fileRef = E241AC851F231DEA000AC656 /* bar.png */; };
+		E241AC8A1F232971000AC656 /* device_bg.png in Resources */ = {isa = PBXBuildFile; fileRef = E241AC891F232971000AC656 /* device_bg.png */; };
+		E24CDC4F1F4B9B6400252360 /* new.png in Resources */ = {isa = PBXBuildFile; fileRef = E24CDC4E1F4B9B6400252360 /* new.png */; };
+		E2671AF81F3942D800516B5E /* RegisterListCell.m in Sources */ = {isa = PBXBuildFile; fileRef = E2671AF71F3942D800516B5E /* RegisterListCell.m */; };
+		E2671AFB1F3A9E4100516B5E /* SearchServiceListCell.m in Sources */ = {isa = PBXBuildFile; fileRef = E2671AFA1F3A9E4100516B5E /* SearchServiceListCell.m */; };
+		E2671AFE1F3ABF9600516B5E /* SearchDeviceListCell.m in Sources */ = {isa = PBXBuildFile; fileRef = E2671AFD1F3ABF9600516B5E /* SearchDeviceListCell.m */; };
+		E284B8361F4428C300F226FB /* ActivateOkListCell.m in Sources */ = {isa = PBXBuildFile; fileRef = E284B8351F4428C300F226FB /* ActivateOkListCell.m */; };
+		E2BEA01B1F305BC9006D8F1E /* libDecodeDevicebyQRcode.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E2BEA01A1F305BC9006D8F1E /* libDecodeDevicebyQRcode.a */; };
+		E2BEA01D1F3065AE006D8F1E /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = E2BEA01C1F3065AE006D8F1E /* libz.tbd */; };
+		E2F0152D1F32FBAC005D224C /* scaleClickRange.m in Sources */ = {isa = PBXBuildFile; fileRef = E2F0152C1F32FBAC005D224C /* scaleClickRange.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -186,6 +197,23 @@
 		A3EBEC601F0DDEF400AF79C4 /* RegisterLicenseListCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RegisterLicenseListCell.h; sourceTree = "<group>"; };
 		A3EBEC611F0DDEF400AF79C4 /* RegisterLicenseListCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RegisterLicenseListCell.m; sourceTree = "<group>"; };
 		A3EF9CF81EEF8DB300FAFAD6 /* reduce.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = reduce.png; sourceTree = "<group>"; };
+		E235056B1F2F2CD900B19E43 /* DecodeDevicebyQRcode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DecodeDevicebyQRcode.h; sourceTree = "<group>"; };
+		E23575FF1F25EC45000048C5 /* search_bg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = search_bg.png; sourceTree = "<group>"; };
+		E241AC851F231DEA000AC656 /* bar.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bar.png; sourceTree = "<group>"; };
+		E241AC891F232971000AC656 /* device_bg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = device_bg.png; sourceTree = "<group>"; };
+		E24CDC4E1F4B9B6400252360 /* new.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = new.png; sourceTree = "<group>"; };
+		E2671AF61F3942D800516B5E /* RegisterListCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RegisterListCell.h; sourceTree = "<group>"; };
+		E2671AF71F3942D800516B5E /* RegisterListCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RegisterListCell.m; sourceTree = "<group>"; };
+		E2671AF91F3A9E4100516B5E /* SearchServiceListCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SearchServiceListCell.h; sourceTree = "<group>"; };
+		E2671AFA1F3A9E4100516B5E /* SearchServiceListCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SearchServiceListCell.m; sourceTree = "<group>"; };
+		E2671AFC1F3ABF9600516B5E /* SearchDeviceListCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SearchDeviceListCell.h; sourceTree = "<group>"; };
+		E2671AFD1F3ABF9600516B5E /* SearchDeviceListCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SearchDeviceListCell.m; sourceTree = "<group>"; };
+		E284B8341F4428C300F226FB /* ActivateOkListCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ActivateOkListCell.h; sourceTree = "<group>"; };
+		E284B8351F4428C300F226FB /* ActivateOkListCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ActivateOkListCell.m; sourceTree = "<group>"; };
+		E2BEA01A1F305BC9006D8F1E /* libDecodeDevicebyQRcode.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libDecodeDevicebyQRcode.a; path = MyZyxel/Frameworks/libDecodeDevicebyQRcode.a; sourceTree = "<group>"; };
+		E2BEA01C1F3065AE006D8F1E /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
+		E2F0152B1F32FBAC005D224C /* scaleClickRange.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = scaleClickRange.h; sourceTree = "<group>"; };
+		E2F0152C1F32FBAC005D224C /* scaleClickRange.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = scaleClickRange.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -193,6 +221,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E2BEA01D1F3065AE006D8F1E /* libz.tbd in Frameworks */,
+				E2BEA01B1F305BC9006D8F1E /* libDecodeDevicebyQRcode.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -225,6 +255,10 @@
 		A32AA4651ECC348C0019003D /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				E24CDC4E1F4B9B6400252360 /* new.png */,
+				E23575FF1F25EC45000048C5 /* search_bg.png */,
+				E241AC891F232971000AC656 /* device_bg.png */,
+				E241AC851F231DEA000AC656 /* bar.png */,
 				A3AD2C931F1B723D002F8D0A /* bk.png */,
 				A3060ED71F14585C0023C4CD /* try_again.png */,
 				A355D8BF1EFCCEE100774312 /* pg2_0.png */,
@@ -264,6 +298,7 @@
 				A39BCA1A1EC5A0A0008882D8 /* MyZyxelTests */,
 				A39BCA251EC5A0A0008882D8 /* MyZyxelUITests */,
 				A39BC9FC1EC5A0A0008882D8 /* Products */,
+				E2C0EEA31F2F2E3500A945FA /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -280,6 +315,7 @@
 		A39BC9FD1EC5A0A0008882D8 /* MyZyxel */ = {
 			isa = PBXGroup;
 			children = (
+				E235056B1F2F2CD900B19E43 /* DecodeDevicebyQRcode.h */,
 				A355D8AF1EFA836800774312 /* Reachability.h */,
 				A355D8B01EFA836800774312 /* Reachability.m */,
 				A3D3033C1EE00DED00624304 /* JWT */,
@@ -339,6 +375,16 @@
 				A3EAFC1C1F0F39A6004AA5A0 /* ShowRegisteredLicenseCell.m */,
 				A3C6BFCD1F15CC1300167A08 /* DeviceAddLicenseListCell.h */,
 				A3C6BFCE1F15CC1300167A08 /* DeviceAddLicenseListCell.m */,
+				E2F0152B1F32FBAC005D224C /* scaleClickRange.h */,
+				E2F0152C1F32FBAC005D224C /* scaleClickRange.m */,
+				E2671AF61F3942D800516B5E /* RegisterListCell.h */,
+				E2671AF71F3942D800516B5E /* RegisterListCell.m */,
+				E2671AF91F3A9E4100516B5E /* SearchServiceListCell.h */,
+				E2671AFA1F3A9E4100516B5E /* SearchServiceListCell.m */,
+				E2671AFC1F3ABF9600516B5E /* SearchDeviceListCell.h */,
+				E2671AFD1F3ABF9600516B5E /* SearchDeviceListCell.m */,
+				E284B8341F4428C300F226FB /* ActivateOkListCell.h */,
+				E284B8351F4428C300F226FB /* ActivateOkListCell.m */,
 			);
 			path = MyZyxel;
 			sourceTree = "<group>";
@@ -378,6 +424,15 @@
 				A3D3033E1EE00EB900624304 /* Jwt.m */,
 			);
 			path = JWT;
+			sourceTree = "<group>";
+		};
+		E2C0EEA31F2F2E3500A945FA /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				E2BEA01C1F3065AE006D8F1E /* libz.tbd */,
+				E2BEA01A1F305BC9006D8F1E /* libDecodeDevicebyQRcode.a */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -447,7 +502,7 @@
 				TargetAttributes = {
 					A39BC9FA1EC5A0A0008882D8 = {
 						CreatedOnToolsVersion = 8.3.2;
-						DevelopmentTeam = V8MGAQW66B;
+						DevelopmentTeam = 6E4DYF539R;
 						ProvisioningStyle = Automatic;
 					};
 					A39BCA161EC5A0A0008882D8 = {
@@ -489,10 +544,12 @@
 			files = (
 				A3D303371ED7E53900624304 /* renew_btn.png in Resources */,
 				A355D8B91EFB70D700774312 /* icon-ios7-arrow-back-512.png in Resources */,
+				E23576001F25EC45000048C5 /* search_bg.png in Resources */,
 				A3D3032E1ED415CB00624304 /* profile_btn_60.png in Resources */,
 				A39BCA111EC5A0A0008882D8 /* LaunchScreen.storyboard in Resources */,
 				A355D8A81EF73C9500774312 /* pg1_1.png in Resources */,
 				A3D3032F1ED415CB00624304 /* search_btn_60.png in Resources */,
+				E241AC8A1F232971000AC656 /* device_bg.png in Resources */,
 				A355D8A71EF73C9500774312 /* pg23_unsed.png in Resources */,
 				A355D89D1EF73C9500774312 /* key_0.png in Resources */,
 				A355D89E1EF73C9500774312 /* key_1.png in Resources */,
@@ -500,8 +557,10 @@
 				A3060ED81F14585C0023C4CD /* try_again.png in Resources */,
 				A39BCA0E1EC5A0A0008882D8 /* Assets.xcassets in Resources */,
 				A32AA4671ECC359F0019003D /* launch_screen.png in Resources */,
+				E24CDC4F1F4B9B6400252360 /* new.png in Resources */,
 				A355D8C21EFCCEE100774312 /* pg1_0.png in Resources */,
 				A355D8A31EF73C9500774312 /* clear.png in Resources */,
+				E241AC861F231DEA000AC656 /* bar.png in Resources */,
 				A355D88F1EF69AFD00774312 /* add.png in Resources */,
 				A355D89F1EF73C9500774312 /* link.png in Resources */,
 				A355D8A51EF73C9500774312 /* pg2_1.png in Resources */,
@@ -546,6 +605,7 @@
 				A3EAE1221ECAD11C0038FA47 /* license.m in Sources */,
 				A3EAE1281ECAD21F0038FA47 /* login.m in Sources */,
 				A355D8B71EFB57D000774312 /* DetailServiceCell.m in Sources */,
+				E2671AF81F3942D800516B5E /* RegisterListCell.m in Sources */,
 				A39BCA091EC5A0A0008882D8 /* device.m in Sources */,
 				A355D8CE1F03322A00774312 /* RegisterDeviceEditListCell.m in Sources */,
 				A39889BC1EEB0D75005162B3 /* DevicesExpiredListCell.m in Sources */,
@@ -553,6 +613,7 @@
 				A38B5DFC1EF21D01005B486D /* RegisteredLicenseListCell.m in Sources */,
 				A355D8CB1F02C7D200774312 /* RegisterDeviceListCell.m in Sources */,
 				A3D3033F1EE00EB900624304 /* Jwt.m in Sources */,
+				E2F0152D1F32FBAC005D224C /* scaleClickRange.m in Sources */,
 				A38B5DFF1EF2F3D5005B486D /* DeviceListCell.m in Sources */,
 				A3EAE1251ECAD1370038FA47 /* notification.m in Sources */,
 				A34652791EEE7B6800126362 /* SearchDevicesListCell.m in Sources */,
@@ -560,7 +621,9 @@
 				A3EBEC621F0DDEF400AF79C4 /* RegisterLicenseListCell.m in Sources */,
 				A3E61BAF1F0742CC009FEC1D /* LicenseRegisteredServicesCell.m in Sources */,
 				A3E61BB51F08C4CE009FEC1D /* ToDeviceListCell.m in Sources */,
+				E284B8361F4428C300F226FB /* ActivateOkListCell.m in Sources */,
 				A39BCA061EC5A0A0008882D8 /* home.m in Sources */,
+				E2671AFB1F3A9E4100516B5E /* SearchServiceListCell.m in Sources */,
 				A355D8C51EFF78EA00774312 /* CompleteServiceCell.m in Sources */,
 				A3EAFC1D1F0F39A6004AA5A0 /* ShowRegisteredLicenseCell.m in Sources */,
 				A32AA46C1ECC4F730019003D /* start.m in Sources */,
@@ -570,6 +633,7 @@
 				A3D303441EE0896700624304 /* public.m in Sources */,
 				A355D8B11EFA836800774312 /* Reachability.m in Sources */,
 				A32AA4641ECAF27B0019003D /* MBProgressHUD.m in Sources */,
+				E2671AFE1F3ABF9600516B5E /* SearchDeviceListCell.m in Sources */,
 				A3C6BFCF1F15CC1300167A08 /* DeviceAddLicenseListCell.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -654,6 +718,7 @@
 				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_INPUT_FILETYPE = automatic;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PREPROCESSOR_DEFINITIONS = (
@@ -702,6 +767,7 @@
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_INPUT_FILETYPE = automatic;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
@@ -722,13 +788,24 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				DEVELOPMENT_TEAM = V8MGAQW66B;
+				CLANG_CXX_LIBRARY = "libc++";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				DEVELOPMENT_TEAM = 6E4DYF539R;
+				EXCLUDED_RECURSIVE_SEARCH_PATH_SUBDIRECTORIES = "*.nib *.lproj *.framework *.gch *.xcode* *.xcassets (*) .DS_Store CVS .svn .git .hg *.pbproj *.pbxproj *.a";
 				INFOPLIST_FILE = MyZyxel/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				ONLY_ACTIVE_ARCH = YES;
+				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/MyZyxel",
+					"$(PROJECT_DIR)/MyZyxel/Frameworks",
+				);
+				ONLY_ACTIVE_ARCH = NO;
+				OTHER_LDFLAGS = "-lstdc++";
 				PRODUCT_BUNDLE_IDENTIFIER = com.zyxel.myZyxel;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				TARGETED_DEVICE_FAMILY = 1;
+				VALID_ARCHS = "armv7 arm64 armv7s";
 			};
 			name = Debug;
 		};
@@ -736,13 +813,24 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				DEVELOPMENT_TEAM = V8MGAQW66B;
+				CLANG_CXX_LIBRARY = "libc++";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				DEVELOPMENT_TEAM = 6E4DYF539R;
+				EXCLUDED_RECURSIVE_SEARCH_PATH_SUBDIRECTORIES = "*.nib *.lproj *.framework *.gch *.xcode* *.xcassets (*) .DS_Store CVS .svn .git .hg *.pbproj *.pbxproj *.a";
 				INFOPLIST_FILE = MyZyxel/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/MyZyxel",
+					"$(PROJECT_DIR)/MyZyxel/Frameworks",
+				);
 				ONLY_ACTIVE_ARCH = NO;
+				OTHER_LDFLAGS = "-lstdc++";
 				PRODUCT_BUNDLE_IDENTIFIER = com.zyxel.myZyxel;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				TARGETED_DEVICE_FAMILY = 1;
+				VALID_ARCHS = "armv7 arm64 armv7s";
 			};
 			name = Release;
 		};

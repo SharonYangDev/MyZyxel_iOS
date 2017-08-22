@@ -31,6 +31,7 @@
 @property (weak, nonatomic) IBOutlet UIView *noWorkView;
 @property (weak, nonatomic) IBOutlet UIView *scanF;
 @property (weak, nonatomic) IBOutlet UIView *completeView;
+@property (weak, nonatomic) IBOutlet UIView *searchNoResView;
 @property (weak, nonatomic) IBOutlet UIButton* profileBtn;
 @property (weak, nonatomic) IBOutlet UIButton* searchBtn;
 @property (weak, nonatomic) IBOutlet UIButton* searchCancelBtn;
@@ -45,6 +46,7 @@
 @property (weak, nonatomic) IBOutlet UIButton *mutiViewActivateBtn;
 @property (weak, nonatomic) IBOutlet UIButton *mutiViewCancelBtn;
 @property (weak, nonatomic) IBOutlet UIButton *tryAgainBtn;
+@property (weak, nonatomic) IBOutlet UIButton *helpBtn;
 @property (weak, nonatomic) IBOutlet UITextField* searchDevicesText;
 @property (weak, nonatomic) IBOutlet UITextField *scanViewEnterLicenseTxt;
 @property (weak, nonatomic) IBOutlet UILabel* userAccountLbl;
@@ -82,5 +84,6 @@
 - (IBAction)mutiViewActivateBtn:(id)sender;
 - (IBAction)mutiViewCancelBtn:(id)sender;
 - (IBAction)tryAgainBtn:(id)sender;
+- (IBAction)helpBtn:(id)sender;
 @end
 

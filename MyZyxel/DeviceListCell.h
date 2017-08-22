@@ -10,6 +10,7 @@
 
 @interface DeviceListCell : UITableViewCell
 @property (weak, nonatomic) IBOutlet UIImageView *withExpireServices;
+@property (weak, nonatomic) IBOutlet UIImageView *newlyRegister;
 @property (weak, nonatomic) IBOutlet UILabel *name;
 @property (weak, nonatomic) IBOutlet UILabel *macAddr;
 @end

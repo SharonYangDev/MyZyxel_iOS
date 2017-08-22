@@ -12,5 +12,6 @@
 @property (weak, nonatomic) IBOutlet UILabel *count;
 @property (weak, nonatomic) IBOutlet UILabel *amount;
 @property (weak, nonatomic) IBOutlet UIButton *activate;
+@property (weak, nonatomic) IBOutlet UILabel *message;
 
 @end
