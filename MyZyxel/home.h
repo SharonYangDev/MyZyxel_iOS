@@ -17,6 +17,7 @@
 
 @interface home : UIViewController
 @property (weak, nonatomic) IBOutlet UIPageControl *pageControl;
+@property (weak, nonatomic) IBOutlet UIWebView *helpWebView;
 @property (weak, nonatomic) IBOutlet UIScrollView *displayView;
 @property (weak, nonatomic) IBOutlet UIView* maskView;
 @property (weak, nonatomic) IBOutlet UIView* homeView;
@@ -32,10 +33,11 @@
 @property (weak, nonatomic) IBOutlet UIView *scanF;
 @property (weak, nonatomic) IBOutlet UIView *completeView;
 @property (weak, nonatomic) IBOutlet UIView *searchNoResView;
-@property (weak, nonatomic) IBOutlet UIButton* profileBtn;
-@property (weak, nonatomic) IBOutlet UIButton* searchBtn;
-@property (weak, nonatomic) IBOutlet UIButton* searchCancelBtn;
-@property (weak, nonatomic) IBOutlet UIButton* renewCancelBtn;
+@property (weak, nonatomic) IBOutlet UIView *helpView;
+@property (weak, nonatomic) IBOutlet UIButton *profileBtn;
+@property (weak, nonatomic) IBOutlet UIButton *searchBtn;
+@property (weak, nonatomic) IBOutlet UIButton *searchCancelBtn;
+@property (weak, nonatomic) IBOutlet UIButton *renewCancelBtn;
 @property (weak, nonatomic) IBOutlet UIButton *logout;
 @property (weak, nonatomic) IBOutlet UIButton *renewScanCodeBtn;
 @property (weak, nonatomic) IBOutlet UIButton *scanCancelBtn;
@@ -47,7 +49,8 @@
 @property (weak, nonatomic) IBOutlet UIButton *mutiViewCancelBtn;
 @property (weak, nonatomic) IBOutlet UIButton *tryAgainBtn;
 @property (weak, nonatomic) IBOutlet UIButton *helpBtn;
-@property (weak, nonatomic) IBOutlet UITextField* searchDevicesText;
+@property (weak, nonatomic) IBOutlet UIButton *helpBackBtn;
+@property (weak, nonatomic) IBOutlet UITextField *searchDevicesText;
 @property (weak, nonatomic) IBOutlet UITextField *scanViewEnterLicenseTxt;
 @property (weak, nonatomic) IBOutlet UILabel* userAccountLbl;
 @property (weak, nonatomic) IBOutlet UILabel* expiredCountLbl;
@@ -63,6 +66,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *mutiServiceName;
 @property (weak, nonatomic) IBOutlet UILabel *mutiServiceMac;
 @property (weak, nonatomic) IBOutlet UILabel *errorLbl;
+@property (weak, nonatomic) IBOutlet UILabel *profileVersion;
 @property (weak, nonatomic) IBOutlet UITableView* searchDeviceExpiredList;
 @property (weak, nonatomic) IBOutlet UITableView *completeLicenseList;
 @property (weak, nonatomic) IBOutlet UITableView *renewRegisteredLicenseList;
@@ -85,5 +89,6 @@
 - (IBAction)mutiViewCancelBtn:(id)sender;
 - (IBAction)tryAgainBtn:(id)sender;
 - (IBAction)helpBtn:(id)sender;
+- (IBAction)helpBackBtn:(id)sender;
 @end
 
