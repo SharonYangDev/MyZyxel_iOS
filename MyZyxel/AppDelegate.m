@@ -14,12 +14,37 @@
 
 @implementation AppDelegate
 
-
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-    // Override point for customization after application launch.
+//     Override point for customization after application launch.
+//    if ([[[UIDevice currentDevice]systemVersion] floatValue] >= 8.0)
+//    {
+//        [[UIApplication sharedApplication]registerUserNotificationSettings:[UIUserNotificationSettings settingsForTypes:(UIUserNotificationTypeSound | UIUserNotificationTypeAlert | UIUserNotificationTypeBadge)categories:nil]];
+//        [[UIApplication sharedApplication]registerForRemoteNotifications];
+//    }
+//    else
+//    {
+//        [[UIApplication sharedApplication]registerForRemoteNotificationTypes:
+//         (UIUserNotificationTypeBadge | UIUserNotificationTypeSound | UIUserNotificationTypeAlert)];
+//    }
+    [application registerUserNotificationSettings: [UIUserNotificationSettings settingsForTypes: UIUserNotificationTypeAlert categories: nil]];
+    if (launchOptions != nil)
+    {
+//        NSLog(@"Launched from notifciation");
+        NSDictionary *notification  = [launchOptions objectForKey: UIApplicationLaunchOptionsRemoteNotificationKey];
+        NSLog(@"%@", [[notification objectForKey: @"aps"]objectForKey: @"alert"]);
+    }
     return YES;
 }
-
+// app open
+- (void)application:(UIApplication *)application didReceiveLocalNotification:(NSDictionary *)userInfo
+{
+    NSLog(@"notification: %@", [[userInfo objectForKey: @"aps"]objectForKey: @"alert"]);
+    if (application.applicationState == UIApplicationStateActive)
+    {
+        UIAlertView *alert = [[UIAlertView alloc]initWithTitle: @"Notification" message: [[userInfo objectForKey: @"aps"]objectForKey: @"alert"] delegate: self cancelButtonTitle: @"OK" otherButtonTitles: nil];
+        [alert show];
+    }
+}
 
 - (void)applicationWillResignActive:(UIApplication *)application {
     // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
@@ -39,7 +64,7 @@
 
 
 - (void)applicationDidBecomeActive:(UIApplication *)application {
-    // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
+    // Restart any tasks that were paused (or not yet started) while the application was inactiv. If the application was previously in the background, optionally refresh the user interface.
 }
 
 
@@ -57,6 +82,24 @@
 //    return YES;
 //}
 
+- (void)application:(UIApplication *)application didRegisterUserNotificationSettings:(UIUserNotificationSettings *)notificationSettings
+{
+    [application registerForRemoteNotifications];
+}
+
+// get device token
+- (void)application:(UIApplication*)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData*)deviceToken
+{
+    NSString * deviceTokenStr = [[[[deviceToken description]
+                                      stringByReplacingOccurrencesOfString: @"<" withString: @""]
+                                     stringByReplacingOccurrencesOfString: @">" withString: @""]
+                                    stringByReplacingOccurrencesOfString: @" " withString: @""];
+    [public set_device_token: deviceTokenStr];
+    push_debug(@"device token = %@", deviceTokenStr);
+}
+- (void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error NS_AVAILABLE_IOS(3_0){
+    push_debug(@"error = %@", error);
+}
 @end
 
 @implementation NSURLRequest(DataController)

@@ -11,4 +11,5 @@
 @interface DetailServiceCell : UITableViewCell
 @property (weak, nonatomic) IBOutlet UILabel *serviceName;
 @property (weak, nonatomic) IBOutlet UILabel *serviceAmount;
+@property (weak, nonatomic) IBOutlet UILabel *serviceGracePeriod;
 @end

@@ -13,8 +13,16 @@
 #include <CoreFoundation/CoreFoundation.h>
 #include <Security/Security.h>
 #import <AVFoundation/AVFoundation.h>
+#import <sys/utsname.h>
 
 #import "common.h"
+
+#include <openssl/pem.h>
+#include <openssl/ssl.h>
+#include <openssl/rsa.h>
+#include <openssl/evp.h>
+#include <openssl/bio.h>
+#include <openssl/err.h>
 
 @interface public : NSObject
 + (NSDictionary *)parseQueryString:(NSString *)query;
@@ -22,7 +30,8 @@
 + (NSString *)base64_decode: (NSString *)token;
 //+ (NSString*)sha256:(NSString *)key length:(NSInteger) length;
 + (NSData *)aes_cbc_256:(NSData *)inData andIv:(NSString *)iv andkey:(NSData *)key andType: (CCOperation)coType;
-+ (NSString*)sha256:(NSString *)input;
++ (NSString *)sha256:(NSString *)input;
++ (NSString *)sha224:(NSString *)input;
 + (NSData *)hexToBytes:(NSString *)str;
 + (NSString*)getHexStringFromNSData:(NSData*)data;
 + (int8_t)getDeviceType;
@@ -30,6 +39,18 @@
 + (NSString *)getServiceTime:(NSInteger)amount;
 + (NSString *)getExpiringTime: (NSInteger)day;
 + (BOOL)checkNetWorkConn;
++ (BOOL)refreshToken;
++ (NSString *)deviceModelName;
++ (BOOL)checkDisplayStatus:(NSString *)moduleCode;
++ (BOOL)checkActivateStatus:(NSString *)moduleCode;
++ (BOOL)checkRegisterStatus:(NSString *)moduleCode;
++ (BOOL)checkSpecialStr:(NSString *)str;
++ (NSString *) signMessage:(NSString *)privateKey and:(NSString *)plainText;
++ (NSString *)stringByAddingPercentEscapesForURLParameter:(NSString *)str;
++ (NSString *)getAppInfo;
++ (NSString *)getTimeStamp;
++ (NSString *)generateSign:(NSInteger)option andTimeStamp:(NSString *)timeStamp andInboxId:(NSString *)inboxId;
++ (NSString *)messageRange:(NSString *)action;
 
 + (void)set_access_token:(NSString *)input;
 + (NSString *)get_access_token;
@@ -42,6 +63,9 @@
 
 + (void)set_secret_access_key:(NSString *)input;
 + (NSString *)get_secret_access_key;
+
++ (void)set_device_token:(NSString *)input;
++ (NSString *)get_device_token;
 
 + (void)set_code:(NSString *)input;
 + (NSString *)get_code;
@@ -66,4 +90,10 @@
 
 + (void)set_device_services:(NSMutableArray *)input;
 + (NSMutableArray *)get_device_services;
+
++ (void)set_user_id:(NSString *)input;
++ (NSString *)get_user_id;
+
++ (void)set_pushUDID:(NSString *)input;
++ (NSString *)get_pushUDID;
 @end

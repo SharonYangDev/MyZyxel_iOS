@@ -41,6 +41,8 @@
 @property (weak, nonatomic) IBOutlet UIView *searchDeviceView;
 @property (weak, nonatomic) IBOutlet UIView *searchNoResView;
 @property (weak, nonatomic) IBOutlet UIView *activateOkView;
+@property (weak, nonatomic) IBOutlet UIView *tutoriaDeviceMTView;
+@property (weak, nonatomic) IBOutlet UIView *tutoriaDeviceRTView;
 @property (weak, nonatomic) IBOutlet UITableView *devicesList;
 @property (weak, nonatomic) IBOutlet UITableView *detailServiceList;
 @property (weak, nonatomic) IBOutlet UITableView *addLicenseServiceList;
@@ -87,6 +89,8 @@
 @property (weak, nonatomic) IBOutlet UIButton *searchDeviceCancelBtn;
 @property (weak, nonatomic) IBOutlet UIButton *deviceSearchBtn;
 @property (weak, nonatomic) IBOutlet UIButton *activateOkBtn;
+@property (weak, nonatomic) IBOutlet UIButton *deviceMTBtn;
+@property (weak, nonatomic) IBOutlet UIButton *deviceRTBtn;
 @property (weak, nonatomic) IBOutlet UILabel *detailDeviceName;
 @property (weak, nonatomic) IBOutlet UILabel *detailDeviceMacAddr;
 @property (weak, nonatomic) IBOutlet UILabel *detailDeviceModel;
@@ -159,5 +163,7 @@
 - (IBAction)searchDeviceCancelBtn:(id)sender;
 - (IBAction)deviceSearchBtn:(id)sender;
 - (IBAction)activateOkBtn:(id)sender;
+- (IBAction)deviceMTBtn:(id)sender;
+- (IBAction)deviceRTBtn:(id)sender;
 @end
 
