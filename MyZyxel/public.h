@@ -45,6 +45,8 @@
 + (BOOL)checkActivateStatus:(NSString *)moduleCode;
 + (BOOL)checkRegisterStatus:(NSString *)moduleCode;
 + (BOOL)checkSpecialStr:(NSString *)str;
++ (BOOL)checkTutoriaInfo:(NSString *)str;
++ (void)recordTutoriaInfo:(NSString *)str;
 + (NSString *) signMessage:(NSString *)privateKey and:(NSString *)plainText;
 + (NSString *)stringByAddingPercentEscapesForURLParameter:(NSString *)str;
 + (NSString *)getAppInfo;

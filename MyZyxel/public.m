@@ -1019,6 +1019,56 @@ NSMutableArray *renewParsedModuleCodeList;
     }
     return NO;
 }
++ (BOOL)checkTutoriaInfo:(NSString *)str
+{
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *documentsDirectory = [paths objectAtIndex:0];
+    NSString *filePath = [documentsDirectory stringByAppendingString:@"/tutoria.plist"];
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    
+    // check file is exist
+    if ([fileManager fileExistsAtPath: filePath])
+    {
+        NSMutableDictionary *data = [[NSMutableDictionary alloc]initWithContentsOfFile: filePath];
+        NSLog(@"tutoria info = %@", data);
+        if ([[data objectForKey: str] isEqualToString: @"YES"])
+        {
+            //hide
+            return YES;
+        }
+        else
+        {
+            return NO;
+        }
+    }
+    else
+    {
+        NSLog(@"file no exist");
+        return NO;
+    }
+}
++ (void)recordTutoriaInfo:(NSString *)str
+{
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *documentsDirectory = [paths objectAtIndex:0];
+    NSString *filePath = [documentsDirectory stringByAppendingString:@"/tutoria.plist"];
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    
+    NSMutableDictionary *data;
+    // check file is exist
+    if ([fileManager fileExistsAtPath: filePath]) {
+        data = [[NSMutableDictionary alloc]initWithContentsOfFile: filePath];
+    } else {
+        data = [[NSMutableDictionary alloc] init];
+    }
+    [data setValue: @"YES" forKey: str];
+    
+    if ([data writeToFile:filePath atomically: YES]) {
+        NSLog(@"write successed");
+    } else {
+        NSLog(@"write failed");
+    }
+}
 
 RSA* createPrivateRSA(NSString *key) {
     RSA *rsa = NULL;

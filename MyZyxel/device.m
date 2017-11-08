@@ -92,6 +92,9 @@
 }
 - (void)viewDidLoad {
     [super viewDidLoad];
+    NSThread *tutoriaThread = [[NSThread alloc]initWithTarget: self selector: @selector(checkTutoriaInfo) object: nil];
+    [tutoriaThread start];
+    
     [self.manualSerialNumber addTarget: self action: @selector(checkDeviceInfo) forControlEvents: UIControlEventEditingDidEndOnExit];
     [self.manualMacAddress addTarget: self action: @selector(checkDeviceInfo) forControlEvents: UIControlEventEditingDidEndOnExit];
     [self.resellerNameTxt addTarget: self action: @selector(searchReseller) forControlEvents: UIControlEventEditingDidEndOnExit];
@@ -1993,6 +1996,11 @@
 {
     device_debug(@"deviceListStatus = %d, deviceDetailStatus = %d, renewStatus = %d, registerPage1Status = %d, registerPage2Status = %d, registerFinalStatus = %d, _addLicenseScanStatus = %d, addLicenseScanStatus = %d, _scanStatus = %d, scanStatus = %d, activateOkStatus = %d, renewStatus = %d, searchStatus = %d, searchKeyWordStatus = %d", deviceListStatus, deviceDetailStatus, renewStatus, registerPage1Status, registerPage2Status, registerFinalStatus, _addLicenseScanStatus, addLicenseScanStatus, _scanStatus, scanStatus, activateOkStatus, renewStatus, searchStatus, searchKeyWordStatus);
 }
+- (void)checkTutoriaInfo
+{
+    if([public checkTutoriaInfo: @"deviceMT"]) [self.tutoriaDeviceMTView setHidden: YES];
+    if([public checkTutoriaInfo: @"deviceRT"]) [self.tutoriaDeviceRTView setHidden: YES];
+}
 # pragma mark - BUTTON EVENTS
 - (IBAction)deviceAddDeviceBtn:(id)sender
 {
@@ -2630,10 +2638,12 @@
 - (IBAction)deviceMTBtn:(id)sender
 {
     [self.tutoriaDeviceMTView setHidden: YES];
+    [public recordTutoriaInfo: @"deviceMT"];
 }
 - (IBAction)deviceRTBtn:(id)sender
 {
     [self.tutoriaDeviceRTView setHidden: YES];
+    [public recordTutoriaInfo: @"deviceRT"];
 }
 #pragma mark - SCAN EVENTS
 - (void)scanCode

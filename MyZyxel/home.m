@@ -75,8 +75,10 @@
 {
     [super viewDidLoad];
     // check notification register device and binding
-    NSThread *thread = [[NSThread alloc] initWithTarget:self selector:@selector(checkPushInfo) object:nil];
+    NSThread *thread = [[NSThread alloc] initWithTarget: self selector: @selector(checkPushInfo) object: nil];
     [thread start];
+    NSThread *tutoriaThread = [[NSThread alloc]initWithTarget: self selector: @selector(checkTutoriaInfo) object: nil];
+    [tutoriaThread start];
     
     [self.tabBarController.tabBar setUnselectedItemTintColor: [UIColor whiteColor]];
     [self getDeviceType];
@@ -490,10 +492,12 @@
 - (IBAction)tutoriaHomeTBtn:(id)sender
 {
     [self.tutoriaHomeTView setHidden: YES];
+    [public recordTutoriaInfo: @"homeT"];
 }
 - (IBAction)registerSTBtn:(id)sender
 {
     [self.tutoriaRegisterSTView setHidden: YES];
+    [public recordTutoriaInfo: @"registerST"];
 }
 #pragma mark - GET SERVER INFO
 // API 1 GET DEVICE INFORMATION
@@ -1859,60 +1863,19 @@
     // hidde keyboard
     [[[UIApplication sharedApplication]keyWindow]endEditing: YES];
 }
-- (void) changeView:(NSString *)pageName
+- (void)changeView:(NSString *)pageName
 {
     UIViewController *vc = [self.storyboard instantiateViewControllerWithIdentifier:pageName];
     [self presentViewController:vc animated:YES completion:nil];
 }
 - (void)checkPushInfo
 {
-//    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-//    NSString *documentsDirectory = [paths objectAtIndex:0];
-//    NSString *filePath = [documentsDirectory stringByAppendingString:@"/push.plist"];
-//    NSFileManager *fileManager = [NSFileManager defaultManager];
-//
-//    if ([fileManager fileExistsAtPath: filePath])
-//    {
-//        NSMutableDictionary *data = [[NSMutableDictionary alloc] initWithContentsOfFile:filePath];
-//        push_debug(@"file data = %@", data);
-//        NSString *registerRes = [NSString stringWithFormat: @"%@", [data objectForKey: @"registerDevice"]];
-//        if ([registerRes isEqualToString: @"registered"])
-//        {
-//            [self updateDevice];
-//        }
-//    }
-//    else
-//    {
-    registerRes = NO;
-    bindingRes = NO;
-//    while (1) {
-//        if (registerRes == YES && bindingRes == YES) break;
-        [self registerDevice];
-    usleep(250000);
-//    }
-//    }
+    [self registerDevice];
 }
-- (void)writePushInfo
+- (void)checkTutoriaInfo
 {
-    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-    NSString *documentsDirectory = [paths objectAtIndex:0];
-    NSString *filePath = [documentsDirectory stringByAppendingString:@"/push.plist"];
-    NSFileManager *fileManager = [NSFileManager defaultManager];
-    
-    NSMutableDictionary *data;
-    if ([fileManager fileExistsAtPath: filePath]) {
-        data = [[NSMutableDictionary alloc] initWithContentsOfFile:filePath];
-    } else {
-        data = [[NSMutableDictionary alloc] init];
-    }
-    [data setValue: @"registered" forKey: @"regiterDevice"];
-    [data setValue: [public get_user_id] forKey: @"bindingDevice"];
-    
-    if ([data writeToFile:filePath atomically: YES]) {
-        push_debug(@"write successed");
-    } else {
-        push_debug(@"write failed");
-    }
+    if([public checkTutoriaInfo: @"homeT"]) [self.tutoriaHomeTView setHidden: YES];
+    if([public checkTutoriaInfo: @"registerST"]) [self.tutoriaRegisterSTView setHidden: YES];
 }
 #pragma mark - SCAN EVENTS
 - (void)scanCode

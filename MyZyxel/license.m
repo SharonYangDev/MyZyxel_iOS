@@ -67,7 +67,9 @@
 }
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view, typically from a nib.
+    NSThread *tutoriaThread = [[NSThread alloc]initWithTarget: self selector: @selector(checkTutoriaInfo) object: nil];
+    [tutoriaThread start];
+    
     [self.manualLicenseKeyTxt addTarget: self action: @selector(checkLicense) forControlEvents: UIControlEventEditingDidEndOnExit];
     [self.manualLicenseKeyTxt.layer setCornerRadius: self.manualLicenseKeyTxt.frame.size.height/2];
     [self.searchServiceTxt addTarget: self action: @selector(searchServiceInfo) forControlEvents: UIControlEventEditingDidEndOnExit];
@@ -1052,6 +1054,10 @@
 {
     service_debug(@"licenseListStatus = %d, licenseDetailStatus = %d, toDeviceStatus = %d, scanStatus = %d, registerListStatus = %d, searchStatus = %d", licenseListStatus, licenseDetailStatus, toDeviceStatus, scanStatus, registerListStatus, searchStatus);
 }
+- (void)checkTutoriaInfo
+{
+    if([public checkTutoriaInfo: @"serviceMT"]) [self.tutoriaServiceMTView setHidden: YES];
+}
 #pragma mark - BUTTON EVENTS
 - (IBAction)registerNewLicensesBtn:(id)sender
 {
@@ -1410,6 +1416,7 @@
 - (IBAction)serviceMTBtn:(id)sender
 {
     [self.tutoriaServiceMTView setHidden: YES];
+    [public recordTutoriaInfo: @"serviceMT"];
 }
 #pragma mark - SCAN EVENTS
 - (void)scanCode
