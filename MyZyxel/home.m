@@ -131,6 +131,7 @@
     [self.errorView setHidden: YES];
     [self.helpView setHidden: YES];
     [self.privacyView setHidden: YES];
+    [self selfLayout];
     if (m_HUD == nil)
     {
         m_HUD = [[MBProgressHUD alloc]initWithView: self.view];
@@ -1472,7 +1473,7 @@
                 //            for (NSString *str in serviceInfo)
                 //            {
                 NSArray *serviceDetailInfo = [serviceInfo[j] componentsSeparatedByString: @"/"];
-                debug(@"xxxxx = %@", serviceDetailInfo);
+                
                 NSString *gracePeriod = [NSString stringWithFormat: @"%@", serviceDetailInfo[1]];
                 if ([gracePeriod isEqualToString: @"1"])
                 {
@@ -1876,6 +1877,38 @@
 {
     if([public checkTutoriaInfo: @"homeT"]) [self.tutoriaHomeTView setHidden: YES];
     if([public checkTutoriaInfo: @"registerST"]) [self.tutoriaRegisterSTView setHidden: YES];
+}
+- (void)selfLayout
+{
+    switch (public.getDeviceType)
+    {
+        case 1:
+            [self.tryAgainBtn setFrame: CGRectMake(124, 360, 73, 30)];
+            [self.errorLbl setFrame: CGRectMake(60, 54, 200, 21)];
+            [self.tutoriaHomeTBtn setFrame: CGRectMake(66, 473, 188, 32)];
+            [self.registerSTBtn setFrame: CGRectMake(66, 517, 188, 32)];
+            break;
+        case 2:
+            [self.tryAgainBtn setFrame: CGRectMake(144, 424, 87, 33)];
+            [self.errorLbl setFrame: CGRectMake(87, 66, 200, 21)];
+            [self.tutoriaHomeTBtn setFrame: CGRectMake(80, 562, 216, 40)];
+            [self.registerSTBtn setFrame: CGRectMake(80, 606, 216, 40)];
+            break;
+        case 3:
+            [self.tryAgainBtn setFrame: CGRectMake(160, 468, 93, 35)];
+            [self.errorLbl setFrame: CGRectMake(107, 74, 200, 21)];
+            [self.tutoriaHomeTBtn setFrame: CGRectMake(88, 625, 240, 44)];
+            [self.registerSTBtn setFrame: CGRectMake(88, 669, 240, 44)];
+            break;
+        case 4:
+            [self.tryAgainBtn setFrame: CGRectMake(144, 516, 87, 40)];
+            [self.errorLbl setFrame: CGRectMake(87, 82, 200, 22)];
+            [self.tutoriaHomeTBtn setFrame: CGRectMake(80, 663, 216, 47)];
+            [self.registerSTBtn setFrame: CGRectMake(80, 707, 216, 47)];
+        default:
+            // other size
+            break;
+    }
 }
 #pragma mark - SCAN EVENTS
 - (void)scanCode

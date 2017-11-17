@@ -174,18 +174,25 @@ NSMutableArray *renewParsedModuleCodeList;
     CGSize screenSize = [[UIScreen mainScreen]bounds].size;
     NSInteger deviceWidth = screenSize.width;
     NSInteger deviceHeight = screenSize.height;
-    
+    // iphone 5 5s se
     if (deviceWidth == 320 && deviceHeight == 568)
     {
         return 1;
     }
+    // iphone 6 7 8
     else if (deviceWidth == 375 && deviceHeight == 667)
     {
         return 2;
     }
+    // iphone 6p 7p 8p
     else if (deviceWidth == 414 && deviceHeight == 736)
     {
         return 3;
+    }
+    // iphone x
+    else if (deviceWidth == 375 && deviceHeight == 812)
+    {
+        return 4;
     }
     else
     {
@@ -611,131 +618,131 @@ NSMutableArray *renewParsedModuleCodeList;
 + (BOOL)checkDisplayStatus:(NSString *)moduleCode
 {
     BOOL display = YES;
-    if ([moduleCode isEqualToString: @"PKG_ZYXEL_S"])
+    if ([[@"PKG_ZYXEL_S" substringToIndex: moduleCode.length] isEqualToString: moduleCode])
     {
         display = YES;
     }
-    else if ([moduleCode isEqualToString: @"UTMSW_ZYXEL_S"])
+    else if ([[@"UTMSW_ZYXEL_S" substringToIndex: moduleCode.length] isEqualToString: moduleCode])
     {
         display = YES;
     }
-    else if ([moduleCode isEqualToString: @"HOTSQ_ZYXEL_S"])
+    else if ([[@"HOTSQ_ZYXEL_S" substringToIndex: moduleCode.length] isEqualToString: moduleCode])
     {
         display = YES;
     }
-    else if ([moduleCode isEqualToString: @"FW_ZYXEL_S"])
+    else if ([[@"FW_ZYXEL_S" substringToIndex: moduleCode.length] isEqualToString: moduleCode])
     {
         display = YES;
     }
-    else if ([moduleCode isEqualToString: @"FWQ_ZYXEL_S"])
+    else if ([[@"FWQ_ZYXEL_S" substringToIndex: moduleCode.length] isEqualToString: moduleCode])
     {
         display = YES;
     }
-    else if ([moduleCode isEqualToString: @"PSP_ZYXEL_T"])
+    else if ([[@"PSP_ZYXEL_T" substringToIndex: moduleCode.length] isEqualToString: moduleCode])
     {
         display = NO;
     }
-    else if ([moduleCode isEqualToString: @"PSP_ZYXEL_S"])
+    else if ([[@"PSP_ZYXEL_S" substringToIndex: moduleCode.length] isEqualToString: moduleCode])
     {
         display = NO;
     }
-    else if ([moduleCode isEqualToString: @"PRMSP_ZYXEL_T"])
+    else if ([[@"PRMSP_ZYXEL_T" substringToIndex: moduleCode.length] isEqualToString: moduleCode])
     {
         display = NO;
     }
-    else if ([moduleCode isEqualToString: @"PRMSP_ZYXEL_S"])
+    else if ([[@"PRMSP_ZYXEL_S" substringToIndex: moduleCode.length] isEqualToString: moduleCode])
     {
         display = NO;
     }
-    else if ([moduleCode isEqualToString: @"TSP_ZYXEL_T"])
+    else if ([[@"TSP_ZYXEL_T" substringToIndex: moduleCode.length] isEqualToString: moduleCode])
     {
         display = NO;
     }
-    else if ([moduleCode isEqualToString: @"TSP_ZYXEL_S"])
+    else if ([[@"TSP_ZYXEL_S" substringToIndex: moduleCode.length] isEqualToString: moduleCode])
     {
         display = NO;
     }
-    else if ([moduleCode isEqualToString: @"WEBSEC_ZYXEL_T"])
+    else if ([[@"WEBSEC_ZYXEL_T" substringToIndex: moduleCode.length] isEqualToString: moduleCode])
     {
         display = NO;
     }
-    else if ([moduleCode isEqualToString: @"WEBSEC_ZYXEL_S"])
+    else if ([[@"WEBSEC_ZYXEL_S" substringToIndex: moduleCode.length] isEqualToString: moduleCode])
     {
         display = NO;
     }
-    else if ([moduleCode isEqualToString: @"APP_QM_T"])
+    else if ([[@"APP_QM_T" substringToIndex: moduleCode.length] isEqualToString: moduleCode])
     {
         display = NO;
     }
-    else if ([moduleCode isEqualToString: @"APP_QM_S"])
+    else if ([[@"APP_QM_S" substringToIndex: moduleCode.length] isEqualToString: moduleCode])
     {
         display = NO;
     }
-    else if ([moduleCode isEqualToString: @"MB_KA_T"])
+    else if ([[@"MB_KA_T" substringToIndex: moduleCode.length] isEqualToString: moduleCode])
     {
         display = NO;
     }
-    else if ([moduleCode isEqualToString: @"MB_KA_S"])
+    else if ([[@"MB_KA_S" substringToIndex: moduleCode.length] isEqualToString: moduleCode])
     {
         display = NO;
     }
-    else if ([moduleCode isEqualToString: @"IPS_AH_T"])
+    else if ([[@"IPS_AH_T" substringToIndex: moduleCode.length] isEqualToString: moduleCode])
     {
         display = NO;
     }
-    else if ([moduleCode isEqualToString: @"IPS_AH_S"])
+    else if ([[@"IPS_AH_S" substringToIndex: moduleCode.length] isEqualToString: moduleCode])
     {
         display = NO;
     }
-    else if ([moduleCode isEqualToString: @"GE_MM_T"])
+    else if ([[@"GE_MM_T" substringToIndex: moduleCode.length] isEqualToString: moduleCode])
     {
         display = NO;
     }
-    else if ([moduleCode isEqualToString: @"GE_MM_S"])
+    else if ([[@"GE_MM_S" substringToIndex: moduleCode.length] isEqualToString: moduleCode])
     {
         display = NO;
     }
-    else if ([moduleCode isEqualToString: @"SBX_LL_T"])
+    else if ([[@"SBX_LL_T" substringToIndex: moduleCode.length] isEqualToString: moduleCode])
     {
         display = NO;
     }
-    else if ([moduleCode isEqualToString: @"SBX_LL_S"])
+    else if ([[@"SBX_LL_S" substringToIndex: moduleCode.length] isEqualToString: moduleCode])
     {
         display = NO;
     }
-    else if ([moduleCode isEqualToString: @"APC_ZYXEL_S"])
+    else if ([[@"APC_ZYXEL_S" substringToIndex: moduleCode.length] isEqualToString: moduleCode])
     {
         display = NO;
     }
-    else if ([moduleCode isEqualToString: @"SECUR_ZYXEL_T"])
+    else if ([[@"SECUR_ZYXEL_T" substringToIndex: moduleCode.length] isEqualToString: moduleCode])
     {
         display = NO;
     }
-    else if ([moduleCode isEqualToString: @"SECUR_ZYXEL_S"])
+    else if ([[@"SECUR_ZYXEL_S" substringToIndex: moduleCode.length] isEqualToString: moduleCode])
     {
         display = NO;
     }
-    else if ([moduleCode isEqualToString: @"FBWIFI_ZYXEL_S"])
+    else if ([[@"FBWIFI_ZYXEL_S" substringToIndex: moduleCode.length] isEqualToString: moduleCode])
     {
         display = YES;
     }
-    else if ([moduleCode isEqualToString: @"CNMS_ZYXEL_S"])
+    else if ([[@"CNMS_ZYXEL_S" substringToIndex: moduleCode.length] isEqualToString: moduleCode])
     {
         display = YES;
     }
-    else if ([moduleCode isEqualToString: @"CNMN_ZYXEL_S"])
+    else if ([[@"CNMN_ZYXEL_S" substringToIndex: moduleCode.length] isEqualToString: moduleCode])
     {
         display = YES;
     }
-    else if ([moduleCode isEqualToString: @"GEOLOC_ZYXEL_S"])
+    else if ([[@"GEOLOC_ZYXEL_S" substringToIndex: moduleCode.length] isEqualToString: moduleCode])
     {
         display = YES;
     }
-    else if ([moduleCode isEqualToString: @"SECUD_ZYXEL_T"])
+    else if ([[@"SECUD_ZYXEL_T" substringToIndex: moduleCode.length] isEqualToString: moduleCode])
     {
         display = NO;
     }
-    else if ([moduleCode isEqualToString: @"SECUD_ZYXEL_S"])
+    else if ([[@"SECUD_ZYXEL_S" substringToIndex: moduleCode.length] isEqualToString: moduleCode])
     {
         display = NO;
     }
@@ -744,131 +751,131 @@ NSMutableArray *renewParsedModuleCodeList;
 + (BOOL)checkActivateStatus:(NSString *)moduleCode
 {
     BOOL display = YES;
-    if ([moduleCode isEqualToString: @"PKG_ZYXEL"])
+    if ([[@"PKG_ZYXEL_S" substringToIndex: moduleCode.length] isEqualToString: moduleCode])
     {
         display = NO;
     }
-    else if ([moduleCode isEqualToString: @"UTMSW_ZYXEL_S"])
+    else if ([[@"UTMSW_ZYXEL_S" substringToIndex: moduleCode.length] isEqualToString: moduleCode])
     {
         display = NO;
     }
-    else if ([moduleCode isEqualToString: @"HOTSQ_ZYXEL_S"])
+    else if ([[@"HOTSQ_ZYXEL_S" substringToIndex: moduleCode.length] isEqualToString: moduleCode])
     {
         display = NO;
     }
-    else if ([moduleCode isEqualToString: @"FW_ZYXEL_S"])
+    else if ([[@"FW_ZYXEL_S"  substringToIndex: moduleCode.length] isEqualToString: moduleCode])
     {
         display = NO;
     }
-    else if ([moduleCode isEqualToString: @"FWQ_ZYXEL_S"])
+    else if ([[@"FWQ_ZYXEL_S" substringToIndex: moduleCode.length] isEqualToString: moduleCode])
     {
         display = NO;
     }
-    else if ([moduleCode isEqualToString: @"PSP_ZYXEL_T"])
+    else if ([[@"PSP_ZYXEL_T" substringToIndex: moduleCode.length] isEqualToString: moduleCode])
     {
         display = NO;
     }
-    else if ([moduleCode isEqualToString: @"PSP_ZYXEL_S"])
+    else if ([[@"PSP_ZYXEL_S" substringToIndex: moduleCode.length] isEqualToString: moduleCode])
     {
         display = NO;
     }
-    else if ([moduleCode isEqualToString: @"PRMSP_ZYXEL_T"])
+    else if ([[@"PRMSP_ZYXEL_T" substringToIndex: moduleCode.length] isEqualToString: moduleCode])
     {
         display = NO;
     }
-    else if ([moduleCode isEqualToString: @"PRMSP_ZYXEL_S"])
+    else if ([[@"PRMSP_ZYXEL_S" substringToIndex: moduleCode.length] isEqualToString: moduleCode])
     {
         display = NO;
     }
-    else if ([moduleCode isEqualToString: @"TSP_ZYXEL_T"])
+    else if ([[@"TSP_ZYXEL_T" substringToIndex: moduleCode.length] isEqualToString: moduleCode])
     {
         display = NO;
     }
-    else if ([moduleCode isEqualToString: @"TSP_ZYXEL_S"])
+    else if ([[@"TSP_ZYXEL_S" substringToIndex: moduleCode.length] isEqualToString: moduleCode])
     {
         display = NO;
     }
-    else if ([moduleCode isEqualToString: @"WEBSEC_ZYXEL_T"])
+    else if ([[@"WEBSEC_ZYXEL_T" substringToIndex: moduleCode.length] isEqualToString: moduleCode])
     {
         display = NO;
     }
-    else if ([moduleCode isEqualToString: @"WEBSEC_ZYXEL_S"])
+    else if ([[@"WEBSEC_ZYXEL_S" substringToIndex: moduleCode.length] isEqualToString: moduleCode])
     {
         display = NO;
     }
-    else if ([moduleCode isEqualToString: @"APP_QM_T"])
+    else if ([[@"APP_QM_T" substringToIndex: moduleCode.length] isEqualToString: moduleCode])
     {
         display = NO;
     }
-    else if ([moduleCode isEqualToString: @"APP_QM_S"])
+    else if ([[@"APP_QM_S" substringToIndex: moduleCode.length] isEqualToString: moduleCode])
     {
         display = NO;
     }
-    else if ([moduleCode isEqualToString: @"MB_KA_T"])
+    else if ([[@"MB_KA_T"  substringToIndex: moduleCode.length] isEqualToString: moduleCode])
     {
         display = NO;
     }
-    else if ([moduleCode isEqualToString: @"MB_KA_S"])
+    else if ([[@"MB_KA_S"  substringToIndex: moduleCode.length] isEqualToString: moduleCode])
     {
         display = NO;
     }
-    else if ([moduleCode isEqualToString: @"IPS_AH_T"])
+    else if ([[@"IPS_AH_T"  substringToIndex: moduleCode.length] isEqualToString: moduleCode])
     {
         display = NO;
     }
-    else if ([moduleCode isEqualToString: @"IPS_AH_S"])
+    else if ([[@"IPS_AH_S" substringToIndex: moduleCode.length] isEqualToString: moduleCode])
     {
         display = NO;
     }
-    else if ([moduleCode isEqualToString: @"GE_MM_T"])
+    else if ([[@"GE_MM_T" substringToIndex: moduleCode.length] isEqualToString: moduleCode])
     {
         display = NO;
     }
-    else if ([moduleCode isEqualToString: @"GE_MM_S"])
+    else if ([[@"GE_MM_S" substringToIndex: moduleCode.length] isEqualToString: moduleCode])
     {
         display = NO;
     }
-    else if ([moduleCode isEqualToString: @"SBX_LL_T"])
+    else if ([[@"SBX_LL_T" substringToIndex: moduleCode.length] isEqualToString: moduleCode])
     {
         display = NO;
     }
-    else if ([moduleCode isEqualToString: @"SBX_LL_S"])
+    else if ([[@"SBX_LL_S" substringToIndex: moduleCode.length] isEqualToString: moduleCode])
     {
         display = NO;
     }
-    else if ([moduleCode isEqualToString: @"APC_ZYXEL_S"])
+    else if ([[@"APC_ZYXEL_S"  substringToIndex: moduleCode.length] isEqualToString: moduleCode])
     {
         display = NO;
     }
-    else if ([moduleCode isEqualToString: @"SECUR_ZYXEL_T"])
+    else if ([[@"SECUR_ZYXEL_T" substringToIndex: moduleCode.length] isEqualToString: moduleCode])
     {
         display = NO;
     }
-    else if ([moduleCode isEqualToString: @"SECUR_ZYXEL_S"])
+    else if ([[@"SECUR_ZYXEL_S" substringToIndex: moduleCode.length] isEqualToString: moduleCode])
     {
         display = NO;
     }
-    else if ([moduleCode isEqualToString: @"FBWIFI_ZYXEL_S"])
+    else if ([[@"FBWIFI_ZYXEL_S" substringToIndex: moduleCode.length] isEqualToString: moduleCode])
     {
         display = NO;
     }
-    else if ([moduleCode isEqualToString: @"CNMS_ZYXEL_S"])
+    else if ([[@"CNMS_ZYXEL_S" substringToIndex: moduleCode.length] isEqualToString: moduleCode])
     {
         display = NO;
     }
-    else if ([moduleCode isEqualToString: @"CNMN_ZYXEL_S"])
+    else if ([[@"CNMN_ZYXEL_S" substringToIndex: moduleCode.length] isEqualToString: moduleCode])
     {
         display = NO;
     }
-    else if ([moduleCode isEqualToString: @"GEOLOC_ZYXEL_S"])
+    else if ([[@"GEOLOC_ZYXEL_S" substringToIndex: moduleCode.length] isEqualToString: moduleCode])
     {
         display = NO;
     }
-    else if ([moduleCode isEqualToString: @"SECUD_ZYXEL_T"])
+    else if ([[@"SECUD_ZYXEL_T" substringToIndex: moduleCode.length] isEqualToString: moduleCode])
     {
         display = NO;
     }
-    else if ([moduleCode isEqualToString: @"SECUD_ZYXEL_S"])
+    else if ([[@"SECUD_ZYXEL_S" substringToIndex: moduleCode.length] isEqualToString: moduleCode])
     {
         display = NO;
     }
@@ -877,131 +884,131 @@ NSMutableArray *renewParsedModuleCodeList;
 + (BOOL)checkRegisterStatus:(NSString *)moduleCode
 {
     BOOL display = YES;
-    if ([moduleCode isEqualToString: @"PKG_ZYXEL"])
+    if ([[@"PKG_ZYXEL_S" substringToIndex: moduleCode.length] isEqualToString: moduleCode])
     {
         display = NO;
     }
-    else if ([moduleCode isEqualToString: @"UTMSW_ZYXEL_S"])
+    else if ([[@"UTMSW_ZYXEL_S" substringToIndex: moduleCode.length] isEqualToString: moduleCode])
     {
         display = NO;
     }
-    else if ([moduleCode isEqualToString: @"HOTSQ_ZYXEL_S"])
+    else if ([[@"HOTSQ_ZYXEL_S" substringToIndex: moduleCode.length] isEqualToString: moduleCode])
     {
         display = NO;
     }
-    else if ([moduleCode isEqualToString: @"FW_ZYXEL_S"])
+    else if ([[@"FW_ZYXEL_S" substringToIndex: moduleCode.length] isEqualToString: moduleCode])
     {
         display = NO;
     }
-    else if ([moduleCode isEqualToString: @"FWQ_ZYXEL_S"])
+    else if ([[@"FWQ_ZYXEL_S" substringToIndex: moduleCode.length] isEqualToString: moduleCode])
     {
         display = NO;
     }
-    else if ([moduleCode isEqualToString: @"PSP_ZYXEL_T"])
+    else if ([[@"PSP_ZYXEL_T" substringToIndex: moduleCode.length] isEqualToString: moduleCode])
     {
         display = NO;
     }
-    else if ([moduleCode isEqualToString: @"PSP_ZYXEL_S"])
+    else if ([[@"PSP_ZYXEL_S" substringToIndex: moduleCode.length] isEqualToString: moduleCode])
     {
         display = NO;
     }
-    else if ([moduleCode isEqualToString: @"PRMSP_ZYXEL_T"])
+    else if ([[@"PRMSP_ZYXEL_T" substringToIndex: moduleCode.length] isEqualToString: moduleCode])
     {
         display = NO;
     }
-    else if ([moduleCode isEqualToString: @"PRMSP_ZYXEL_S"])
+    else if ([[@"PRMSP_ZYXEL_S" substringToIndex: moduleCode.length] isEqualToString: moduleCode])
     {
         display = NO;
     }
-    else if ([moduleCode isEqualToString: @"TSP_ZYXEL_T"])
+    else if ([[@"TSP_ZYXEL_T" substringToIndex: moduleCode.length] isEqualToString: moduleCode])
     {
         display = NO;
     }
-    else if ([moduleCode isEqualToString: @"TSP_ZYXEL_S"])
+    else if ([[@"TSP_ZYXEL_S" substringToIndex: moduleCode.length] isEqualToString: moduleCode])
     {
         display = NO;
     }
-    else if ([moduleCode isEqualToString: @"WEBSEC_ZYXEL_T"])
+    else if ([[@"WEBSEC_ZYXEL_T" substringToIndex: moduleCode.length] isEqualToString: moduleCode])
     {
         display = NO;
     }
-    else if ([moduleCode isEqualToString: @"WEBSEC_ZYXEL_S"])
+    else if ([[@"WEBSEC_ZYXEL_S" substringToIndex: moduleCode.length] isEqualToString: moduleCode])
     {
         display = NO;
     }
-    else if ([moduleCode isEqualToString: @"APP_QM_T"])
+    else if ([[@"APP_QM_T" substringToIndex: moduleCode.length] isEqualToString: moduleCode])
     {
         display = NO;
     }
-    else if ([moduleCode isEqualToString: @"APP_QM_S"])
+    else if ([[@"APP_QM_S" substringToIndex: moduleCode.length] isEqualToString: moduleCode])
     {
         display = NO;
     }
-    else if ([moduleCode isEqualToString: @"MB_KA_T"])
+    else if ([[@"MB_KA_T" substringToIndex: moduleCode.length] isEqualToString: moduleCode])
     {
         display = NO;
     }
-    else if ([moduleCode isEqualToString: @"MB_KA_S"])
+    else if ([[@"MB_KA_S" substringToIndex: moduleCode.length] isEqualToString: moduleCode])
     {
         display = NO;
     }
-    else if ([moduleCode isEqualToString: @"IPS_AH_T"])
+    else if ([[@"IPS_AH_T" substringToIndex: moduleCode.length] isEqualToString: moduleCode])
     {
         display = NO;
     }
-    else if ([moduleCode isEqualToString: @"IPS_AH_S"])
+    else if ([[@"IPS_AH_S" substringToIndex: moduleCode.length] isEqualToString: moduleCode])
     {
         display = NO;
     }
-    else if ([moduleCode isEqualToString: @"GE_MM_T"])
+    else if ([[@"GE_MM_T" substringToIndex: moduleCode.length] isEqualToString: moduleCode])
     {
         display = NO;
     }
-    else if ([moduleCode isEqualToString: @"GE_MM_S"])
+    else if ([[@"GE_MM_S" substringToIndex: moduleCode.length] isEqualToString: moduleCode])
     {
         display = NO;
     }
-    else if ([moduleCode isEqualToString: @"SBX_LL_T"])
+    else if ([[@"SBX_LL_T" substringToIndex: moduleCode.length] isEqualToString: moduleCode])
     {
         display = NO;
     }
-    else if ([moduleCode isEqualToString: @"SBX_LL_S"])
+    else if ([[@"SBX_LL_S" substringToIndex: moduleCode.length] isEqualToString: moduleCode])
     {
         display = NO;
     }
-    else if ([moduleCode isEqualToString: @"APC_ZYXEL_S"])
+    else if ([[@"APC_ZYXEL_S" substringToIndex: moduleCode.length] isEqualToString: moduleCode])
     {
         display = NO;
     }
-    else if ([moduleCode isEqualToString: @"SECUR_ZYXEL_T"])
+    else if ([[@"SECUR_ZYXEL_T" substringToIndex: moduleCode.length] isEqualToString: moduleCode])
     {
         display = NO;
     }
-    else if ([moduleCode isEqualToString: @"SECUR_ZYXEL_S"])
+    else if ([[@"SECUR_ZYXEL_S" substringToIndex: moduleCode.length] isEqualToString: moduleCode])
     {
         display = NO;
     }
-    else if ([moduleCode isEqualToString: @"FBWIFI_ZYXEL_S"])
+    else if ([[@"FBWIFI_ZYXEL_S" substringToIndex: moduleCode.length] isEqualToString: moduleCode])
     {
         display = NO;
     }
-    else if ([moduleCode isEqualToString: @"CNMS_ZYXEL_S"])
+    else if ([[@"CNMS_ZYXEL_S" substringToIndex: moduleCode.length] isEqualToString: moduleCode])
     {
         display = NO;
     }
-    else if ([moduleCode isEqualToString: @"CNMN_ZYXEL_S"])
+    else if ([[@"CNMN_ZYXEL_S" substringToIndex: moduleCode.length] isEqualToString: moduleCode])
     {
         display = NO;
     }
-    else if ([moduleCode isEqualToString: @"GEOLOC_ZYXEL_S"])
+    else if ([[@"GEOLOC_ZYXEL_S" substringToIndex: moduleCode.length] isEqualToString: moduleCode])
     {
         display = NO;
     }
-    else if ([moduleCode isEqualToString: @"SECUD_ZYXEL_T"])
+    else if ([[@"SECUD_ZYXEL_T" substringToIndex: moduleCode.length] isEqualToString: moduleCode])
     {
         display = NO;
     }
-    else if ([moduleCode isEqualToString: @"SECUD_ZYXEL_S"])
+    else if ([[@"SECUD_ZYXEL_S" substringToIndex: moduleCode.length] isEqualToString: moduleCode])
     {
         display = NO;
     }
@@ -1009,8 +1016,9 @@ NSMutableArray *renewParsedModuleCodeList;
 }
 + (BOOL)checkSpecialStr:(NSString *)str
 {
-    NSString *string = @"%, ~, ￥, #, &, *, <, >, 《, 》, (, ), [, ], {, }, 【, 】, ^, @, /, \\, ￡, ¤, |, §, ¨, 「, 」, 『, 』, ￠, ￢, ￣, （, ）, ——, +, |, $, €, ¥";
+    NSString *string = @"%,~,￥,#,&,*,<,>,《,》,(,),[,],{,},【,】,^,@,/,\\,￡,¤,|,§,¨,「,」,『,』,￠,￢,￣,（,）,——,+,|,$,€,¥";
     NSArray *specialStrArr = [string componentsSeparatedByString: @","];
+
     for (int i=0; i<[specialStrArr count]; i++) {
         if ([str rangeOfString: [specialStrArr objectAtIndex: i]].location != NSNotFound)
         {
@@ -1030,7 +1038,6 @@ NSMutableArray *renewParsedModuleCodeList;
     if ([fileManager fileExistsAtPath: filePath])
     {
         NSMutableDictionary *data = [[NSMutableDictionary alloc]initWithContentsOfFile: filePath];
-        NSLog(@"tutoria info = %@", data);
         if ([[data objectForKey: str] isEqualToString: @"YES"])
         {
             //hide
@@ -1043,7 +1050,6 @@ NSMutableArray *renewParsedModuleCodeList;
     }
     else
     {
-        NSLog(@"file no exist");
         return NO;
     }
 }
@@ -1064,9 +1070,9 @@ NSMutableArray *renewParsedModuleCodeList;
     [data setValue: @"YES" forKey: str];
     
     if ([data writeToFile:filePath atomically: YES]) {
-        NSLog(@"write successed");
+        debug(@"write successed");
     } else {
-        NSLog(@"write failed");
+        debug(@"write failed");
     }
 }
 

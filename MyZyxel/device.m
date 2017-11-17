@@ -145,7 +145,7 @@
     [self.deviceAddDeviceBtn setHitTestEdgeInsets: UIEdgeInsetsMake(60, 60, 60, 60)];
     [self.detailEditBtn setHitTestEdgeInsets: UIEdgeInsetsMake(60, 60, 60, 60)];
     [self.deviceDetailBackBtn setHitTestEdgeInsets: UIEdgeInsetsMake(60, 60, 60, 60)];
-    [self.editViewCancelBtn setHitTestEdgeInsets: UIEdgeInsetsMake(80, 60, 80, 60)];
+    [self.editViewCancelBtn setHitTestEdgeInsets: UIEdgeInsetsMake(60, 60, 60, 60)];
     [self.registerDevicepage1ScanCancelBtn setHitTestEdgeInsets: UIEdgeInsetsMake(60, 60, 60, 60)];
     [self.registerDevicepage1ManualCancelBtn setHitTestEdgeInsets: UIEdgeInsetsMake(60, 60, 60, 60)];
     [self.registerDevicePage2BackBtn setHitTestEdgeInsets: UIEdgeInsetsMake(60, 60, 60, 60)];
@@ -1970,14 +1970,26 @@
         case 1:
             [self.tryAgainBtn setFrame: CGRectMake(124, 360, 73, 30)];
             [self.errorLbl setFrame: CGRectMake(60, 54, 200, 21)];
+            [self.deviceMTBtn setFrame: CGRectMake(66, 473, 188, 32)];
+            [self.deviceRTBtn setFrame: CGRectMake(66, 517, 188, 32)];
             break;
         case 2:
             [self.tryAgainBtn setFrame: CGRectMake(144, 424, 87, 33)];
             [self.errorLbl setFrame: CGRectMake(87, 66, 200, 21)];
+            [self.deviceMTBtn setFrame: CGRectMake(80, 562, 216, 40)];
+            [self.deviceRTBtn setFrame: CGRectMake(80, 606, 216, 40)];
             break;
         case 3:
             [self.tryAgainBtn setFrame: CGRectMake(160, 468, 93, 35)];
             [self.errorLbl setFrame: CGRectMake(107, 74, 200, 21)];
+            [self.deviceMTBtn setFrame: CGRectMake(88, 625, 240, 44)];
+            [self.deviceRTBtn setFrame: CGRectMake(88, 669, 240, 44)];
+            break;
+        case 4:
+            [self.tryAgainBtn setFrame: CGRectMake(144, 516, 87, 40)];
+            [self.errorLbl setFrame: CGRectMake(87, 82, 200, 22)];
+            [self.deviceMTBtn setFrame: CGRectMake(80, 663, 216, 47)];
+            [self.deviceRTBtn setFrame: CGRectMake(80, 707, 216, 47)];
             break;
         default:
             // other size

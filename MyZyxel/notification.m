@@ -251,8 +251,9 @@
                                     [titleList addObject: [NSString stringWithFormat: @"%@", [message objectForKey: @"title"]]];
                                     NSString *bodyStr = [NSString stringWithFormat: @"%@", [message objectForKey: @"body"]];
                                     // remove trim and new line 2
-                                    NSCharacterSet *dontWantChar = [NSCharacterSet whitespaceAndNewlineCharacterSet];
-                                    [messageBodyList addObject: [[bodyStr componentsSeparatedByCharactersInSet:dontWantChar]componentsJoinedByString:@""]];
+                                    //NSCharacterSet *dontWantChar = [NSCharacterSet whitespaceAndNewlineCharacterSet];
+                                    //[messageBodyList addObject: [[bodyStr componentsSeparatedByCharactersInSet:dontWantChar]componentsJoinedByString:@""]];
+                                    [messageBodyList addObject: bodyStr];
                                     NSString *createDate = [NSString stringWithFormat: @"%@", [message objectForKey: @"created_at"]];
                                     NSArray *date = [createDate componentsSeparatedByString: @"T"];
                                     NSArray *time = [[date objectAtIndex: 1]componentsSeparatedByString: @"."];

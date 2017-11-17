@@ -251,7 +251,7 @@
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Cannot connect to Server" textAlignment="center" lineBreakMode="wordWrap" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="tnG-1v-Udr">
-                                        <rect key="frame" x="12" y="232" width="296" height="28"/>
+                                        <rect key="frame" x="12" y="225" width="296" height="28"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="28" id="ljK-7g-Ckd"/>
                                         </constraints>
@@ -260,7 +260,7 @@
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Please try again late" textAlignment="center" lineBreakMode="wordWrap" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Naa-55-bLG">
-                                        <rect key="frame" x="12" y="264" width="296" height="28"/>
+                                        <rect key="frame" x="12" y="257" width="296" height="28"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="28" id="fJn-gD-zGj"/>
                                         </constraints>
@@ -269,7 +269,7 @@
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ClC-to-peF">
-                                        <rect key="frame" x="0.0" y="106" width="320" height="130"/>
+                                        <rect key="frame" x="0.0" y="95" width="320" height="130"/>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         <constraints>
                                             <constraint firstAttribute="width" secondItem="ClC-to-peF" secondAttribute="height" multiplier="32:13" id="xtr-xr-AWf"/>
@@ -293,8 +293,8 @@
                                     <constraint firstAttribute="bottom" secondItem="XSh-aD-G65" secondAttribute="bottom" id="7l6-uw-Umr"/>
                                     <constraint firstItem="Naa-55-bLG" firstAttribute="top" secondItem="tnG-1v-Udr" secondAttribute="bottom" constant="4" id="A3t-g3-cgp"/>
                                     <constraint firstAttribute="trailing" secondItem="XSh-aD-G65" secondAttribute="trailing" id="BPJ-MF-O0m"/>
-                                    <constraint firstItem="ClC-to-peF" firstAttribute="top" secondItem="cyr-qY-uhy" secondAttribute="bottom" constant="54" id="HA9-Rf-FYp"/>
-                                    <constraint firstItem="tnG-1v-Udr" firstAttribute="top" secondItem="ClC-to-peF" secondAttribute="bottom" constant="-4" id="HT4-7m-1pX"/>
+                                    <constraint firstItem="ClC-to-peF" firstAttribute="top" secondItem="cyr-qY-uhy" secondAttribute="bottom" constant="43" id="HA9-Rf-FYp"/>
+                                    <constraint firstItem="tnG-1v-Udr" firstAttribute="top" secondItem="ClC-to-peF" secondAttribute="bottom" id="HT4-7m-1pX"/>
                                     <constraint firstItem="XSh-aD-G65" firstAttribute="top" secondItem="4dV-35-d94" secondAttribute="top" id="IRU-ze-Qbq"/>
                                     <constraint firstAttribute="trailing" secondItem="tnG-1v-Udr" secondAttribute="trailing" constant="12" id="JUH-zJ-PgY"/>
                                     <constraint firstAttribute="trailing" secondItem="cyr-qY-uhy" secondAttribute="trailing" id="Lyn-pd-cXS"/>
