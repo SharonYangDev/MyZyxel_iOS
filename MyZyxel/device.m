@@ -95,6 +95,18 @@
     NSThread *tutoriaThread = [[NSThread alloc]initWithTarget: self selector: @selector(checkTutoriaInfo) object: nil];
     [tutoriaThread start];
     
+    [self.deviceMTBtn.layer setCornerRadius: self.deviceMTBtn.frame.size.height/2];
+    [self.deviceMTBtn.layer setMasksToBounds: YES];
+    [self.deviceMTBtn.layer setBorderWidth: 2];
+    [self.deviceMTBtn.layer setBorderColor: [UIColor colorWithDisplayP3Red: (78/255.0) green: (190/255.0) blue: (250/255.0) alpha: 1.0].CGColor];
+    [self.deviceMTBtn setTitleColor: [UIColor colorWithDisplayP3Red: (78/255.0) green: (190/255.0) blue: (250/255.0) alpha: 1.0] forState: UIControlStateNormal];
+    
+    [self.deviceRTBtn.layer setCornerRadius: self.deviceRTBtn.frame.size.height/2];
+    [self.deviceRTBtn.layer setMasksToBounds: YES];
+    [self.deviceRTBtn.layer setBorderWidth: 2];
+    [self.deviceRTBtn.layer setBorderColor: [UIColor colorWithDisplayP3Red: (78/255.0) green: (190/255.0) blue: (250/255.0) alpha: 1.0].CGColor];
+    [self.deviceRTBtn setTitleColor: [UIColor colorWithDisplayP3Red: (78/255.0) green: (190/255.0) blue: (250/255.0) alpha: 1.0] forState: UIControlStateNormal];
+    
     [self.manualSerialNumber addTarget: self action: @selector(checkDeviceInfo) forControlEvents: UIControlEventEditingDidEndOnExit];
     [self.manualMacAddress addTarget: self action: @selector(checkDeviceInfo) forControlEvents: UIControlEventEditingDidEndOnExit];
     [self.resellerNameTxt addTarget: self action: @selector(searchReseller) forControlEvents: UIControlEventEditingDidEndOnExit];
@@ -477,10 +489,11 @@
               detailServiceCodeList = [[NSString alloc]init];
               for (NSDictionary *device in deviceListArr)
               {
-                  NSString *name = [NSString stringWithFormat: @"%@", [device objectForKey: @"name"]];
-                  // remove PKG_Update
-                  if (![name isEqualToString: @"PKG_Update"])
+                  NSString *moduleCode = [NSString stringWithFormat: @"%@", [device objectForKey: @"parsed_module_code"]];
+                  device_debug(@"linesss = %@", moduleCode);
+                  if ([public checkServiceStatus: moduleCode action: CHECK_DISPLAY])
                   {
+                      NSString *name = [NSString stringWithFormat: @"%@", [device objectForKey: @"name"]];
                       [detailServiceNameList addObject: name];
                       NSNumber *amount = [device objectForKey: @"remain_amount"];
                       [detailServiceAmountList addObject: amount];
@@ -1463,6 +1476,7 @@
     [[session dataTaskWithRequest: request_user_info
                 completionHandler:^(NSData *data, NSURLResponse *response, NSError *error)
       {
+          BOOL registerStatus = YES;
           if (data != nil)
           {
               NSMutableDictionary *json = [NSJSONSerialization JSONObjectWithData: data options: kNilOptions error: nil];
@@ -1499,23 +1513,46 @@
                           for (NSDictionary *serviceInfo in getServiceArr)
                           {
                               NSString *serviceName = [NSString stringWithFormat: @"%@", [serviceInfo objectForKey: @"name"]];
-                              [addLicenseScanNameList addObject: serviceName];
-                          }
-                          dispatch_async(dispatch_get_main_queue(), ^() {
-                              [self.addlicenseScanMessage setHidden: YES];
-                              [self.addlicenseManualMessage setHidden: YES];
-                              [self.addLicenseManualViewTxt setText: @""];
-                              if ([addLicenseScanNameList count] > 0)
+                              if ([public checkServiceStatusFromName: serviceName action: CHECK_REGISTER])
                               {
-                                  [self.addlicenseScanActivateBtn setEnabled: YES];
-                                  [self.addlicenseManualActivateBtn setEnabled: YES];
+                                  [addLicenseScanNameList addObject: serviceName];
                               }
-                              [self.addLicenseManualList reloadData];
-                              [self.addLicenseScanList reloadData];
-                              [self.errorView setHidden: YES];
-                              [m_HUD setHidden: YES];
-                              _addLicenseScanStatus = YES;
-                          });
+                              else
+                              {
+                                  registerStatus = NO;
+                              }
+                          }
+                          
+                          if (registerStatus)
+                          {
+                              dispatch_async(dispatch_get_main_queue(), ^() {
+                                  [self.addlicenseScanMessage setHidden: YES];
+                                  [self.addlicenseManualMessage setHidden: YES];
+                                  [self.addLicenseManualViewTxt setText: @""];
+                                  if ([addLicenseScanNameList count] > 0)
+                                  {
+                                      [self.addlicenseScanActivateBtn setEnabled: YES];
+                                      [self.addlicenseManualActivateBtn setEnabled: YES];
+                                  }
+                                  [self.addLicenseManualList reloadData];
+                                  [self.addLicenseScanList reloadData];
+                                  [self.errorView setHidden: YES];
+                                  [m_HUD setHidden: YES];
+                                  _addLicenseScanStatus = YES;
+                              });
+                          }
+                          else
+                          {
+                              dispatch_async(dispatch_get_main_queue(), ^() {
+                                  [self.addlicenseScanMessage setText: @"The License does not allow register."];
+                                  [self.addlicenseManualMessage setText: @"The License does not allow register."];
+                                  [self.addlicenseScanMessage setHidden: NO];
+                                  [self.addlicenseManualMessage setHidden: NO];
+                                  [self.errorView setHidden: YES];
+                                  [m_HUD setHidden: YES];
+                                  _addLicenseScanStatus = YES;
+                              });
+                          }
                       }
                       else
                       {
@@ -1747,21 +1784,31 @@
     NSString *sn = [self.manualSerialNumber.text stringByTrimmingCharactersInSet: [NSCharacterSet whitespaceAndNewlineCharacterSet]];
     if ([mac length] > 0 && [sn length] > 0)
     {
-        action = REGISTER_CHECK_MANUAL_DEVICE;
-        if ([public checkNetWorkConn])
+        if (![public checkSpecialStr: mac] && ![public checkSpecialStr: sn])
         {
-            [self checkNewDevice: self.manualMacAddress.text andSn: self.manualSerialNumber.text andEventType: @"manually"];
+            action = REGISTER_CHECK_MANUAL_DEVICE;
+            if ([public checkNetWorkConn])
+            {
+                [self checkNewDevice: self.manualMacAddress.text andSn: self.manualSerialNumber.text andEventType: @"manually"];
+            }
+            else
+            {
+                [self.errorView setHidden: NO];
+            }
         }
         else
         {
-            [self.errorView setHidden: NO];
+            [self.manualErrorMessage setText: @"Please ensure your input has no special characters."];
+            [self.manualErrorMessage setHidden: NO];
+            [self.manualMacAddress setText: @""];
+            [self.manualSerialNumber setText: @""];
         }
     }
     else
     {
         if ([mac length] <= 0 && [sn length] > 0)
         {
-            [self.manualErrorMessage setText: @"Mac address can't be blank."];
+            [self.manualErrorMessage setText: @"MAC address can't be blank."];
             [self.manualErrorMessage setHidden: NO];
             [self.manualMacAddress setText: @""];
         }
@@ -1773,7 +1820,7 @@
         }
         else
         {
-            [self.manualErrorMessage setText: @"Mac address and serial number can't be blank."];
+            [self.manualErrorMessage setText: @"MAC address and serial number can't be blank."];
             [self.manualErrorMessage setHidden: NO];
             [self.manualMacAddress setText: @""];
             [self.manualSerialNumber setText: @""];
@@ -1874,26 +1921,35 @@
     {
         if ([self.addLicenseManualViewTxt.text length] > 0)
         {
-            BOOL repeated = NO;
-            for (NSString *license in addLicenseScanKeyList) {
-                if ([self.addLicenseManualViewTxt.text isEqualToString: license]) {
-                    repeated = YES;
-                    [self.addlicenseManualMessage setText: @"The license is already in the list for add license."];
-                    [self.addlicenseManualMessage setHidden: NO];
-                    break;
+            if (![public checkSpecialStr: key])
+            {
+                BOOL repeated = NO;
+                for (NSString *license in addLicenseScanKeyList) {
+                    if ([self.addLicenseManualViewTxt.text isEqualToString: license]) {
+                        repeated = YES;
+                        [self.addlicenseManualMessage setText: @"The license is already in the list for add license."];
+                        [self.addlicenseManualMessage setHidden: NO];
+                        break;
+                    }
+                }
+                if (repeated == NO)
+                {
+                    action = DEVICE_CHECK_MANUAL_ADD_LICENSE;
+                    if ([public checkNetWorkConn])
+                    {
+                        [self addLicenseActivateValie: detailDeviceId andKey: self.addLicenseManualViewTxt.text andEventType: @"manually"];
+                    }
+                    else
+                    {
+                        [self.errorView setHidden: NO];
+                    }
                 }
             }
-            if (repeated == NO)
+            else
             {
-                action = DEVICE_CHECK_MANUAL_ADD_LICENSE;
-                if ([public checkNetWorkConn])
-                {
-                    [self addLicenseActivateValie: detailDeviceId andKey: self.addLicenseManualViewTxt.text andEventType: @"manually"];
-                }
-                else
-                {
-                    [self.errorView setHidden: NO];
-                }
+                [self.addlicenseManualMessage setText: @"Please ensure your input has no special characters."];
+                [self.addlicenseManualMessage setHidden: NO];
+                [self.addLicenseManualViewTxt setText: @""];
             }
         }
     }
@@ -1970,26 +2026,26 @@
         case 1:
             [self.tryAgainBtn setFrame: CGRectMake(124, 360, 73, 30)];
             [self.errorLbl setFrame: CGRectMake(60, 54, 200, 21)];
-            [self.deviceMTBtn setFrame: CGRectMake(66, 473, 188, 32)];
-            [self.deviceRTBtn setFrame: CGRectMake(66, 517, 188, 32)];
+//            [self.deviceMTBtn setFrame: CGRectMake(66, 473, 188, 32)];
+//            [self.deviceRTBtn setFrame: CGRectMake(66, 517, 188, 32)];
             break;
         case 2:
             [self.tryAgainBtn setFrame: CGRectMake(144, 424, 87, 33)];
             [self.errorLbl setFrame: CGRectMake(87, 66, 200, 21)];
-            [self.deviceMTBtn setFrame: CGRectMake(80, 562, 216, 40)];
-            [self.deviceRTBtn setFrame: CGRectMake(80, 606, 216, 40)];
+//            [self.deviceMTBtn setFrame: CGRectMake(80, 562, 216, 40)];
+//            [self.deviceRTBtn setFrame: CGRectMake(80, 606, 216, 40)];
             break;
         case 3:
             [self.tryAgainBtn setFrame: CGRectMake(160, 468, 93, 35)];
             [self.errorLbl setFrame: CGRectMake(107, 74, 200, 21)];
-            [self.deviceMTBtn setFrame: CGRectMake(88, 625, 240, 44)];
-            [self.deviceRTBtn setFrame: CGRectMake(88, 669, 240, 44)];
+//            [self.deviceMTBtn setFrame: CGRectMake(88, 625, 240, 44)];
+//            [self.deviceRTBtn setFrame: CGRectMake(88, 669, 240, 44)];
             break;
         case 4:
             [self.tryAgainBtn setFrame: CGRectMake(144, 516, 87, 40)];
             [self.errorLbl setFrame: CGRectMake(87, 82, 200, 22)];
-            [self.deviceMTBtn setFrame: CGRectMake(80, 663, 216, 47)];
-            [self.deviceRTBtn setFrame: CGRectMake(80, 707, 216, 47)];
+//            [self.deviceMTBtn setFrame: CGRectMake(80, 663, 216, 47)];
+//            [self.deviceRTBtn setFrame: CGRectMake(80, 707, 216, 47)];
             break;
         default:
             // other size
@@ -2956,30 +3012,45 @@
                 
                 if ([serviceType isEqualToString: @"TimeService"])
                 {
-                    NSString *expireAt = [detailServiceExpireAtList objectAtIndex: indexPath.row];
-                    NSArray *expireAtConver = [expireAt componentsSeparatedByString: @"T"];
-                    NSArray *getTime = [expireAtConver[1] componentsSeparatedByString: @"Z"];
-                    NSString *dateF = [NSString stringWithFormat: @"%@ %@", expireAtConver[0], getTime[0]];
-                    // get source date
-                    NSDateFormatter *df1 = [[NSDateFormatter alloc] init];
-                    [df1 setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
-                    NSDate *sDate = [df1 dateFromString: dateF];
-                    device_debug(@"sDate = %@", sDate);
-                    // set specify date
-                    NSDateFormatter *df2 = [[NSDateFormatter alloc] init];
-                    [df2 setDateFormat: @"yyyyMMdd"];
-                    NSDate *aDate = [df2 dateFromString: @"20210101"];
-                    device_debug(@"aDate = %@", aDate);
-                    NSComparisonResult cmpRes = [sDate compare: aDate];
-                    // filter firmware upgrade service
-                    if ([detailCell.serviceName.text isEqualToString: @"Firmware Upgrade"] && cmpRes == NSOrderedDescending)
+                    NSString *dateF = [[NSString alloc]init];
+                    NSString *expireAt = [NSString stringWithFormat: @"%@", [detailServiceExpireAtList objectAtIndex: indexPath.row]];
+                    if ([expireAt isEqualToString: @"<null>"])
                     {
+                        //dateF = @"-";
                         [detailCell.serviceAmount setText: @"-"];
                     }
                     else
                     {
+                        NSArray *expireAtConver = [expireAt componentsSeparatedByString: @"T"];
+                        NSArray *getTime = [expireAtConver[1] componentsSeparatedByString: @"Z"];
+                        dateF = [NSString stringWithFormat: @"%@ %@", expireAtConver[0], getTime[0]];
+                        
+                        // get source date
+                        NSDateFormatter *df1 = [[NSDateFormatter alloc] init];
+                        [df1 setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+                        NSDate *sDate = [df1 dateFromString: dateF];
+                        device_debug(@"sDate = %@", sDate);
+                        // set specify date
+                        NSDateFormatter *df2 = [[NSDateFormatter alloc] init];
+                        [df2 setDateFormat: @"yyyyMMdd"];
+                        // for firmware upgrade > 20210101 then show -
+                        NSDate *aDate = [df2 dateFromString: @"20210101"];
+                        device_debug(@"aDate = %@", aDate);
+                        
                         NSString *expireAtReplace = [expireAtConver[0] stringByReplacingOccurrencesOfString: @"-" withString: @"/"];
                         [detailCell.serviceAmount setText: [NSString stringWithFormat: @"%@", expireAtReplace]];
+                        
+                        NSComparisonResult cmpRes = [sDate compare: aDate];
+                        // filter firmware upgrade service
+                        if ([detailCell.serviceName.text isEqualToString: @"Firmware Upgrade"] && cmpRes == NSOrderedDescending)
+                        {
+                            [detailCell.serviceAmount setText: @"-"];
+                        }
+                        else
+                        {
+                            NSString *expireAtReplace = [expireAtConver[0] stringByReplacingOccurrencesOfString: @"-" withString: @"/"];
+                            [detailCell.serviceAmount setText: [NSString stringWithFormat: @"%@", expireAtReplace]];
+                        }
                     }
                 }
                 else if ([serviceType isEqualToString: @"QuantityService"])

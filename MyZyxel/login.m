@@ -47,7 +47,7 @@
     else
     {
         dispatch_async(dispatch_get_main_queue(), ^() {
-            debug(@"no internet");
+            login_debug(@"no internet");
             [m_HUD setHidden: YES];
             [self.errorView setHidden: NO];
         });
@@ -63,7 +63,7 @@
 {
     [m_HUD setHidden: NO];
     NSString *oauth_url = [NSString stringWithFormat: @"%@/oauth/authorize?client_id=%@&redirect_uri=%@&response_type=code&state=line", SITE_URL, CLIENT_ID, REDIRECT_URI];
-    debug(@"oauth url = %@", oauth_url);
+    login_debug(@"oauth url = %@", oauth_url);
     NSURL *url = [NSURL URLWithString: oauth_url];
     //NSURLRequest *request_auth = [NSURLRequest requestWithURL: url];
     NSURLRequest *request_auth = [NSURLRequest requestWithURL: url cachePolicy: NSURLRequestUseProtocolCachePolicy timeoutInterval: 30];
@@ -73,7 +73,7 @@
 {
     [m_HUD setHidden: NO];
     NSString *access_token_url = [NSString stringWithFormat: @"%@/oauth/token", SITE_URL];
-    debug(@"access token url = %@", access_token_url);
+    login_debug(@"access token url = %@", access_token_url);
     NSURL *url = [NSURL URLWithString: access_token_url];
     NSMutableURLRequest *request_access_token = [NSMutableURLRequest requestWithURL: url cachePolicy: NSURLRequestUseProtocolCachePolicy timeoutInterval: 30];
     
@@ -107,7 +107,7 @@
 - (void)get_user_info
 {
     NSString *get_user_info_url = [NSString stringWithFormat: @"%@/api/v2/my/info", SITE_URL];
-    debug(@"get_user_info_url = %@", get_user_info_url);
+    login_debug(@"get_user_info_url = %@", get_user_info_url);
     NSURL *url = [NSURL URLWithString: get_user_info_url];
     NSMutableURLRequest *request_user_info = [NSMutableURLRequest requestWithURL: url cachePolicy: NSURLRequestUseProtocolCachePolicy timeoutInterval: 30];
     [request_user_info setHTTPMethod: @"GET"];
@@ -118,42 +118,45 @@
                 {
                     if (data != nil)
                     {
-                        debug(@"access token = %@", [public get_access_token]);
+                        login_debug(@"access token = %@", [public get_access_token]);
                         NSMutableDictionary *json = [NSJSONSerialization JSONObjectWithData: data options: kNilOptions error: nil];
-                        debug(@"userInfo = %@", [json objectForKey: @"result"]);
+                        login_debug(@"userInfo = %@", [json objectForKey: @"result"]);
                         NSString *encryptionCode = [json objectForKey: @"result"];
                         NSString *iv = [encryptionCode substringWithRange: NSMakeRange(0, 16)];
                         NSString *encrypted_data = [encryptionCode substringFromIndex: 16];
                         NSString *sha256_decode_data = [public sha256: CLIENT_SECRET];
                         NSData *decode_key = [public hexToBytes: sha256_decode_data];
-                        debug(@"encryption = %@", encryptionCode);
-                        debug(@"iv = %@", iv);
-                        debug(@"base64_encode = %@", encrypted_data);
+                        login_debug(@"encryption = %@", encryptionCode);
+                        login_debug(@"iv = %@", iv);
+                        login_debug(@"base64_encode = %@", encrypted_data);
                         // Decryption base64 aes256-cbc sha256-digest
                         NSData *base64_decode_data = (NSData *)[public base64_decode: encrypted_data];
-                        debug(@"base64_decode = %@", base64_decode_data);
+                        login_debug(@"base64_decode = %@", base64_decode_data);
                         NSData *aes_decode_data = [public aes_cbc_256: base64_decode_data andIv: iv andkey: decode_key andType: kCCDecrypt];
                         NSStringEncoding enc = CFStringConvertEncodingToNSStringEncoding (kCFStringEncodingUTF8);
                         NSString *userInfo = [[NSString alloc]initWithData: aes_decode_data encoding: enc];
-                        debug(@"user info = %@", userInfo);
+                        login_debug(@"user info = %@", userInfo);
                         NSMutableDictionary *userInfo_json = [NSJSONSerialization JSONObjectWithData: aes_decode_data options:kNilOptions error: nil];
-                        debug(@"info = %@", [userInfo_json objectForKey: @"info"]);
+                        login_debug(@"info = %@", [userInfo_json objectForKey: @"info"]);
                         NSDictionary *emailInfo = [userInfo_json objectForKey: @"info"];
                         // get user account
-                        NSString *account_id = [NSString stringWithFormat: @"%@", [emailInfo objectForKey: @"cloud_id"]];
-                        [public set_user_id: account_id];
-                        debug(@"userId = %@", [public get_user_id]);
+                        NSString *account_id = [NSString stringWithFormat: @"%@", [emailInfo objectForKey: @"account_id"]];
+                        [public set_account_id: account_id];
+                        // get cloud id
+                        NSString *cloud_id = [NSString stringWithFormat: @"%@", [emailInfo objectForKey: @"cloud_id"]];
+                        [public set_user_id: cloud_id];
+                        login_debug(@"userId = %@", [public get_user_id]);
                         [public set_user_account: [emailInfo objectForKey: @"email"]];
-                        debug(@"access_key = %@", [userInfo_json objectForKey: @"access_key"]);
+                        login_debug(@"access_key = %@", [userInfo_json objectForKey: @"access_key"]);
                         NSDictionary *accessKeyInfo = [userInfo_json objectForKey: @"access_key"];
                         // get access key info
                         [public set_access_key_id: [accessKeyInfo objectForKey: @"access_key_id"]];
                         [public set_secret_access_key: [accessKeyInfo objectForKey: @"secret_access_key"]];
-                        debug(@"access key id = %@ : secret access key = %@", [public get_access_key_id], [public get_secret_access_key]);
+                        login_debug(@"access key id = %@ : secret access key = %@", [public get_access_key_id], [public get_secret_access_key]);
                         if ([[json objectForKey: @"result"]length] > 0)
                         {
                             dispatch_async(dispatch_get_main_queue(), ^{
-                                debug(@"change to main page.");
+                                login_debug(@"change to main page.");
                                 [m_HUD setHidden: YES];
                                 [self changeView:@"main"];
                             });
@@ -169,13 +172,13 @@
 #pragma mark - UIWebView Delegate Methods
 -(void)webViewDidStartLoad:(UIWebView *)webView
 {
-    debug(@"loading...");
+    login_debug(@"loading...");
 }
 -(void)webViewDidFinishLoad:(UIWebView *)webView
 {
     // get response header fields
     NSCachedURLResponse *resp = [[NSURLCache sharedURLCache] cachedResponseForRequest:webView.request];
-    debug(@"status = %ld", (long)[(NSHTTPURLResponse*)resp.response statusCode]);
+    login_debug(@"status = %ld", (long)[(NSHTTPURLResponse*)resp.response statusCode]);
     //if ((long)[(NSHTTPURLResponse*)resp.response statusCode])
     //{
     dispatch_async(dispatch_get_main_queue(), ^() {
@@ -186,10 +189,10 @@
 -(void)webView:(UIWebView *)webView didFailLoadWithError:(NSError *)error
 {
     NSDictionary *serverInfo = [error userInfo];
-    debug(@"serverInfo = %@", serverInfo);
+    login_debug(@"serverInfo = %@", serverInfo);
     NSString *urlKey = [NSString stringWithFormat: @"NSErrorFailingURLKey = %@", [serverInfo objectForKey: @"NSErrorFailingURLKey"]];
     NSArray *auth_grant_code = [urlKey componentsSeparatedByString: @"?"];
-    debug(@"auth_grant_code = %@", [auth_grant_code objectAtIndex: 1]);
+    login_debug(@"auth_grant_code = %@", [auth_grant_code objectAtIndex: 1]);
     NSDictionary *query_str = [public parseQueryString: [auth_grant_code objectAtIndex: 1]];
     [public set_code: [NSString stringWithFormat: @"%@", [query_str objectForKey: @"code"]]];
     if (![[public get_code] isEqualToString: @"(null)"])
@@ -224,6 +227,10 @@
         case 3:
             [self.tryAgainBtn setFrame: CGRectMake(160, 468, 93, 35)];
             [self.errorLbl setFrame: CGRectMake(107, 74, 200, 21)];
+            break;
+        case 4:
+            [self.tryAgainBtn setFrame: CGRectMake(144, 516, 87, 40)];
+            [self.errorLbl setFrame: CGRectMake(87, 82, 200, 22)];
             break;
         default:
             // other size

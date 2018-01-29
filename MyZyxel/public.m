@@ -18,7 +18,7 @@ NSString *user_account;
 NSString *renewDeviceId;
 NSString *deviceToken;
 NSString *userId;
-// push used
+// for notification
 NSString *pushDeviceName;
 NSString *pushOsVersion;
 NSString *pushDeviceModel;
@@ -28,6 +28,8 @@ NSString *pushAppVersion;
 NSString *pushAppBuildNum;
 NSString *pushUDID;
 NSString *pushAppInfo;
+// for tutorial by account
+NSString *accountId;
 
 NSInteger expired_count;
 NSInteger updateStatus;
@@ -203,7 +205,7 @@ NSMutableArray *renewParsedModuleCodeList;
 {
     if ([code isEqualToString: @"400.3.1"])
     {
-        return @"Mac address can't be blank.";
+        return @"MAC address can't be blank.";
     }
     else if ([code isEqualToString: @"400.3.2"])
     {
@@ -515,12 +517,11 @@ NSMutableArray *renewParsedModuleCodeList;
         return YES;
     }
 }
-
 + (BOOL)refreshToken
 {
     getRefreshRes = NO;
     NSString *access_token_url = [NSString stringWithFormat: @"%@/oauth/token", SITE_URL];
-    if (DEBUG) debug(@"access token url = %@", access_token_url);
+    public_debug(@"access token url = %@", access_token_url);
     NSURL *url = [NSURL URLWithString: access_token_url];
     NSMutableURLRequest *request_access_token = [NSMutableURLRequest requestWithURL: url cachePolicy: NSURLRequestUseProtocolCachePolicy timeoutInterval: 30];
     
@@ -540,7 +541,7 @@ NSMutableArray *renewParsedModuleCodeList;
                         getRefreshRes = YES;
                     }
     }] resume];
-    debug(@"access_token = %@, refresh_token = %@", [public get_access_token], [public get_refresh_token]);
+    public_debug(@"access_token = %@, refresh_token = %@", [public get_access_token], [public get_refresh_token]);
     return  getRefreshRes;
 }
 + (NSString*)deviceModelName
@@ -615,405 +616,116 @@ NSMutableArray *renewParsedModuleCodeList;
     return deviceModel;
 }
 
-+ (BOOL)checkDisplayStatus:(NSString *)moduleCode
++ (BOOL)checkServiceStatusFromName:(NSString *)name action:(NSInteger)action
 {
-    BOOL display = YES;
-    if ([[@"PKG_ZYXEL_S" substringToIndex: moduleCode.length] isEqualToString: moduleCode])
+    public_debug(@"compare name = %@", name);
+    NSArray *serviceList = [[NSArray alloc]initWithObjects: @"PKG_Update", @"Premium Service", @"Cloud Network Center", @"SecuManager Annual", @"SecuManager Node", @"CNC", @"HA Pro", @"Nebula Control Center Professional Pack Service", @"Nebula Security Service", @"CloudCNM Start-up", @"CloudCNM Annual", @"CloudCNM Node", @"Firmware Upgrade", @"Nebula Control Center Service", @"CloudCNM Start-up _T", @"Prime Security Pack", @"Facebook Wi-Fi", @"Total Security Pack", @"APT Sandboxing", @"Prime Service Pack", @"Premium Security Pack", @"Cubsorchestration", nil];
+    //                                                             1   2   3   4   5   6   7   8   9   10  11  12  13  14  15  16  17  18  19  20  21   22
+    NSArray *serviceDisplayList = [[NSArray alloc]initWithObjects: @1, @1, @0, @1, @1, @0, @1, @0, @0, @1, @1, @1, @1, @0, @1, @0, @1, @0, @0, @0, @0, @0, nil];
+    NSArray *serviceActivateList = [[NSArray alloc]initWithObjects: @0, @0, @0, @0, @0, @0, @0, @0, @0, @0, @0, @0, @0, @0, @0, @0, @0, @0, @0, @0, @0, @0, nil];
+    NSArray *serviceRegisterList = [[NSArray alloc]initWithObjects: @0, @0, @0, @0, @0, @0, @0, @0, @0, @0, @0, @0, @0, @0, @0, @0, @0, @0, @0, @0, @0, @0, nil];
+    BOOL res = YES;
+    
+    for (int i=0;i<[serviceList count];i++)
     {
-        display = YES;
+        if ([[serviceList objectAtIndex: i] isEqualToString: name])
+        {
+            switch (action)
+            {
+                case CHECK_DISPLAY:
+                {
+                    NSInteger getValue = [[serviceDisplayList objectAtIndex: i]integerValue];
+                    if (getValue == 0)
+                    {
+                        res = NO;
+                    }
+                    break;
+                }
+                case CHECK_ACTIVATE:
+                {
+                    NSInteger getValue = [[serviceActivateList objectAtIndex: i]integerValue];
+                    if (getValue == 0)
+                    {
+                        res = NO;
+                    }
+                    break;
+                }
+                case CHECK_REGISTER:
+                {
+                    NSInteger getValue = [[serviceRegisterList objectAtIndex: i]integerValue];
+                    if (getValue == 0)
+                    {
+                        res = NO;
+                    }
+                    break;
+                }
+            }
+            break;
+        }
     }
-    else if ([[@"UTMSW_ZYXEL_S" substringToIndex: moduleCode.length] isEqualToString: moduleCode])
-    {
-        display = YES;
-    }
-    else if ([[@"HOTSQ_ZYXEL_S" substringToIndex: moduleCode.length] isEqualToString: moduleCode])
-    {
-        display = YES;
-    }
-    else if ([[@"FW_ZYXEL_S" substringToIndex: moduleCode.length] isEqualToString: moduleCode])
-    {
-        display = YES;
-    }
-    else if ([[@"FWQ_ZYXEL_S" substringToIndex: moduleCode.length] isEqualToString: moduleCode])
-    {
-        display = YES;
-    }
-    else if ([[@"PSP_ZYXEL_T" substringToIndex: moduleCode.length] isEqualToString: moduleCode])
-    {
-        display = NO;
-    }
-    else if ([[@"PSP_ZYXEL_S" substringToIndex: moduleCode.length] isEqualToString: moduleCode])
-    {
-        display = NO;
-    }
-    else if ([[@"PRMSP_ZYXEL_T" substringToIndex: moduleCode.length] isEqualToString: moduleCode])
-    {
-        display = NO;
-    }
-    else if ([[@"PRMSP_ZYXEL_S" substringToIndex: moduleCode.length] isEqualToString: moduleCode])
-    {
-        display = NO;
-    }
-    else if ([[@"TSP_ZYXEL_T" substringToIndex: moduleCode.length] isEqualToString: moduleCode])
-    {
-        display = NO;
-    }
-    else if ([[@"TSP_ZYXEL_S" substringToIndex: moduleCode.length] isEqualToString: moduleCode])
-    {
-        display = NO;
-    }
-    else if ([[@"WEBSEC_ZYXEL_T" substringToIndex: moduleCode.length] isEqualToString: moduleCode])
-    {
-        display = NO;
-    }
-    else if ([[@"WEBSEC_ZYXEL_S" substringToIndex: moduleCode.length] isEqualToString: moduleCode])
-    {
-        display = NO;
-    }
-    else if ([[@"APP_QM_T" substringToIndex: moduleCode.length] isEqualToString: moduleCode])
-    {
-        display = NO;
-    }
-    else if ([[@"APP_QM_S" substringToIndex: moduleCode.length] isEqualToString: moduleCode])
-    {
-        display = NO;
-    }
-    else if ([[@"MB_KA_T" substringToIndex: moduleCode.length] isEqualToString: moduleCode])
-    {
-        display = NO;
-    }
-    else if ([[@"MB_KA_S" substringToIndex: moduleCode.length] isEqualToString: moduleCode])
-    {
-        display = NO;
-    }
-    else if ([[@"IPS_AH_T" substringToIndex: moduleCode.length] isEqualToString: moduleCode])
-    {
-        display = NO;
-    }
-    else if ([[@"IPS_AH_S" substringToIndex: moduleCode.length] isEqualToString: moduleCode])
-    {
-        display = NO;
-    }
-    else if ([[@"GE_MM_T" substringToIndex: moduleCode.length] isEqualToString: moduleCode])
-    {
-        display = NO;
-    }
-    else if ([[@"GE_MM_S" substringToIndex: moduleCode.length] isEqualToString: moduleCode])
-    {
-        display = NO;
-    }
-    else if ([[@"SBX_LL_T" substringToIndex: moduleCode.length] isEqualToString: moduleCode])
-    {
-        display = NO;
-    }
-    else if ([[@"SBX_LL_S" substringToIndex: moduleCode.length] isEqualToString: moduleCode])
-    {
-        display = NO;
-    }
-    else if ([[@"APC_ZYXEL_S" substringToIndex: moduleCode.length] isEqualToString: moduleCode])
-    {
-        display = NO;
-    }
-    else if ([[@"SECUR_ZYXEL_T" substringToIndex: moduleCode.length] isEqualToString: moduleCode])
-    {
-        display = NO;
-    }
-    else if ([[@"SECUR_ZYXEL_S" substringToIndex: moduleCode.length] isEqualToString: moduleCode])
-    {
-        display = NO;
-    }
-    else if ([[@"FBWIFI_ZYXEL_S" substringToIndex: moduleCode.length] isEqualToString: moduleCode])
-    {
-        display = YES;
-    }
-    else if ([[@"CNMS_ZYXEL_S" substringToIndex: moduleCode.length] isEqualToString: moduleCode])
-    {
-        display = YES;
-    }
-    else if ([[@"CNMN_ZYXEL_S" substringToIndex: moduleCode.length] isEqualToString: moduleCode])
-    {
-        display = YES;
-    }
-    else if ([[@"GEOLOC_ZYXEL_S" substringToIndex: moduleCode.length] isEqualToString: moduleCode])
-    {
-        display = YES;
-    }
-    else if ([[@"SECUD_ZYXEL_T" substringToIndex: moduleCode.length] isEqualToString: moduleCode])
-    {
-        display = NO;
-    }
-    else if ([[@"SECUD_ZYXEL_S" substringToIndex: moduleCode.length] isEqualToString: moduleCode])
-    {
-        display = NO;
-    }
-    return display;
+    return res;
 }
-+ (BOOL)checkActivateStatus:(NSString *)moduleCode
+
++ (BOOL)checkServiceStatus:(NSString *)moduleCode action:(NSInteger)action
 {
-    BOOL display = YES;
-    if ([[@"PKG_ZYXEL_S" substringToIndex: moduleCode.length] isEqualToString: moduleCode])
+    public_debug(@"compare module code = %@", moduleCode);
+    // compare count 31
+//    NSArray *serviceList = [[NSArray alloc]initWithObjects: @"PKG_ZYXEL_S", @"UTMSW_ZYXEL_S", @"FW_ZYXEL_S", @"HA_ZYXEL_S", @"FWQ_ZYXEL_S", @"PSP_ZYXEL_T", @"PSP_ZYXEL_S", @"PRMSP_ZYXEL_T", @"PRMSP_ZYXEL_S", @"TSP_ZYXEL_T", @"TSP_ZYXEL_S", @"WEBSEC_ZYXEL_T", @"WEBSEC_ZYXEL_S", @"APP_QM_T", @"APP_QM_S", @"MB_KA_T", @"MB_KA_S", @"IPS_AH_T", @"IPS_AH_S", @"GE_MM_T", @"GE_MM_S", @"SBX_LL_T", @"SBX_LL_S", @"APC_ZYXEL_S", @"SECUR_ZYXEL_T", @"SECUR_ZYXEL_S", @"FBWIFI_ZYXEL_S", @"CNMS_ZYXEL_S", @"CNMN_ZYXEL_S", @"GEOLOC_ZYXEL_S", @"SECUD_ZYXEL_T", @"SECUD_ZYXEL_S", nil];
+//    NSArray *serviceDisplayList = [[NSArray alloc]initWithObjects: @1, @1, @1, @1, @1, @1, @0, @0, @0, @0, @0, @0, @0, @0, @0, @0, @0, @0, @0, @0, @0, @0, @0, @0, @0, @0, @1, @1, @1, @1, @0, @0, nil];
+//    NSArray *serviceActivateList = [[NSArray alloc]initWithObjects: @0, @0, @0, @0, @0, @0, @0, @0, @0, @0, @0, @0, @0, @0, @0, @0, @0, @0, @0, @0, @0, @0, @0, @0, @0, @0, @0, @0, @0, @0, @0, @0, nil];
+//    NSArray *serviceRegisterList = [[NSArray alloc]initWithObjects: @0, @0, @0, @0, @0, @0, @0, @0, @0, @0, @0, @0, @0, @0, @0, @0, @0, @0, @0, @0, @0, @0, @0, @0, @0, @0, @0, @0, @0, @0, @0, @0, nil];
+    
+    // compare count 13
+    NSArray *serviceList = [[NSArray alloc]initWithObjects: @"PKG_ZYXEL_S", @"UTMSW_ZYXEL_S", @"CNC_ZYXEL_T", @"CNMS_ZYXEL_S", @"CNMN_ZYXEL_S", @"CNC_ZYXEL_S", @"HA_ZYXEL_S", @"NCC_ZYXEL_S", @"NSSIDP_ZYXEL_S", @"CNMS_ZYXEL_T", @"FW_ZYXEL_S", @"PSP_ZYXEL_S", @"PSP_ZYXEL_T", @"FBWIFI_ZYXEL_S", @"TSP_ZYXEL_T", @"TSP_ZYXEL_S", @"SBX_LL_T", @"SBX_LL_S", @"PRMSP_ZYXEL_T", @"PRMSP_ZYXEL_S", @"CUB_ZYXEL_S", nil];
+    //                                                             1   2   3   4   5   6   7   8   9   10  11  12  13  14  15  16  17  18  19  20  21
+    NSArray *serviceDisplayList = [[NSArray alloc]initWithObjects: @1, @1, @0, @1, @1, @0, @1, @0, @0, @1, @1, @0, @0, @1, @0, @0, @0, @0, @0, @0, @0, nil];
+    NSArray *serviceActivateList = [[NSArray alloc]initWithObjects: @0, @0, @0, @0, @0, @0, @0, @0, @0, @0, @0, @0, @0, @0, @0, @0, @0, @0, @0, @0, @0, nil];
+    NSArray *serviceRegisterList = [[NSArray alloc]initWithObjects: @0, @0, @0, @0, @0, @0, @0, @0, @0, @0, @0, @0, @0, @0, @0, @0, @0, @0, @0, @0, @0, nil];
+    BOOL res = YES;
+    
+    for (int i=0;i<[serviceList count];i++)
     {
-        display = NO;
+        if ([[serviceList objectAtIndex: i]length] > [moduleCode length])
+        {
+            if ([[[serviceList objectAtIndex: i] substringToIndex: moduleCode.length] isEqualToString: moduleCode])
+            {
+                switch (action)
+                {
+                    case CHECK_DISPLAY:
+                    {
+                        NSInteger getValue = [[serviceDisplayList objectAtIndex: i]integerValue];
+                        if (getValue == 0)
+                        {
+                            res = NO;
+                        }
+                        break;
+                    }
+                    case CHECK_ACTIVATE:
+                    {
+                        NSInteger getValue = [[serviceActivateList objectAtIndex: i]integerValue];
+                        if (getValue == 0)
+                        {
+                            res = NO;
+                        }
+                        break;
+                    }
+                    case CHECK_REGISTER:
+                    {
+                        NSInteger getValue = [[serviceRegisterList objectAtIndex: i]integerValue];
+                        if (getValue == 0)
+                        {
+                            res = NO;
+                        }
+                        break;
+                    }
+                }
+                break;
+            }
+        }
     }
-    else if ([[@"UTMSW_ZYXEL_S" substringToIndex: moduleCode.length] isEqualToString: moduleCode])
-    {
-        display = NO;
-    }
-    else if ([[@"HOTSQ_ZYXEL_S" substringToIndex: moduleCode.length] isEqualToString: moduleCode])
-    {
-        display = NO;
-    }
-    else if ([[@"FW_ZYXEL_S"  substringToIndex: moduleCode.length] isEqualToString: moduleCode])
-    {
-        display = NO;
-    }
-    else if ([[@"FWQ_ZYXEL_S" substringToIndex: moduleCode.length] isEqualToString: moduleCode])
-    {
-        display = NO;
-    }
-    else if ([[@"PSP_ZYXEL_T" substringToIndex: moduleCode.length] isEqualToString: moduleCode])
-    {
-        display = NO;
-    }
-    else if ([[@"PSP_ZYXEL_S" substringToIndex: moduleCode.length] isEqualToString: moduleCode])
-    {
-        display = NO;
-    }
-    else if ([[@"PRMSP_ZYXEL_T" substringToIndex: moduleCode.length] isEqualToString: moduleCode])
-    {
-        display = NO;
-    }
-    else if ([[@"PRMSP_ZYXEL_S" substringToIndex: moduleCode.length] isEqualToString: moduleCode])
-    {
-        display = NO;
-    }
-    else if ([[@"TSP_ZYXEL_T" substringToIndex: moduleCode.length] isEqualToString: moduleCode])
-    {
-        display = NO;
-    }
-    else if ([[@"TSP_ZYXEL_S" substringToIndex: moduleCode.length] isEqualToString: moduleCode])
-    {
-        display = NO;
-    }
-    else if ([[@"WEBSEC_ZYXEL_T" substringToIndex: moduleCode.length] isEqualToString: moduleCode])
-    {
-        display = NO;
-    }
-    else if ([[@"WEBSEC_ZYXEL_S" substringToIndex: moduleCode.length] isEqualToString: moduleCode])
-    {
-        display = NO;
-    }
-    else if ([[@"APP_QM_T" substringToIndex: moduleCode.length] isEqualToString: moduleCode])
-    {
-        display = NO;
-    }
-    else if ([[@"APP_QM_S" substringToIndex: moduleCode.length] isEqualToString: moduleCode])
-    {
-        display = NO;
-    }
-    else if ([[@"MB_KA_T"  substringToIndex: moduleCode.length] isEqualToString: moduleCode])
-    {
-        display = NO;
-    }
-    else if ([[@"MB_KA_S"  substringToIndex: moduleCode.length] isEqualToString: moduleCode])
-    {
-        display = NO;
-    }
-    else if ([[@"IPS_AH_T"  substringToIndex: moduleCode.length] isEqualToString: moduleCode])
-    {
-        display = NO;
-    }
-    else if ([[@"IPS_AH_S" substringToIndex: moduleCode.length] isEqualToString: moduleCode])
-    {
-        display = NO;
-    }
-    else if ([[@"GE_MM_T" substringToIndex: moduleCode.length] isEqualToString: moduleCode])
-    {
-        display = NO;
-    }
-    else if ([[@"GE_MM_S" substringToIndex: moduleCode.length] isEqualToString: moduleCode])
-    {
-        display = NO;
-    }
-    else if ([[@"SBX_LL_T" substringToIndex: moduleCode.length] isEqualToString: moduleCode])
-    {
-        display = NO;
-    }
-    else if ([[@"SBX_LL_S" substringToIndex: moduleCode.length] isEqualToString: moduleCode])
-    {
-        display = NO;
-    }
-    else if ([[@"APC_ZYXEL_S"  substringToIndex: moduleCode.length] isEqualToString: moduleCode])
-    {
-        display = NO;
-    }
-    else if ([[@"SECUR_ZYXEL_T" substringToIndex: moduleCode.length] isEqualToString: moduleCode])
-    {
-        display = NO;
-    }
-    else if ([[@"SECUR_ZYXEL_S" substringToIndex: moduleCode.length] isEqualToString: moduleCode])
-    {
-        display = NO;
-    }
-    else if ([[@"FBWIFI_ZYXEL_S" substringToIndex: moduleCode.length] isEqualToString: moduleCode])
-    {
-        display = NO;
-    }
-    else if ([[@"CNMS_ZYXEL_S" substringToIndex: moduleCode.length] isEqualToString: moduleCode])
-    {
-        display = NO;
-    }
-    else if ([[@"CNMN_ZYXEL_S" substringToIndex: moduleCode.length] isEqualToString: moduleCode])
-    {
-        display = NO;
-    }
-    else if ([[@"GEOLOC_ZYXEL_S" substringToIndex: moduleCode.length] isEqualToString: moduleCode])
-    {
-        display = NO;
-    }
-    else if ([[@"SECUD_ZYXEL_T" substringToIndex: moduleCode.length] isEqualToString: moduleCode])
-    {
-        display = NO;
-    }
-    else if ([[@"SECUD_ZYXEL_S" substringToIndex: moduleCode.length] isEqualToString: moduleCode])
-    {
-        display = NO;
-    }
-    return display;
+    return res;
 }
-+ (BOOL)checkRegisterStatus:(NSString *)moduleCode
-{
-    BOOL display = YES;
-    if ([[@"PKG_ZYXEL_S" substringToIndex: moduleCode.length] isEqualToString: moduleCode])
-    {
-        display = NO;
-    }
-    else if ([[@"UTMSW_ZYXEL_S" substringToIndex: moduleCode.length] isEqualToString: moduleCode])
-    {
-        display = NO;
-    }
-    else if ([[@"HOTSQ_ZYXEL_S" substringToIndex: moduleCode.length] isEqualToString: moduleCode])
-    {
-        display = NO;
-    }
-    else if ([[@"FW_ZYXEL_S" substringToIndex: moduleCode.length] isEqualToString: moduleCode])
-    {
-        display = NO;
-    }
-    else if ([[@"FWQ_ZYXEL_S" substringToIndex: moduleCode.length] isEqualToString: moduleCode])
-    {
-        display = NO;
-    }
-    else if ([[@"PSP_ZYXEL_T" substringToIndex: moduleCode.length] isEqualToString: moduleCode])
-    {
-        display = NO;
-    }
-    else if ([[@"PSP_ZYXEL_S" substringToIndex: moduleCode.length] isEqualToString: moduleCode])
-    {
-        display = NO;
-    }
-    else if ([[@"PRMSP_ZYXEL_T" substringToIndex: moduleCode.length] isEqualToString: moduleCode])
-    {
-        display = NO;
-    }
-    else if ([[@"PRMSP_ZYXEL_S" substringToIndex: moduleCode.length] isEqualToString: moduleCode])
-    {
-        display = NO;
-    }
-    else if ([[@"TSP_ZYXEL_T" substringToIndex: moduleCode.length] isEqualToString: moduleCode])
-    {
-        display = NO;
-    }
-    else if ([[@"TSP_ZYXEL_S" substringToIndex: moduleCode.length] isEqualToString: moduleCode])
-    {
-        display = NO;
-    }
-    else if ([[@"WEBSEC_ZYXEL_T" substringToIndex: moduleCode.length] isEqualToString: moduleCode])
-    {
-        display = NO;
-    }
-    else if ([[@"WEBSEC_ZYXEL_S" substringToIndex: moduleCode.length] isEqualToString: moduleCode])
-    {
-        display = NO;
-    }
-    else if ([[@"APP_QM_T" substringToIndex: moduleCode.length] isEqualToString: moduleCode])
-    {
-        display = NO;
-    }
-    else if ([[@"APP_QM_S" substringToIndex: moduleCode.length] isEqualToString: moduleCode])
-    {
-        display = NO;
-    }
-    else if ([[@"MB_KA_T" substringToIndex: moduleCode.length] isEqualToString: moduleCode])
-    {
-        display = NO;
-    }
-    else if ([[@"MB_KA_S" substringToIndex: moduleCode.length] isEqualToString: moduleCode])
-    {
-        display = NO;
-    }
-    else if ([[@"IPS_AH_T" substringToIndex: moduleCode.length] isEqualToString: moduleCode])
-    {
-        display = NO;
-    }
-    else if ([[@"IPS_AH_S" substringToIndex: moduleCode.length] isEqualToString: moduleCode])
-    {
-        display = NO;
-    }
-    else if ([[@"GE_MM_T" substringToIndex: moduleCode.length] isEqualToString: moduleCode])
-    {
-        display = NO;
-    }
-    else if ([[@"GE_MM_S" substringToIndex: moduleCode.length] isEqualToString: moduleCode])
-    {
-        display = NO;
-    }
-    else if ([[@"SBX_LL_T" substringToIndex: moduleCode.length] isEqualToString: moduleCode])
-    {
-        display = NO;
-    }
-    else if ([[@"SBX_LL_S" substringToIndex: moduleCode.length] isEqualToString: moduleCode])
-    {
-        display = NO;
-    }
-    else if ([[@"APC_ZYXEL_S" substringToIndex: moduleCode.length] isEqualToString: moduleCode])
-    {
-        display = NO;
-    }
-    else if ([[@"SECUR_ZYXEL_T" substringToIndex: moduleCode.length] isEqualToString: moduleCode])
-    {
-        display = NO;
-    }
-    else if ([[@"SECUR_ZYXEL_S" substringToIndex: moduleCode.length] isEqualToString: moduleCode])
-    {
-        display = NO;
-    }
-    else if ([[@"FBWIFI_ZYXEL_S" substringToIndex: moduleCode.length] isEqualToString: moduleCode])
-    {
-        display = NO;
-    }
-    else if ([[@"CNMS_ZYXEL_S" substringToIndex: moduleCode.length] isEqualToString: moduleCode])
-    {
-        display = NO;
-    }
-    else if ([[@"CNMN_ZYXEL_S" substringToIndex: moduleCode.length] isEqualToString: moduleCode])
-    {
-        display = NO;
-    }
-    else if ([[@"GEOLOC_ZYXEL_S" substringToIndex: moduleCode.length] isEqualToString: moduleCode])
-    {
-        display = NO;
-    }
-    else if ([[@"SECUD_ZYXEL_T" substringToIndex: moduleCode.length] isEqualToString: moduleCode])
-    {
-        display = NO;
-    }
-    else if ([[@"SECUD_ZYXEL_S" substringToIndex: moduleCode.length] isEqualToString: moduleCode])
-    {
-        display = NO;
-    }
-    return display;
-}
+
 + (BOOL)checkSpecialStr:(NSString *)str
 {
     NSString *string = @"%,~,￥,#,&,*,<,>,《,》,(,),[,],{,},【,】,^,@,/,\\,￡,¤,|,§,¨,「,」,『,』,￠,￢,￣,（,）,——,+,|,$,€,¥";
@@ -1031,7 +743,7 @@ NSMutableArray *renewParsedModuleCodeList;
 {
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     NSString *documentsDirectory = [paths objectAtIndex:0];
-    NSString *filePath = [documentsDirectory stringByAppendingString:@"/tutoria.plist"];
+    NSString *filePath = [documentsDirectory stringByAppendingString: [NSString stringWithFormat: @"/%@.plist", [public get_account_id]]];
     NSFileManager *fileManager = [NSFileManager defaultManager];
     
     // check file is exist
@@ -1057,7 +769,7 @@ NSMutableArray *renewParsedModuleCodeList;
 {
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     NSString *documentsDirectory = [paths objectAtIndex:0];
-    NSString *filePath = [documentsDirectory stringByAppendingString:@"/tutoria.plist"];
+    NSString *filePath = [documentsDirectory stringByAppendingString: [NSString stringWithFormat: @"/%@.plist", [public get_account_id]]];
     NSFileManager *fileManager = [NSFileManager defaultManager];
     
     NSMutableDictionary *data;
@@ -1070,10 +782,42 @@ NSMutableArray *renewParsedModuleCodeList;
     [data setValue: @"YES" forKey: str];
     
     if ([data writeToFile:filePath atomically: YES]) {
-        debug(@"write successed");
+        public_debug(@"write successed");
     } else {
-        debug(@"write failed");
+        public_debug(@"write failed");
     }
+}
++ (NSArray *)showFileList
+{
+    // list all files from NSDocumentDirectory
+    int count;
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *documentsDirectory = [paths objectAtIndex:0];
+    NSArray *directoryContent = [[NSFileManager defaultManager] contentsOfDirectoryAtPath: documentsDirectory error: NULL];
+    for (count = 0; count < (int)[directoryContent count]; count++)
+    {
+        NSLog(@"File %d: %@", (count + 1), [directoryContent objectAtIndex:count]);
+    }
+    return directoryContent;
+}
+
++ (BOOL)checkAppVerFromServerCompare
+{
+    NSDictionary* infoDictionary = [[NSBundle mainBundle] infoDictionary];
+    NSString* boundleID = infoDictionary[@"CFBundleIdentifier"];
+    NSURL* url = [NSURL URLWithString:[NSString stringWithFormat:@"http://itunes.apple.com/kn/lookup?bundleId=%@", boundleID]];
+    NSData* data = [NSData dataWithContentsOfURL:url];
+    NSDictionary* lookup = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
+    
+    if ([lookup[@"resultCount"] integerValue] == 1){
+        NSString* appStoreVersion = lookup[@"results"][0][@"version"];
+        NSString* currentVersion = infoDictionary[@"CFBundleShortVersionString"];
+        if (![appStoreVersion isEqualToString:currentVersion]){
+            public_debug(@"Need to update [%@ != %@]", appStoreVersion, currentVersion);
+            return YES;
+        }
+    }
+    return NO;
 }
 
 RSA* createPrivateRSA(NSString *key) {
@@ -1233,7 +977,7 @@ void Base64Encode( const unsigned char* buffer,
     {
         strFormat = [strFormat stringByAppendingString: [parameter objectForKey: [keySort objectAtIndex: i]]];
     }
-    push_debug(@"sign data = %@", strFormat);
+    public_debug(@"sign data = %@", strFormat);
     return [NSString stringWithFormat: @"%@", [[public signMessage: PRIVATE_KEY and: strFormat]stringByReplacingOccurrencesOfString:@"\n" withString: @""]];
 }
 + (NSString *)messageRange:(NSString *)action
@@ -1375,7 +1119,7 @@ void Base64Encode( const unsigned char* buffer,
 {
     return deviceServicesList;
 }
-//push used
+// for notification
 + (void)set_user_id:(NSString *)input
 {
     userId = input;
@@ -1384,6 +1128,7 @@ void Base64Encode( const unsigned char* buffer,
 {
     return userId;
 }
+// for notification
 + (void)set_pushUDID:(NSString *)input
 {
     pushUDID = input;
@@ -1395,5 +1140,14 @@ void Base64Encode( const unsigned char* buffer,
 + (NSString *)getOsVersion
 {
     return pushOsVersion;
+}
+// for tutorial by account
++ (void)set_account_id:(NSString *)input
+{
+    accountId = input;
+}
++ (NSString *)get_account_id
+{
+    return accountId;
 }
 @end

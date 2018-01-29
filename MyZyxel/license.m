@@ -70,6 +70,18 @@
     NSThread *tutoriaThread = [[NSThread alloc]initWithTarget: self selector: @selector(checkTutoriaInfo) object: nil];
     [tutoriaThread start];
     
+    [self.serviceRTBtn.layer setCornerRadius: self.serviceRTBtn.frame.size.height/2];
+    [self.serviceRTBtn.layer setMasksToBounds: YES];
+    [self.serviceRTBtn.layer setBorderWidth: 2];
+    [self.serviceRTBtn.layer setBorderColor: [UIColor colorWithDisplayP3Red: (78/255.0) green: (190/255.0) blue: (250/255.0) alpha: 1.0].CGColor];
+    [self.serviceRTBtn setTitleColor: [UIColor colorWithDisplayP3Red: (78/255.0) green: (190/255.0) blue: (250/255.0) alpha: 1.0] forState: UIControlStateNormal];
+    
+    [self.serviceMTBtn.layer setCornerRadius: self.serviceMTBtn.frame.size.height/2];
+    [self.serviceMTBtn.layer setMasksToBounds: YES];
+    [self.serviceMTBtn.layer setBorderWidth: 2];
+    [self.serviceMTBtn.layer setBorderColor: [UIColor colorWithDisplayP3Red: (78/255.0) green: (190/255.0) blue: (250/255.0) alpha: 1.0].CGColor];
+    [self.serviceMTBtn setTitleColor: [UIColor colorWithDisplayP3Red: (78/255.0) green: (190/255.0) blue: (250/255.0) alpha: 1.0] forState: UIControlStateNormal];
+    
     [self.manualLicenseKeyTxt addTarget: self action: @selector(checkLicense) forControlEvents: UIControlEventEditingDidEndOnExit];
     [self.manualLicenseKeyTxt.layer setCornerRadius: self.manualLicenseKeyTxt.frame.size.height/2];
     [self.searchServiceTxt addTarget: self action: @selector(searchServiceInfo) forControlEvents: UIControlEventEditingDidEndOnExit];
@@ -169,7 +181,7 @@
         service_debug(@"jwt token = %@", token);
     }
     NSString *get_license_info_url = [NSString stringWithFormat: @"%@/api/v2/my/licenses?token=%@&access_key_id=%@", DATA_URL, token, [public get_access_key_id]];
-    NSLog(@"get_license_info_url = %@", get_license_info_url);
+    service_debug(@"get_license_info_url = %@", get_license_info_url);
     NSURL *url = [NSURL URLWithString: get_license_info_url];
     NSMutableURLRequest *request_user_info = [NSMutableURLRequest requestWithURL: url cachePolicy: NSURLRequestUseProtocolCachePolicy timeoutInterval: 15];
     [request_user_info setHTTPMethod: @"GET"];
@@ -196,7 +208,7 @@
                   NSData *aes_decode_data = [[NSData alloc]initWithData: [public aes_cbc_256: base64_decode_data andIv: iv andkey: decode_key andType: kCCDecrypt]];
                   NSStringEncoding enc = CFStringConvertEncodingToNSStringEncoding (kCFStringEncodingUTF8);
                   NSString *licenseInfo = [[NSString alloc]initWithData: aes_decode_data encoding: enc];
-                  NSLog(@"license info = %@", licenseInfo);
+                  service_debug(@"license info = %@", licenseInfo);
                   licenseNameList = [[NSMutableArray alloc]init];
                   licenseTotalList = [[NSMutableArray alloc]init];
                   licenseParsedModuleCodeList = [[NSMutableArray alloc]init];
@@ -211,7 +223,7 @@
                       {
                           strFormat = @"";
                           NSString *module_code = [NSString stringWithFormat: @"%@", [device objectForKey: @"parsed_module_code"]];
-                          if ([public checkDisplayStatus: module_code])
+                          if ([public checkServiceStatus: module_code action: CHECK_DISPLAY])
                           {
                               NSString *name = [NSString stringWithFormat: @"%@", [device objectForKey: @"name"]];
                               //                              [licenseNameList addObject: name];
@@ -274,7 +286,7 @@
               else
               {
                   // reponse error
-                  response_debug(@"error code = %@, error meesage = %@", code, message);
+                  service_debug(@"error code = %@, error meesage = %@", code, message);
                   [self.tabBarController.tabBar setHidden: YES];
                   [self.errorView setHidden: NO];
                   [m_HUD setHidden: YES];
@@ -283,7 +295,7 @@
           else
           {
               // no response data
-              response_debug(@"No response data");
+              service_debug(@"No response data");
               [self.tabBarController.tabBar setHidden: YES];
               [self.errorView setHidden: NO];
               [m_HUD setHidden: YES];
@@ -401,7 +413,7 @@
               else
               {
                   // request error
-                  response_debug(@"error code = %@, error message = %@", code, message);
+                  service_debug(@"error code = %@, error message = %@", code, message);
                   [self.errorView setHidden: YES];
                   [m_HUD setHidden: YES];
               }
@@ -409,7 +421,7 @@
           else
           {
               // no response data
-              response_debug(@"No response data");
+              service_debug(@"No response data");
               [self.errorView setHidden: NO];
               [m_HUD setHidden: YES];
           }
@@ -556,7 +568,7 @@
               {
                   // response error
                   dispatch_async(dispatch_get_main_queue(), ^() {
-                      response_debug(@"error code = %@, error message = %@", code, message);
+                      service_debug(@"error code = %@, error message = %@", code, message);
                       [self.errorView setHidden: YES];
                       [m_HUD setHidden: YES];
                   });
@@ -566,7 +578,7 @@
           {
               // no response
               dispatch_async(dispatch_get_main_queue(), ^() {
-                  response_debug(@"No response data");
+                  service_debug(@"No response data");
                   [self.errorView setHidden: NO];
                   [m_HUD setHidden: YES];
               });
@@ -647,7 +659,7 @@
               {
                   // request error
                   dispatch_async(dispatch_get_main_queue(), ^() {
-                      response_debug(@"error code = %@, error message = %@", code, message);
+                      service_debug(@"error code = %@, error message = %@", code, message);
                       NSString *errorMsg = [public checkErrorCode: code];
                       if ([errorMsg isEqualToString: @"unknow"])
                       {
@@ -667,7 +679,7 @@
           {
               // no response data
               dispatch_async(dispatch_get_main_queue(), ^() {
-                  response_debug(@"No response data");
+                  service_debug(@"No response data");
                   [self.errorView setHidden: NO];
                   [m_HUD setHidden: YES];
               });
@@ -709,6 +721,7 @@
     [[session dataTaskWithRequest: request_user_info
                 completionHandler:^(NSData *data, NSURLResponse *response, NSError *error)
       {
+          BOOL registerStatus = YES;
           if (data != nil)
           {
               NSMutableDictionary *json = [NSJSONSerialization JSONObjectWithData: data options: kNilOptions error: nil];
@@ -740,7 +753,6 @@
                       {
                           // check succeeded and to capital
                           NSString *key = [NSString stringWithFormat: @"%@", [service objectForKey: @"key"]];
-                          [scanServiceKeyList addObject: [key uppercaseString]];
                           NSData *services = [NSJSONSerialization dataWithJSONObject: [service objectForKey: @"services"] options: NSJSONWritingPrettyPrinted error: nil];
                           NSArray *getServiceArr = [NSJSONSerialization JSONObjectWithData: services options: NSJSONReadingMutableContainers error: nil];
                           for (NSDictionary *serviceInfo in getServiceArr)
@@ -748,25 +760,49 @@
                               NSString *serviceName = [NSString stringWithFormat: @"%@", [serviceInfo objectForKey: @"name"]];
                               NSInteger amountProc = [[serviceInfo objectForKey: @"amount"]integerValue];
                               NSString *amount = [public getServiceTime: amountProc];
-                              [scanServiceNameList addObject: serviceName];
-                              [scanServiceAmountList addObject: amount];
-                              [scanServiceEventTypeList addObject: eventType];
-                          }
-                          dispatch_async(dispatch_get_main_queue(), ^() {
-                              [self.scanLicenseList reloadData];
-                              [self.manualLicenseList reloadData];
-                              [self.manualViewErrorMessage setHidden: YES];
-                              [self.scanViewErrorMessage setHidden: YES];
-                              [self.manualLicenseKeyTxt setText: @""];
-                              [self.errorView setHidden: YES];
-                              [m_HUD setHidden: YES];
-                              _scanStatus = YES;
-                              if ([scanServiceKeyList count] > 0)
+                              if ([public checkServiceStatusFromName: serviceName action: CHECK_REGISTER])
                               {
-                                  [self.scanRegisterBtn setEnabled: YES];
-                                  [self.manualRegisterBtn setEnabled: YES];
+                                  [scanServiceKeyList addObject: [key uppercaseString]];
+                                  [scanServiceNameList addObject: serviceName];
+                                  [scanServiceAmountList addObject: amount];
+                                  [scanServiceEventTypeList addObject: eventType];
                               }
-                          });
+                              else
+                              {
+                                  registerStatus = NO;
+                              }
+                          }
+                          if (registerStatus)
+                          {
+                              dispatch_async(dispatch_get_main_queue(), ^() {
+                                  [self.scanLicenseList reloadData];
+                                  [self.manualLicenseList reloadData];
+                                  [self.manualViewErrorMessage setHidden: YES];
+                                  [self.scanViewErrorMessage setHidden: YES];
+                                  [self.manualLicenseKeyTxt setText: @""];
+                                  [self.errorView setHidden: YES];
+                                  [m_HUD setHidden: YES];
+                                  _scanStatus = YES;
+                                  // enable register button
+                                  if ([scanServiceKeyList count] > 0)
+                                  {
+                                      [self.scanRegisterBtn setEnabled: YES];
+                                      [self.manualRegisterBtn setEnabled: YES];
+                                  }
+                              });
+                          }
+                          else
+                          {
+                              dispatch_async(dispatch_get_main_queue(), ^() {
+                                  [self.manualViewErrorMessage setText: @"The License does not allow register."];
+                                  [self.scanViewErrorMessage setText: @"The License does not allow register."];
+                                  [self.manualViewErrorMessage setHidden: NO];
+                                  [self.scanViewErrorMessage setHidden: NO];
+                                  [self.errorView setHidden: YES];
+                                  [m_HUD setHidden: YES];
+                                  _scanStatus = YES;
+                              });
+                          }
                       }
                       else
                       {
@@ -796,7 +832,7 @@
               {
                   // response error
                   dispatch_async(dispatch_get_main_queue(), ^() {
-                      response_debug(@"error code = %@, error message = %@", code, message);
+                      service_debug(@"error code = %@, error message = %@", code, message);
                       [self.errorView setHidden: NO];
                       [m_HUD setHidden: YES];
                   });
@@ -806,7 +842,7 @@
           {
               //no resonse data
               dispatch_async(dispatch_get_main_queue(), ^() {
-                  response_debug(@"no response data");
+                  service_debug(@"no response data");
                   [self.errorView setHidden: NO];
                   [m_HUD setHidden: YES];
               });
@@ -913,7 +949,7 @@
               {
                   // response error
                   dispatch_async(dispatch_get_main_queue(), ^() {
-                      response_debug(@"error code = %@, error message = %@", code, message);
+                      service_debug(@"error code = %@, error message = %@", code, message);
                       [self.errorView setHidden: NO];
                       [m_HUD setHidden: YES];
                   });
@@ -923,7 +959,7 @@
           {
               // no response data
               dispatch_async(dispatch_get_main_queue(), ^() {
-                  response_debug(@"No reponse data");
+                  service_debug(@"No reponse data");
                   [self.errorView setHidden: NO];
                   [m_HUD setHidden: YES];
               });
@@ -936,32 +972,42 @@
     NSString *key = [self.manualLicenseKeyTxt.text stringByTrimmingCharactersInSet: [NSCharacterSet whitespaceAndNewlineCharacterSet]];
     if ([key length] > 0)
     {
-        BOOL repeated = NO;
-        for (NSString *license in scanServiceKeyList) {
-            if ([self.manualLicenseKeyTxt.text isEqualToString: license]) {
-                repeated = YES;
-                [self.manualViewErrorMessage setText: @"The license is already in the list for add license."];
-                [self.manualViewErrorMessage setHidden: NO];
-                break;
+        if (![public checkSpecialStr: key])
+        {
+            BOOL repeated = NO;
+            for (NSString *license in scanServiceKeyList) {
+                if ([self.manualLicenseKeyTxt.text isEqualToString: license]) {
+                    repeated = YES;
+                    [self.manualViewErrorMessage setText: @"The license is already in the list for add license."];
+                    [self.manualViewErrorMessage setHidden: NO];
+                    break;
+                }
+            }
+            if (repeated == NO)
+            {
+                action = SERVICE_CHECK_MANUAL_LICENSE;
+                if ([public checkNetWorkConn])
+                {
+                    [self checkLicenseInfo: self.manualLicenseKeyTxt.text andEventType: @"manually"];
+                }
+                else
+                {
+                    [self.errorView setHidden: NO];
+                }
             }
         }
-        if (repeated == NO)
+        else
         {
-            action = SERVICE_CHECK_MANUAL_LICENSE;
-            if ([public checkNetWorkConn])
-            {
-                [self checkLicenseInfo: self.manualLicenseKeyTxt.text andEventType: @"manually"];
-            }
-            else
-            {
-                [self.errorView setHidden: NO];
-            }
+            [self.manualViewErrorMessage setText: @"Please ensure your input has no special characters."];
+            [self.manualViewErrorMessage setHidden: NO];
+            [self.manualLicenseKeyTxt setText: @""];
         }
     }
     else
     {
         [self.manualViewErrorMessage setText: @"License key can't be blank."];
         [self.manualViewErrorMessage setHidden: NO];
+        [self.manualLicenseKeyTxt setText: @""];
     }
 }
 - (void)stopReading
@@ -975,22 +1021,22 @@
         case 1:
             [self.tryAgainBtn setFrame: CGRectMake(124, 360, 73, 30)];
             [self.errorLbl setFrame: CGRectMake(60, 54, 200, 21)];
-            [self.serviceMTBtn setFrame: CGRectMake(66, 473, 188, 32)];
+//            [self.serviceMTBtn setFrame: CGRectMake(66, 473, 188, 32)];
             break;
         case 2:
             [self.tryAgainBtn setFrame: CGRectMake(144, 424, 87, 33)];
             [self.errorLbl setFrame: CGRectMake(87, 66, 200, 21)];
-            [self.serviceMTBtn setFrame: CGRectMake(80, 562, 216, 40)];
+//            [self.serviceMTBtn setFrame: CGRectMake(80, 562, 216, 40)];
             break;
         case 3:
             [self.tryAgainBtn setFrame: CGRectMake(160, 468, 93, 35)];
             [self.errorLbl setFrame: CGRectMake(107, 74, 200, 21)];
-            [self.serviceMTBtn setFrame: CGRectMake(88, 625, 240, 44)];
+//            [self.serviceMTBtn setFrame: CGRectMake(88, 625, 240, 44)];
             break;
         case 4:
             [self.tryAgainBtn setFrame: CGRectMake(144, 516, 87, 40)];
             [self.errorLbl setFrame: CGRectMake(87, 82, 200, 22)];
-            [self.serviceMTBtn setFrame: CGRectMake(80, 663, 216, 47)];
+//            [self.serviceMTBtn setFrame: CGRectMake(80, 663, 216, 47)];
             break;
         default:
             // other size
@@ -1065,6 +1111,7 @@
 - (void)checkTutoriaInfo
 {
     if([public checkTutoriaInfo: @"serviceMT"]) [self.tutoriaServiceMTView setHidden: YES];
+    if([public checkTutoriaInfo: @"serviceRT"]) [self.tutoriaServiceRTView setHidden: YES];
 }
 #pragma mark - BUTTON EVENTS
 - (IBAction)registerNewLicensesBtn:(id)sender
@@ -1426,6 +1473,11 @@
     [self.tutoriaServiceMTView setHidden: YES];
     [public recordTutoriaInfo: @"serviceMT"];
 }
+- (IBAction)serviceRTBtn:(id)sender
+{
+    [self.tutoriaServiceRTView setHidden: YES];
+    [public recordTutoriaInfo: @"serviceRT"];
+}
 #pragma mark - SCAN EVENTS
 - (void)scanCode
 {
@@ -1596,8 +1648,8 @@
                 [licenseDetailCell.activate setTag: indexPath.row];
                 [licenseDetailCell.activate addTarget: self action: @selector(detailActivateBtn:) forControlEvents: UIControlEventTouchUpInside];
                 // filter module code
-                NSLog(@"license detail license module code = %@", detailModuleCode);
-                if ([public checkActivateStatus: detailModuleCode])
+                service_debug(@"license detail license module code = %@", detailModuleCode);
+                if ([public checkServiceStatus: detailModuleCode action: CHECK_ACTIVATE])
                 {
                     [licenseDetailCell.activate setHidden: NO];
                 }

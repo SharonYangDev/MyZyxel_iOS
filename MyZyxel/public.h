@@ -41,9 +41,8 @@
 + (BOOL)checkNetWorkConn;
 + (BOOL)refreshToken;
 + (NSString *)deviceModelName;
-+ (BOOL)checkDisplayStatus:(NSString *)moduleCode;
-+ (BOOL)checkActivateStatus:(NSString *)moduleCode;
-+ (BOOL)checkRegisterStatus:(NSString *)moduleCode;
++ (BOOL)checkServiceStatusFromName:(NSString *)name action:(NSInteger)action;
++ (BOOL)checkServiceStatus:(NSString *)moduleCode action:(NSInteger)action;
 + (BOOL)checkSpecialStr:(NSString *)str;
 + (BOOL)checkTutoriaInfo:(NSString *)str;
 + (void)recordTutoriaInfo:(NSString *)str;
@@ -53,6 +52,8 @@
 + (NSString *)getTimeStamp;
 + (NSString *)generateSign:(NSInteger)option andTimeStamp:(NSString *)timeStamp andInboxId:(NSString *)inboxId;
 + (NSString *)messageRange:(NSString *)action;
++ (BOOL)checkAppVerFromServerCompare;
++ (NSArray *)showFileList;
 
 + (void)set_access_token:(NSString *)input;
 + (NSString *)get_access_token;
@@ -71,6 +72,9 @@
 
 + (void)set_code:(NSString *)input;
 + (NSString *)get_code;
+// for tutorial by account
++ (void)set_account_id:(NSString *)input;
++ (NSString *)get_account_id;
 
 + (void)set_user_account:(NSString *)input;
 + (NSString *)get_user_account;
@@ -92,10 +96,10 @@
 
 + (void)set_device_services:(NSMutableArray *)input;
 + (NSMutableArray *)get_device_services;
-
+// for notification
 + (void)set_user_id:(NSString *)input;
 + (NSString *)get_user_id;
-
+// for notification
 + (void)set_pushUDID:(NSString *)input;
 + (NSString *)get_pushUDID;
 @end

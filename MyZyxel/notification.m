@@ -106,7 +106,7 @@
 //                    if (data != nil)
 //                    {
 //                        NSMutableDictionary *json = [NSJSONSerialization JSONObjectWithData: data options: kNilOptions error: nil];
-//                        push_debug(@"json = %@", json);
+//                        notification_debug(@"json = %@", json);
 //                    }
 //                }] resume];
 //}
@@ -132,7 +132,7 @@
 //                    if (data != nil)
 //                    {
 //                        NSMutableDictionary *json = [NSJSONSerialization JSONObjectWithData: data options: kNilOptions error: nil];
-//                        push_debug(@"json = %@", json);
+//                        notification_debug(@"json = %@", json);
 //                    }
 //                }] resume];
 //}
@@ -150,7 +150,7 @@
 //    NSString *urlEncode = [public stringByAddingPercentEscapesForURLParameter: userId];
 //    NSString *stringData = [NSString stringWithFormat: @"access_key_id=%@&udid=%@&user_id=%@", AKID, deviceId, urlEncode];
 //    NSData *postData = [stringData dataUsingEncoding: NSUTF8StringEncoding];
-//    push_debug(@"post data = %@", stringData);
+//    notification_debug(@"post data = %@", stringData);
 //    [request_register_device setHTTPBody: postData];
 //
 //    NSURLSession *session = [NSURLSession sessionWithConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration]];
@@ -159,7 +159,7 @@
 //                    if (data != nil)
 //                    {
 //                        NSMutableDictionary *json = [NSJSONSerialization JSONObjectWithData: data options: kNilOptions error: nil];
-//                        push_debug(@"json = %@", json);
+//                        notification_debug(@"json = %@", json);
 //                    }
 //                }] resume];
 //}
@@ -183,7 +183,7 @@
 //                    if (data != nil)
 //                    {
 //                        NSMutableDictionary *json = [NSJSONSerialization JSONObjectWithData: data options: kNilOptions error: nil];
-//                        push_debug(@"json = %@", json);
+//                        notification_debug(@"json = %@", json);
 //                    }
 //                }] resume];
 //}
@@ -193,11 +193,11 @@
     [self checkReadLog];
     NSString *timeStamp = [public getTimeStamp];
     NSString *signature = [[NSString alloc]initWithString: [public generateSign: GET_MESSAGE_LIST andTimeStamp: timeStamp andInboxId: nil]];
-    push_debug(@"sig len = %d", [signature length]);
+    notification_debug(@"sig len = %d", [signature length]);
     NSString *sigFormat = [signature substringToIndex: 344];
-    push_debug(@"format = %@", sigFormat);
+    notification_debug(@"format = %@", sigFormat);
     NSString *register_device_url = [NSString stringWithFormat: @"%@/v1/inboxes/personal?access_key_id=%@&user_id=%@&from=%@&to=%@", PUSH_SITE, AKID, [public get_user_id], [public messageRange: @"from"], [public messageRange: @"to"]];
-    push_debug(@"url = %@", register_device_url);
+    notification_debug(@"url = %@", register_device_url);
     NSURL *url = [NSURL URLWithString: register_device_url];
     NSMutableURLRequest *request_register_device = [NSMutableURLRequest requestWithURL: url cachePolicy: NSURLRequestUseProtocolCachePolicy timeoutInterval: 30];
     [request_register_device setHTTPMethod: @"GET"];
@@ -210,7 +210,7 @@
                     if (data != nil)
                     {
                         NSMutableDictionary *json = [NSJSONSerialization JSONObjectWithData: data options: kNilOptions error: nil];
-//                        push_debug(@"json = %@", json);
+//                        notification_debug(@"json = %@", json);
                         if ([[json objectForKey: @"code"] isEqualToString: @"0000"])
                         {
                             messageIdList = [[NSMutableArray alloc]init];
@@ -224,11 +224,11 @@
                             {
                                 for (NSDictionary *message in messageList)
                                 {
-                                    push_debug(@"inbox_id = %@", [message objectForKey: @"inbox_id"]);
-                                    push_debug(@"title = %@", [message objectForKey: @"title"]);
-                                    push_debug(@"body = %@", [message objectForKey: @"body"]);
-                                    push_debug(@"create time = %@", [message objectForKey: @"created_at"]);
-                                    push_debug(@"type = %@", [message objectForKey: @"type"]);
+                                    notification_debug(@"inbox_id = %@", [message objectForKey: @"inbox_id"]);
+                                    notification_debug(@"title = %@", [message objectForKey: @"title"]);
+                                    notification_debug(@"body = %@", [message objectForKey: @"body"]);
+                                    notification_debug(@"create time = %@", [message objectForKey: @"created_at"]);
+                                    notification_debug(@"type = %@", [message objectForKey: @"type"]);
                                     NSString *inboxId = [NSString stringWithFormat: @"%@", [message objectForKey: @"inbox_id"]];
                                     [messageIdList addObject: inboxId];
                                     BOOL compareRes = NO;
@@ -290,7 +290,7 @@
                     else
                     {
                         // no reponse data
-                        response_debug(@"No response data");
+                        notification_debug(@"No response data");
                         [self.tabBarController.tabBar setHidden: YES];
                         [self.errorView setHidden: NO];
                         [m_HUD setHidden: YES];
@@ -307,7 +307,7 @@
     NSString *timeStamp = [public getTimeStamp];
     NSString *signature = [[NSString alloc]initWithString: [public generateSign: GET_MESSAGE_DETAIL andTimeStamp: timeStamp andInboxId: inboxId]];
     NSString *sigFormat = [signature substringToIndex: 344];
-    push_debug(@"sign = %@", signature);
+    notification_debug(@"sign = %@", signature);
     //NSString *inboxId = [messageIdList objectAtIndex: selectMessageId];
     NSString *register_device_url = [NSString stringWithFormat: @"%@/v1/inboxes/personal/%@?access_key_id=%@&user_id=%@", PUSH_SITE, inboxId, AKID, [public get_user_id]];
     NSURL *url = [NSURL URLWithString: register_device_url];
@@ -322,13 +322,13 @@
                     if (data != nil)
                     {
                         NSMutableDictionary *json = [NSJSONSerialization JSONObjectWithData: data options: kNilOptions error: nil];
-//                        push_debug(@"json = %@", json);
+//                        notification_debug(@"json = %@", json);
                         if ([[json objectForKey: @"code"] isEqualToString: @"0000"])
                         {
                             NSMutableDictionary *detail = [json objectForKey: @"data"];
-//                            push_debug(@"body = %@", [detail objectForKey: @"body"]);
-//                            push_debug(@"title = %@", [detail objectForKey: @"title"]);
-//                            push_debug(@"type = %@", [detail objectForKey: @"type"]);
+//                            notification_debug(@"body = %@", [detail objectForKey: @"body"]);
+//                            notification_debug(@"title = %@", [detail objectForKey: @"title"]);
+//                            notification_debug(@"type = %@", [detail objectForKey: @"type"]);
                             NSString *body = [NSString stringWithFormat: @"%@", [detail objectForKey: @"body"]];
                             body = [body stringByReplacingOccurrencesOfString: @"\n" withString: @"<br />"];
                             NSString *title = [NSString stringWithFormat: @"%@", [detail objectForKey: @"title"]];
@@ -358,7 +358,7 @@
                     else
                     {
                         // no response data
-                        response_debug(@"No response data");
+                        notification_debug(@"No response data");
                         [self.tabBarController.tabBar setHidden: YES];
                         [self.errorView setHidden: NO];
                         [m_HUD setHidden: YES];
@@ -389,7 +389,7 @@
     if ([fileManager fileExistsAtPath: readPath])
     {
         readLogList = [[NSMutableArray alloc]initWithContentsOfFile: readPath];
-        push_debug(@"readLog = %@", readLogList);
+        notification_debug(@"readLog = %@", readLogList);
     }
 }
 - (void)writeReadLog:(NSString *)inboxId
@@ -505,7 +505,7 @@
 //    {
 //        strFormat = [strFormat stringByAppendingString: [parameter objectForKey: [keySort objectAtIndex: i]]];
 //    }
-//    push_debug(@"sign data = %@", strFormat);
+//    notification_debug(@"sign data = %@", strFormat);
 //    return [NSString stringWithFormat: @"%@", [[public signMessage: PRIVATE_KEY and: strFormat]stringByReplacingOccurrencesOfString:@"\n" withString: @""]];
 //}
 //- (NSString *)messageRange
@@ -544,7 +544,7 @@
     }
     else
     {
-        push_debug(@"No Internet.");
+        notification_debug(@"No Internet.");
     }
 }
 #pragma mark - TABLEVIEW CALL BACK

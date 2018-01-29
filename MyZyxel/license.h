@@ -32,6 +32,7 @@
 @property (weak, nonatomic) IBOutlet UIView *searchListView;
 @property (weak, nonatomic) IBOutlet UIView *searchNoResView;
 @property (weak, nonatomic) IBOutlet UIView *tutoriaServiceMTView;
+@property (weak, nonatomic) IBOutlet UIView *tutoriaServiceRTView;
 @property (weak, nonatomic) IBOutlet UITableView *licenseList;
 @property (weak, nonatomic) IBOutlet UITableView *scanLicenseList;
 @property (weak, nonatomic) IBOutlet UITableView *manualLicenseList;
@@ -56,6 +57,7 @@
 @property (weak, nonatomic) IBOutlet UIButton *licenseSearchBtn;
 @property (weak, nonatomic) IBOutlet UIButton *searchServiceCancelBtn;
 @property (weak, nonatomic) IBOutlet UIButton *serviceMTBtn;
+@property (weak, nonatomic) IBOutlet UIButton *serviceRTBtn;
 @property (weak, nonatomic) IBOutlet UITextField *manualLicenseKeyTxt;
 @property (weak, nonatomic) IBOutlet UITextField *searchServiceTxt;
 @property (weak, nonatomic) IBOutlet UILabel *manualViewErrorMessage;
@@ -87,4 +89,5 @@
 - (IBAction)licenseSearchBtn:(id)sender;
 - (IBAction)searchServiceCancelBtn:(id)sender;
 - (IBAction)serviceMTBtn:(id)sender;
+- (IBAction)serviceRTBtn:(id)sender;
 @end

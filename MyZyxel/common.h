@@ -66,7 +66,14 @@ enum SignStatus
     GET_MESSAGE_DETAIL
 };
 
-#define debug(s, ...) if (DEBUGMODE) NSLog(@"\n\t[%@:%d] %@\n", [[NSString stringWithUTF8String:__FUNCTION__] lastPathComponent], \
+enum serviceListAction
+{
+    CHECK_DISPLAY = 0,
+    CHECK_ACTIVATE,
+    CHECK_REGISTER
+};
+
+#define home_debug(s, ...) if (HOMEMODE) NSLog(@"\n\t[%@:%d] %@\n", [[NSString stringWithUTF8String:__FUNCTION__] lastPathComponent], \
 __LINE__, [NSString stringWithFormat:(s), ##__VA_ARGS__])
 
 #define service_debug(s, ...) if (SERVICEMODE) NSLog(@"\n\t[%@:%d] %@\n", [[NSString stringWithUTF8String:__FUNCTION__] lastPathComponent], \
@@ -75,28 +82,29 @@ __LINE__, [NSString stringWithFormat:(s), ##__VA_ARGS__])
 #define device_debug(s, ...) if (DEVICEMODE) NSLog(@"\n\t[%@:%d] %@\n", [[NSString stringWithUTF8String:__FUNCTION__] lastPathComponent], \
 __LINE__, [NSString stringWithFormat:(s), ##__VA_ARGS__])
 
-#define push_debug(s, ...) if (PUSHMODE) NSLog(@"\n\t[%@:%d] %@\n", [[NSString stringWithUTF8String:__FUNCTION__] lastPathComponent], \
+#define notification_debug(s, ...) if (NOTIFICATIONMODE) NSLog(@"\n\t[%@:%d] %@\n", [[NSString stringWithUTF8String:__FUNCTION__] lastPathComponent], \
 __LINE__, [NSString stringWithFormat:(s), ##__VA_ARGS__])
 
-#define response_debug(s, ...) if (RESPONSEMODE) NSLog(@"\n\t[%@:%d] %@\n", [[NSString stringWithUTF8String:__FUNCTION__] lastPathComponent], \
+#define public_debug(s, ...) if (PUBLICMODE) NSLog(@"\n\t[%@:%d] %@\n", [[NSString stringWithUTF8String:__FUNCTION__] lastPathComponent], \
 __LINE__, [NSString stringWithFormat:(s), ##__VA_ARGS__])
 
-#define tableview_debug(s, ...) if (TABLEVIEWMODE) NSLog(@"\n\t[%@:%d] %@\n", [[NSString stringWithUTF8String:__FUNCTION__] lastPathComponent], \
+#define login_debug(s, ...) if (LOGINMODE) NSLog(@"\n\t[%@:%d] %@\n", [[NSString stringWithUTF8String:__FUNCTION__] lastPathComponent], \
 __LINE__, [NSString stringWithFormat:(s), ##__VA_ARGS__])
 
 #endif
 
 //#define SITE
 #define RELEASE
-#define DEBUGMODE 0
+#define CHECK_VERSION 0
+#define PUBLICMODE 0
+#define LOGINMODE 0
+#define HOMEMODE 0
 #define DEVICEMODE 0
 #define SERVICEMODE 0
-#define TABLEVIEWMODE 0
-#define RESPONSEMODE 0
-#define PUSHMODE 0
+#define NOTIFICATIONMODE 0
 #define PUSH_SITE @"https://push-ebeta.myzyxel.com"
 //#define PUSH_SITE @"http://push-ebeta.myzyxel.ecoworkinc.com"
-#define APP_VERSION @"Version 1.0.0.10B5S5"
+#define APP_VERSION @"Version 1.0.0.10B6S1"
 
 #ifdef SITE
     #define CLIENT_ID @"2743579a84d07e87cd1aa6405044952af408033a6d6d96c99708cc5ce8ecddf1"

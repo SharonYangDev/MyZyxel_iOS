@@ -95,10 +95,10 @@
                                      stringByReplacingOccurrencesOfString: @">" withString: @""]
                                     stringByReplacingOccurrencesOfString: @" " withString: @""];
     [public set_device_token: deviceTokenStr];
-    push_debug(@"device token = %@", deviceTokenStr);
+    notification_debug(@"device token = %@", deviceTokenStr);
 }
 - (void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error NS_AVAILABLE_IOS(3_0){
-    push_debug(@"error = %@", error);
+    notification_debug(@"error = %@", error);
 }
 @end
 
