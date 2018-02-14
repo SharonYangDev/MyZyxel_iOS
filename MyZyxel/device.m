@@ -466,6 +466,8 @@
               detailGracePeriodAmountList = [[NSMutableArray alloc]init];
               NSMutableDictionary *devices_detail_info_json = [NSJSONSerialization JSONObjectWithData: aes_decode_data options:kNilOptions error: nil];
               detailDeviceId = [NSString stringWithFormat: @"%@", [devices_detail_info_json objectForKey: @"device_id"]];
+              
+              // set device detail tital name
               detailDeviceNames = [NSString stringWithFormat: @"%@", [devices_detail_info_json objectForKey: @"name"]];
               detailDeviceMac = [NSString stringWithFormat: @"%@", [devices_detail_info_json objectForKey: @"mac_address"]];
               detailDeviceModelCode = [NSString stringWithFormat: @"%@", [devices_detail_info_json objectForKey: @"model"]];
@@ -491,6 +493,7 @@
               {
                   NSString *moduleCode = [NSString stringWithFormat: @"%@", [device objectForKey: @"parsed_module_code"]];
                   device_debug(@"linesss = %@", moduleCode);
+                  // filter service module code
                   if ([public checkServiceStatus: moduleCode action: CHECK_DISPLAY])
                   {
                       NSString *name = [NSString stringWithFormat: @"%@", [device objectForKey: @"name"]];
@@ -615,9 +618,8 @@
                   {
                       NSString *name = [NSString stringWithFormat: @"%@", [license objectForKey: @"name"]];
                       // filter service name
-//                      BOOL display = [public checkServiceStatus: name];
-//                      if (display == YES)
-//                      {
+                      if ([public checkServiceStatusFromName: name action: CHECK_ACTIVATE])
+                      {
                           [renewServiceNameList addObject: name];
                           NSString *total = [NSString stringWithFormat: @"%@", [license objectForKey: @"total"]];
                           [renewServiceTotalList addObject: total];
@@ -625,7 +627,7 @@
                           [renewServiceAmountList addObject: amount];
                           NSString *serviceId = [NSString stringWithFormat: @"%@", [license objectForKey: @"license_service_id"]];
                           [renewServiceId addObject: serviceId];
-//                      }
+                      }
                   }
                   dispatch_async(dispatch_get_main_queue(), ^() {
                       if (action == DEVICE_ACTIVATE_LICENSE)
@@ -3323,6 +3325,7 @@
 }
 - (NSIndexPath *)tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    // device list click event for device page
     if (deviceListStatus == YES) {
         action = ENTER_DEVICE_DETAIL;
         DeviceListCell *deviceCell = [self.devicesList cellForRowAtIndexPath: indexPath];
@@ -3344,6 +3347,7 @@
             }
         });
     }
+    // device list click event for search page
     if (searchStatus == YES)
     {
         [self hiddeKeyboard];
