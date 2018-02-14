@@ -711,7 +711,7 @@
 					A39BC9FA1EC5A0A0008882D8 = {
 						CreatedOnToolsVersion = 8.3.2;
 						DevelopmentTeam = V8MGAQW66B;
-						ProvisioningStyle = Automatic;
+						ProvisioningStyle = Manual;
 						SystemCapabilities = {
 							com.apple.Push = {
 								enabled = 1;
@@ -1019,6 +1019,7 @@
 				CODE_SIGN_ENTITLEMENTS = MyZyxel/MyZyxel.entitlements;
 				CODE_SIGN_IDENTITY = "";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_STYLE = Manual;
 				DEVELOPMENT_TEAM = V8MGAQW66B;
 				EXCLUDED_RECURSIVE_SEARCH_PATH_SUBDIRECTORIES = "*.nib *.lproj *.framework *.gch *.xcode* *.xcassets (*) .DS_Store CVS .svn .git .hg *.pbproj *.pbxproj *.a";
 				HEADER_SEARCH_PATHS = "$(PROJECT_DIR)/MyZyxel";
@@ -1038,8 +1039,8 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.zyxel.myZyxelcom;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
-				PROVISIONING_PROFILE_SPECIFIER = "";
+				PROVISIONING_PROFILE = "a5a3bfca-7602-49b3-90f2-2cd3e8eaa06a";
+				PROVISIONING_PROFILE_SPECIFIER = myZyxel;
 				TARGETED_DEVICE_FAMILY = 1;
 				USER_HEADER_SEARCH_PATHS = "$(PROJECT_DIR)/MyZyxel/Frameworks/** $(PROJECT_DIR)/MyZyxel/openssl/** $(PROJECT_DIR)/MyZyxel/JWT/**";
 				USE_HEADERMAP = NO;
@@ -1056,6 +1057,7 @@
 				CODE_SIGN_ENTITLEMENTS = MyZyxel/MyZyxel.entitlements;
 				CODE_SIGN_IDENTITY = "";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_STYLE = Manual;
 				DEVELOPMENT_TEAM = V8MGAQW66B;
 				EXCLUDED_RECURSIVE_SEARCH_PATH_SUBDIRECTORIES = "*.nib *.lproj *.framework *.gch *.xcode* *.xcassets (*) .DS_Store CVS .svn .git .hg *.pbproj *.pbxproj *.a";
 				HEADER_SEARCH_PATHS = "$(PROJECT_DIR)/MyZyxel";
@@ -1075,8 +1077,8 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.zyxel.myZyxelcom;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
-				PROVISIONING_PROFILE_SPECIFIER = "";
+				PROVISIONING_PROFILE = "a5a3bfca-7602-49b3-90f2-2cd3e8eaa06a";
+				PROVISIONING_PROFILE_SPECIFIER = myZyxel;
 				TARGETED_DEVICE_FAMILY = 1;
 				USER_HEADER_SEARCH_PATHS = "$(PROJECT_DIR)/MyZyxel/Frameworks/** $(PROJECT_DIR)/MyZyxel/openssl/** $(PROJECT_DIR)/MyZyxel/JWT/**";
 				USE_HEADERMAP = NO;
