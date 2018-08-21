@@ -179,6 +179,13 @@
     // speed
     [self.displayView setDecelerationRate: UIScrollViewDecelerationRateFast];
     [self getDevicesInfo];
+    static dispatch_once_t disOnce;
+    dispatch_once(&disOnce,^ {
+        if (public.getDeviceType == 4)
+        {
+            [self.tutoriaHomeTBtn setFrame: CGRectMake(self.tutoriaHomeTBtn.frame.origin.x, self.tutoriaHomeTBtn.frame.origin.y-32, self.tutoriaHomeTBtn.frame.size.width, self.tutoriaHomeTBtn.frame.size.height)];
+        }
+    });
 }
 #pragma mark - BUTTON EVENTS
 - (IBAction)profileBtn:(id)sender
@@ -214,8 +221,18 @@
                 [self.tabBarController.tabBar setHidden: YES];
                 [self.maskView setHidden: NO];
             }];
-        }
             break;
+        }
+        case 4:
+        {
+            [self.profileView setFrame: CGRectMake(-310, 0, 310, 812)];
+            [UIView animateWithDuration: 0.5 animations:^{
+                [self.profileView setFrame: CGRectMake(0, 0, 310, 812)];
+                [self.tabBarController.tabBar setHidden: YES];
+                [self.maskView setHidden: NO];
+            }];
+            break;
+        }
     }
     self.maskViewTapGesture = [[UITapGestureRecognizer alloc]initWithTarget: self action: @selector(maskViewGesture)];
     [self.maskView addGestureRecognizer: self.maskViewTapGesture];
@@ -637,17 +654,22 @@
                           CGFloat width, height;
                           width = self.displayView.frame.size.width;
                           height = self.displayView.frame.size.height;
-                          switch (deviceType) {
-                              case 1:
-                                  [self.displayView setContentSize:CGSizeMake(width*self.pageControl.numberOfPages, 0)];
-                                  break;
-                              case 2:
-                                  [self.displayView setContentSize:CGSizeMake(width*self.pageControl.numberOfPages, 0)];
-                                  break;
-                              case 3:
-                                  [self.displayView setContentSize:CGSizeMake(width*self.pageControl.numberOfPages, 0)];
-                                  break;
-                          }
+//                          switch (deviceType) {
+//                              case 1:
+//                                  [self.displayView setContentSize:CGSizeMake(width*self.pageControl.numberOfPages, 0)];
+//                                  break;
+//                              case 2:
+//                                  [self.displayView setContentSize:CGSizeMake(width*self.pageControl.numberOfPages, 0)];
+//                                  break;
+//                              case 3:
+//                                  [self.displayView setContentSize:CGSizeMake(width*self.pageControl.numberOfPages, 0)];
+//                                  break;
+//                              case 4:
+//                                  [self.displayView setContentSize:CGSizeMake(width*self.pageControl.numberOfPages, 0)];
+//                                  break;
+//                          }
+                          [self.displayView setContentSize:CGSizeMake(width*self.pageControl.numberOfPages, 0)];
+                          
                           [self.pageControl setCurrentPage:0];
                           // set scrollview content
                           [self displayInit];
@@ -1559,12 +1581,22 @@
                 deviceMac = [[UILabel alloc]initWithFrame: CGRectMake(20, 134, 319, 30)];
                 deviceIndex = [[UILabel alloc]initWithFrame: CGRectMake(6, 34, 30, 30)];
                 renewBtn = [[UIButton alloc]initWithFrame: CGRectMake(139, 478, 100, 40)];
-                break; 
+                break;
+            case 4:
+                servicePage = [[UIView alloc]initWithFrame: CGRectMake(i*320, 0, 320, self.displayView.frame.size.height)];
+                reduce = [[UIImageView alloc]initWithFrame: CGRectMake(20, 144, 280, 40)];
+                contentView = [[UIScrollView alloc]initWithFrame: CGRectMake(0, 154, 320, 304)];
+                deviceName = [[UILabel alloc]initWithFrame: CGRectMake(20, 110, 280, 30)];
+                deviceMac = [[UILabel alloc]initWithFrame: CGRectMake(20, 134, 280, 30)];
+                deviceIndex = [[UILabel alloc]initWithFrame: CGRectMake(6, 34, 30, 30)];
+                renewBtn = [[UIButton alloc]initWithFrame: CGRectMake(120, 478, 100, 40)];
+                break;
         }
 
 //        [deviceName setBackgroundColor: [UIColor redColor]];
 //        [deviceMac setBackgroundColor: [UIColor blueColor]];
 //        [contentView setBackgroundColor: [UIColor yellowColor]];
+        
         [reduce setImage: [UIImage imageNamed: @"reduce.png"]];
         [contentView setScrollEnabled: YES];
         [deviceName setText: [NSString stringWithFormat: @"%@", [homeDeviceNameList objectAtIndex: i]]];
@@ -1666,6 +1698,12 @@
                     code = [[UILabel alloc]initWithFrame: CGRectMake(15, j*22, 100, 22)];
                     amount = [[UILabel alloc]initWithFrame: CGRectMake(224, j*22, 120, 22)];
                     gracePeriod = [[UILabel alloc]initWithFrame: CGRectMake(224, j*54, 90, 22)];
+//                    [contentView setContentSize: CGSizeMake(359, (j*30)+20)];
+                    break;
+                case 4:
+                    code = [[UILabel alloc]initWithFrame: CGRectMake(15, j*22, 100, 22)];
+                    amount = [[UILabel alloc]initWithFrame: CGRectMake(180, j*22, 120, 22)];
+                    gracePeriod = [[UILabel alloc]initWithFrame: CGRectMake(180, j*54, 90, 22)];
 //                    [contentView setContentSize: CGSizeMake(359, (j*30)+20)];
                     break;
             }
@@ -1772,8 +1810,10 @@
 - (void)getDeviceType
 {
     CGSize screenSize = [[UIScreen mainScreen]bounds].size;
-    NSInteger deviceWidth = screenSize.width;
-    NSInteger deviceHeight = screenSize.height;
+    int deviceWidth = screenSize.width;
+    int deviceHeight = screenSize.height;
+    
+    home_debug(@"device width = %d and heigh = %d", deviceWidth, deviceHeight);
     
     if (deviceWidth == 320 && deviceHeight == 568)
     {
@@ -1786,6 +1826,10 @@
     else if (deviceWidth == 414 && deviceHeight == 736)
     {
         deviceType = 3;
+    }
+    else if (deviceWidth == 375 && deviceHeight == 812)
+    {
+        deviceType = 4;
     }
 }
 - (void)maskViewGesture
@@ -1802,9 +1846,11 @@
                 case 3:
                     [self.profileView setFrame: CGRectMake(-349, 0, 349, 736)];
                     break;
+                case 4:
+                    [self.profileView setFrame: CGRectMake(-310, 0, 310, 812)];
             }
             [self.maskView setHidden: YES];
-            
+
         } completion:^(BOOL finished) {
             [self.tabBarController.tabBar setHidden: NO];
             [self.profileView setHidden: YES];
@@ -1935,8 +1981,6 @@
 }
 - (void)checkTutoriaInfo
 {
-//    NSArray *fileList = [public showFileList];
-//    home_debug(@"list = %@", fileList);
     home_debug(@"account id = %@", [public get_account_id]);
     if([public checkTutoriaInfo: @"homeT"]) [self.tutoriaHomeTView setHidden: YES];
     if([public checkTutoriaInfo: @"registerST"]) [self.tutoriaRegisterSTView setHidden: YES];

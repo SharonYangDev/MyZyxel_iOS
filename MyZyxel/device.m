@@ -242,6 +242,14 @@
         [self.errorView setHidden: NO];
         [m_HUD setHidden: YES];
     }
+    // only one
+    static dispatch_once_t disOnce;
+    dispatch_once(&disOnce,^ {
+        if (public.getDeviceType == 4)
+        {
+            [self.deviceMTBtn setFrame: CGRectMake(self.deviceMTBtn.frame.origin.x, self.deviceMTBtn.frame.origin.y-32, self.deviceMTBtn.frame.size.width, self.deviceMTBtn.frame.size.height)];
+        }
+    });
 }
 #pragma mark - GET SERVER INFO
 // API 1

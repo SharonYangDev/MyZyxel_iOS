@@ -161,6 +161,14 @@
         [self.errorView setHidden: NO];
         [m_HUD setHidden: YES];
     }
+    // only one
+    static dispatch_once_t disOnce;
+    dispatch_once(&disOnce,^ {
+        if (public.getDeviceType == 4)
+        {
+            [self.serviceMTBtn setFrame: CGRectMake(self.serviceMTBtn.frame.origin.x, self.serviceMTBtn.frame.origin.y-32, self.serviceMTBtn.frame.size.width, self.serviceMTBtn.frame.size.height)];
+        }
+    });
 }
 #pragma mark - GET SERVER INFO
 // API 10 GET SERVICE FROM CURRENT USERNAME

@@ -94,17 +94,17 @@ __LINE__, [NSString stringWithFormat:(s), ##__VA_ARGS__])
 #endif
 
 //#define SITE
-//#define RELEASE
+#define RELEASE
 #define CHECK_VERSION 0
 #define PUBLICMODE 0
 #define LOGINMODE 0
-#define HOMEMODE 0
-#define DEVICEMODE 1
+#define HOMEMODE 1
+#define DEVICEMODE 0
 #define SERVICEMODE 0
 #define NOTIFICATIONMODE 0
 #define PUSH_SITE @"https://push-ebeta.myzyxel.com"
 //#define PUSH_SITE @"http://push-ebeta.myzyxel.ecoworkinc.com"
-#define APP_VERSION @"Version 1.0.0.10B6S2"
+#define APP_VERSION @"Version 1.0.0.10B6S3"
 
 #ifdef SITE
     #define CLIENT_ID @"2743579a84d07e87cd1aa6405044952af408033a6d6d96c99708cc5ce8ecddf1"
