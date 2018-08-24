@@ -93,7 +93,7 @@ __LINE__, [NSString stringWithFormat:(s), ##__VA_ARGS__])
 
 #endif
 
-//#define SITE
+#define SITE
 #define RELEASE
 #define CHECK_VERSION 0
 #define PUBLICMODE 0
@@ -102,20 +102,21 @@ __LINE__, [NSString stringWithFormat:(s), ##__VA_ARGS__])
 #define DEVICEMODE 0
 #define SERVICEMODE 0
 #define NOTIFICATIONMODE 0
-#define PUSH_SITE @"https://push-ebeta.myzyxel.com"
 //#define PUSH_SITE @"http://push-ebeta.myzyxel.ecoworkinc.com"
-#define APP_VERSION @"Version 1.0.0.10B6S3"
+#define APP_VERSION @"Version 1.0.10.6"
 
 #ifdef SITE
     #define CLIENT_ID @"2743579a84d07e87cd1aa6405044952af408033a6d6d96c99708cc5ce8ecddf1"
     #define CLIENT_SECRET @"3451eedf7f384979534864984027a4136659e42a91633512ec404b0c9e27b92a"
     #define SITE_URL @"https://accounts-sit.myzyxel.com"
     #define DATA_URL @"https://portal-sit.myzyxel.com"
+    #define PUSH_SITE @"https://push-sit.myzyxel.com"
 #else
     #define CLIENT_ID @"2080f0cb0df2992acabd8d7b5d958ab7e79d7d8c2849a46c7bc3386325629bd8"
     #define CLIENT_SECRET @"cbac8e4c82173440fab4a64abce5286fb748fa0228a1f286e025ff42632f1eee"
     #define SITE_URL @"https://accounts-ebeta.myzyxel.com"
     #define DATA_URL @"https://portal-ebeta.myzyxel.com"
+#define PUSH_SITE @"https://push-ebeta.myzyxel.com"
 #endif
 
 #define REDIRECT_URI @"myZyxel://auth/callback"
