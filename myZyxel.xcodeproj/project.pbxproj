@@ -710,8 +710,8 @@
 				TargetAttributes = {
 					A39BC9FA1EC5A0A0008882D8 = {
 						CreatedOnToolsVersion = 8.3.2;
-						DevelopmentTeam = J5XDZWSPML;
-						ProvisioningStyle = Automatic;
+						DevelopmentTeam = V8MGAQW66B;
+						ProvisioningStyle = Manual;
 						SystemCapabilities = {
 							com.apple.Push = {
 								enabled = 1;
@@ -1018,8 +1018,9 @@
 				CLANG_CXX_LIBRARY = "libc++";
 				CODE_SIGN_ENTITLEMENTS = MyZyxel/MyZyxel.entitlements;
 				CODE_SIGN_IDENTITY = "";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				DEVELOPMENT_TEAM = J5XDZWSPML;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
+				CODE_SIGN_STYLE = Manual;
+				DEVELOPMENT_TEAM = V8MGAQW66B;
 				EXCLUDED_RECURSIVE_SEARCH_PATH_SUBDIRECTORIES = "*.nib *.lproj *.framework *.gch *.xcode* *.xcassets (*) .DS_Store CVS .svn .git .hg *.pbproj *.pbxproj *.a";
 				HEADER_SEARCH_PATHS = "$(PROJECT_DIR)/MyZyxel";
 				INFOPLIST_FILE = MyZyxel/Info.plist;
@@ -1038,8 +1039,8 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.zyxel.myZyxelcom;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
-				PROVISIONING_PROFILE_SPECIFIER = "";
+				PROVISIONING_PROFILE = "7352e836-7571-46e4-85ae-175639296e13";
+				PROVISIONING_PROFILE_SPECIFIER = "Zyxel myZyxel";
 				TARGETED_DEVICE_FAMILY = 1;
 				USER_HEADER_SEARCH_PATHS = "$(PROJECT_DIR)/MyZyxel/Frameworks/** $(PROJECT_DIR)/MyZyxel/openssl/** $(PROJECT_DIR)/MyZyxel/JWT/**";
 				USE_HEADERMAP = NO;
@@ -1055,8 +1056,9 @@
 				CLANG_CXX_LIBRARY = "libc++";
 				CODE_SIGN_ENTITLEMENTS = MyZyxel/MyZyxel.entitlements;
 				CODE_SIGN_IDENTITY = "";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				DEVELOPMENT_TEAM = J5XDZWSPML;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
+				CODE_SIGN_STYLE = Manual;
+				DEVELOPMENT_TEAM = V8MGAQW66B;
 				EXCLUDED_RECURSIVE_SEARCH_PATH_SUBDIRECTORIES = "*.nib *.lproj *.framework *.gch *.xcode* *.xcassets (*) .DS_Store CVS .svn .git .hg *.pbproj *.pbxproj *.a";
 				HEADER_SEARCH_PATHS = "$(PROJECT_DIR)/MyZyxel";
 				INFOPLIST_FILE = MyZyxel/Info.plist;
@@ -1075,8 +1077,8 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.zyxel.myZyxelcom;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
-				PROVISIONING_PROFILE_SPECIFIER = "";
+				PROVISIONING_PROFILE = "7352e836-7571-46e4-85ae-175639296e13";
+				PROVISIONING_PROFILE_SPECIFIER = "Zyxel myZyxel";
 				TARGETED_DEVICE_FAMILY = 1;
 				USER_HEADER_SEARCH_PATHS = "$(PROJECT_DIR)/MyZyxel/Frameworks/** $(PROJECT_DIR)/MyZyxel/openssl/** $(PROJECT_DIR)/MyZyxel/JWT/**";
 				USE_HEADERMAP = NO;
